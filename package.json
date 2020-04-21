@@ -23,6 +23,6 @@
     "react-dom": "^16.13.1"
   },
   "scripts": {
-    "watch": "webpack-dev-server --progress"
+    "start": "webpack-dev-server --open"
   }
 }
