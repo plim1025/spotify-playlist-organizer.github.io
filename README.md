@@ -1,1 +1,1 @@
-# spotify-bpm-playlists
+# spotify-playlists
