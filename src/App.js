@@ -1,10 +1,14 @@
 import React from 'react';
 import PlaylistView from './views/PlaylistView';
+import SortBy from './components/SortBy';
 
-function App() {
+const App = () => {
 
     return (
-        <PlaylistView />
+        <div>
+            <PlaylistView />
+            <SortBy />
+        </div>
     )
 }
 

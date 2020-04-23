@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Song(props) {
+const Song = (props) => {
     return (
         <div>
             {props.details.title}
@@ -10,3 +10,5 @@ export default function Song(props) {
         </div>
     )
 }
+
+export default Song;

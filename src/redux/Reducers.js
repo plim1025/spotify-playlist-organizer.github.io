@@ -1,16 +1,7 @@
-import { UNSELECT_SONG } from './Constants';
+import { UNSELECT_SONG, SORTBY_TITLE } from './Constants';
 import { combineReducers } from 'redux';
 
 const songList = [
-    {
-        "title": "Love the Way You Lie",
-        "artist": "Eminem",
-        "album": "Recovery",
-        "year": 2010,
-        "genre": "hip hop/rap",
-        "time": 350,
-        "popularity": 35
-    },
     {
         "title": "Not Afraid",
         "artist": "Eminem",
@@ -19,6 +10,15 @@ const songList = [
         "genre": "hip hop/rap",
         "time": 350,
         "popularity": 50
+    },
+    {
+        "title": "Love the Way You Lie",
+        "artist": "Eminem",
+        "album": "Recovery",
+        "year": 2010,
+        "genre": "hip hop/rap",
+        "time": 350,
+        "popularity": 35
     },
     {
         "title": "Space Bound",
@@ -36,6 +36,9 @@ const songs = (state = songList, action) => {
         case UNSELECT_SONG:
             // use filter function
             return state;
+        case SORTBY_TITLE:
+            console.log(state)
+            return state.sort((a, b) => (a.title > b.title) ? 1 : -1);
         default:
             return state;
     }

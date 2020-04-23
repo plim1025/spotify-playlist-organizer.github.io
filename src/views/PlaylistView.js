@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Song from '../components/Song';
 
-function PlaylistView(props) {
-
+const PlaylistView = (props) => {
     return (
         <div>
             {

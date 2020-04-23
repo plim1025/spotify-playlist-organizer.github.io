@@ -1,1 +1,2 @@
 export const UNSELECT_SONG = 'UNSELECT_SONG';
+export const SORTBY_TITLE = 'SORTBY_TITLE';
