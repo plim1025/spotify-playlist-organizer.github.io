@@ -37,8 +37,8 @@ const songs = (state = songList, action) => {
             // use filter function
             return state;
         case SORTBY_TITLE:
-            console.log(state)
-            return state.sort((a, b) => (a.title > b.title) ? 1 : -1);
+            const newState = [...state]
+            return newState.sort((a, b) => (a.title > b.title) ? 1 : -1);
         default:
             return state;
     }

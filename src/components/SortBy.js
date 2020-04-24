@@ -1,24 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { sortByTitle } from '../redux/Actions';
+import { useDispatch } from 'react-redux';
+import { SORTBY_TITLE } from '../redux/Constants';
 
 const SortBy = (props) => {
+
+    const sortByTitle = useDispatch();
+
     return (
-        <div onClick={() => props.sortByTitle()}>
+        <div onClick={() => sortByTitle({type: SORTBY_TITLE})}>
             hello
         </div>
     )
 }
 
-const mapStateToProps = state => {
-    return {
-    };
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        sortByTitle: () => dispatch(sortByTitle())
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps) (SortBy);
+export default SortBy;
