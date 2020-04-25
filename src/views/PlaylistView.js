@@ -9,7 +9,7 @@ const PlaylistView = (props) => {
     return (
         <div>
             {
-                songs ? songs.map(song => <Song key={song.title} details={song}/>)
+                songs ? songs.map(song => <Song key={song.name} details={song}/>)
                 : null
             }
         </div>

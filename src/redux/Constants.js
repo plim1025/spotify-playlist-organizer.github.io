@@ -1,2 +1,7 @@
 export const UNSELECT_SONG = 'UNSELECT_SONG';
-export const SORTBY_TITLE = 'SORTBY_TITLE';
+export const SORTBY_NAME = 'SORTBY_NAME';
+export const SORTBY_ARTIST = 'SORTBY_ARTIST';
+export const SORTBY_ALBUM = 'SORTBY_ALBUM';
+export const SORTBY_YEAR = 'SORTBY_YEAR';
+export const SORTBY_DURATION = 'SORTBY_DURATION';
+export const SORTBY_POPULARITY = 'SORTBY_POPULARITY';
