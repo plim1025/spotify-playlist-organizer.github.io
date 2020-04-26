@@ -5,3 +5,7 @@ export const SORTBY_ALBUM = 'SORTBY_ALBUM';
 export const SORTBY_YEAR = 'SORTBY_YEAR';
 export const SORTBY_DURATION = 'SORTBY_DURATION';
 export const SORTBY_POPULARITY = 'SORTBY_POPULARITY';
+export const SORTBY_BPM = 'SORTBY_BPM';
+export const SORTBY_LOUDNESS = 'SORTBY_LOUDNESS';
+
+export const FILTERBY_BPM = 'FILTERBY_BPM';
