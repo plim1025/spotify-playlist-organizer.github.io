@@ -8,36 +8,60 @@ export const songList = [
         "artist": "Eminem",
         "album": "Recovery",
         "year": 2010,
-        "genre": "hip hop/rap",
         "duration": 350,
         "popularity": 50,
         "bpm": 3005,
         "loudness": 150,
-        "selected": true
+        "filteredOutBy": {
+            "name": false,
+            "artist": false,
+            "album": false,
+            "year": false,
+            "duration": false,
+            "popularity": false,
+            "bpm": false,
+            "loudness": false
+        }
     },
     {
         "name": "Love the Way You Lie",
         "artist": "Eminem",
         "album": "Recovery",
         "year": 2010,
-        "genre": "hip hop/rap",
         "duration": 350,
         "popularity": 35,
         "bpm": 4000,
         "loudness": 140,
-        "selected": true
+        "filteredOutBy": {
+            "name": false,
+            "artist": false,
+            "album": false,
+            "year": false,
+            "duration": false,
+            "popularity": false,
+            "bpm": false,
+            "loudness": false
+        }
     },
     {
         "name": "Space Bound",
         "artist": "Eminem",
         "album": "Recovery",
         "year": 2010,
-        "genre": "hip hop/rap",
         "duration": 350,
         "popularity": 103,
         "bpm": 2005,
         "loudness": 170,
-        "selected": true
+        "filteredOutBy": {
+            "name": false,
+            "artist": false,
+            "album": false,
+            "year": false,
+            "duration": false,
+            "popularity": false,
+            "bpm": false,
+            "loudness": false
+        }
     }
 ]
 
@@ -63,7 +87,16 @@ const songs = (state = songList, action) => {
         case SORTBY_LOUDNESS:
             return [...state.sort((a, b) => (a.loudness > b.loudness) ? 1 : -1)];
         case FILTERBY_BPM:
-            return [...state.map(song => ((song.bpm >= action.range[0]) && (song.bpm <= action.range[1])) ? {...song, selected: true } : {...song, selected: false})];
+            return [
+                ...state.map(song => {
+                    return {...song, 
+                        filteredOutBy: {
+                            ...song.filteredOutBy,
+                            bpm: ((song.bpm < action.range[0]) || (song.bpm > action.range[1]))
+                        }
+                    }
+                })
+            ];
         default:
             return state;
     }

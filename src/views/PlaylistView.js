@@ -6,11 +6,19 @@ const PlaylistView = (props) => {
 
     const songs = useSelector(state => state.songs);
 
+    const songNotFiltered = filterObj => {
+        for(var o in filterObj)
+            if(filterObj[o])
+                return false;
+        return true;
+    }
+
     return (
         <div>
             {
-                songs.length ? songs.map(song => song.selected ? <Song key={song.name} details={song}/> : null)
-                : null
+                songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) 
+                    ? <Song key={song.name} details={song}/> : null)
+                    : null
             }
         </div>
     )
