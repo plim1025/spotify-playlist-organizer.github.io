@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Slider } from '@material-ui/core';
 import './SliderFilter.css';
@@ -18,7 +18,7 @@ const SlideFilter = (props) => {
             <div className="sliderTitle">{props.title}</div>
             <Slider
                 onChange={handleChange}
-                min={0}
+                min={props.min}
                 max={props.max}
                 value={range}
                 valueLabelDisplay="auto"

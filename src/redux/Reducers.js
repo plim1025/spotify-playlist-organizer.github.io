@@ -1,5 +1,5 @@
 import { UNSELECT_SONG, SORTBY_NAME, SORTBY_ARTIST, SORTBY_ALBUM, SORTBY_YEAR, SORTBY_DURATION, SORTBY_POPULARITY, SORTBY_BPM, SORTBY_LOUDNESS,
-FILTERBY_BPM } from './Constants';
+FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './Constants';
 import { combineReducers } from 'redux';
 
 export const songList = [
@@ -13,7 +13,6 @@ export const songList = [
         "bpm": 3005,
         "loudness": 150,
         "filteredOutBy": {
-            "name": false,
             "artist": false,
             "album": false,
             "year": false,
@@ -33,7 +32,6 @@ export const songList = [
         "bpm": 4000,
         "loudness": 140,
         "filteredOutBy": {
-            "name": false,
             "artist": false,
             "album": false,
             "year": false,
@@ -53,7 +51,6 @@ export const songList = [
         "bpm": 2005,
         "loudness": 170,
         "filteredOutBy": {
-            "name": false,
             "artist": false,
             "album": false,
             "year": false,
@@ -86,6 +83,28 @@ const songs = (state = songList, action) => {
             return [...state.sort((a, b) => (a.bpm > b.bpm) ? 1 : -1)];
         case SORTBY_LOUDNESS:
             return [...state.sort((a, b) => (a.loudness > b.loudness) ? 1 : -1)];
+        case FILTERBY_DURATION:
+            return [
+                ...state.map(song => {
+                    return {...song, 
+                        filteredOutBy: {
+                            ...song.filteredOutBy,
+                            duration: ((song.duration < action.range[0]) || (song.duration > action.range[1]))
+                        }
+                    }
+                })
+            ];
+        case FILTERBY_POPULARITY:
+            return [
+                ...state.map(song => {
+                    return {...song, 
+                        filteredOutBy: {
+                            ...song.filteredOutBy,
+                            bpm: ((song.popularity < action.range[0]) || (song.popularity > action.range[1]))
+                        }
+                    }
+                })
+            ];
         case FILTERBY_BPM:
             return [
                 ...state.map(song => {
@@ -93,6 +112,17 @@ const songs = (state = songList, action) => {
                         filteredOutBy: {
                             ...song.filteredOutBy,
                             bpm: ((song.bpm < action.range[0]) || (song.bpm > action.range[1]))
+                        }
+                    }
+                })
+            ];
+        case FILTERBY_LOUDNESS:
+            return [
+                ...state.map(song => {
+                    return {...song, 
+                        filteredOutBy: {
+                            ...song.filteredOutBy,
+                            bpm: ((song.loudness < action.range[0]) || (song.loudness > action.range[1]))
                         }
                     }
                 })
