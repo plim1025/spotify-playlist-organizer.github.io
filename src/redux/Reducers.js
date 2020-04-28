@@ -1,5 +1,5 @@
 import { UNSELECT_SONG, SORTBY_NAME, SORTBY_ARTIST, SORTBY_ALBUM, SORTBY_YEAR, SORTBY_DURATION, SORTBY_POPULARITY, SORTBY_BPM, SORTBY_LOUDNESS,
-FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './Constants';
+FILTERBY_ARTIST, FILTERBY_ALBUM, FILTERBY_YEAR, FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './Constants';
 import { combineReducers } from 'redux';
 
 export const songList = [
@@ -59,6 +59,25 @@ export const songList = [
             "bpm": false,
             "loudness": false
         }
+    },
+    {
+        "name": "Redbone",
+        "artist": "Childish Gambino",
+        "album": "Awaken My Love",
+        "year": 2018,
+        "duration": 200,
+        "popularity": 3,
+        "bpm": 1005,
+        "loudness": 170,
+        "filteredOutBy": {
+            "artist": false,
+            "album": false,
+            "year": false,
+            "duration": false,
+            "popularity": false,
+            "bpm": false,
+            "loudness": false
+        }
     }
 ]
 
@@ -83,6 +102,12 @@ const songs = (state = songList, action) => {
             return [...state.sort((a, b) => (a.bpm > b.bpm) ? 1 : -1)];
         case SORTBY_LOUDNESS:
             return [...state.sort((a, b) => (a.loudness > b.loudness) ? 1 : -1)];
+        case FILTERBY_ARTIST:
+            return state;
+        case FILTERBY_ALBUM:
+            return state;
+        case FILTERBY_YEAR:
+            return state;
         case FILTERBY_DURATION:
             return [
                 ...state.map(song => {

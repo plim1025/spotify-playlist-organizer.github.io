@@ -1,6 +1,6 @@
 import React from 'react';
 import { songList } from './redux/Reducers';
-import { FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './redux/Constants';
+import { FILTERBY_ARTIST, FILTERBY_ALBUM, FILTERBY_YEAR, FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './redux/Constants';
 import PlaylistView from './views/PlaylistView';
 import SliderFilter from './components/SliderFilter';
 import DropdownFilter from './components/DropdownFilter';
@@ -40,7 +40,7 @@ const App = () => {
                 min={0}
                 max={maxLoudness}
             />
-            <DropdownFilter />
+            <DropdownFilter title={"Artists"} filterDispatch={FILTERBY_ARTIST}/>
             <SortBy />
         </div>
     )
