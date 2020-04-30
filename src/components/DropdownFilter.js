@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText, Checkbox } from '@material-ui/core';
 import './SliderFilter.css';
+import { FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from '../redux/Constants';
 
 const DropdownFilter = (props) => {
 
@@ -12,7 +13,18 @@ const DropdownFilter = (props) => {
 
     const handleChange = e => {
         setArtists(e.target.value);
-        dispatch({type: props.filterDispatch, list: e.target.value});
+        if(e.target.value.length == 1 && artists.length == 0)
+            dispatch({type: FILTERALL_OUT, category: props.category});
+        else if(e.target.value.length == 0 && artists.length == 1)
+            dispatch({type: FILTERALL_IN, category: props.category});
+
+        if(artists.length < e.target.value.length) {
+            let added = e.target.value.filter(artist => !artists.includes(artist));
+            dispatch({type: FILTER_ADD, category: props.category, addedFilter: added});
+        } else {
+            let removed = artists.filter(artist => !e.target.value.includes(artist));
+            dispatch({type: FILTER_REMOVE, category: props.category, removedFilter: removed})
+        }
     }
 
     return (

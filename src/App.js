@@ -1,6 +1,6 @@
 import React from 'react';
 import { songList } from './redux/Reducers';
-import { FILTERBY_ARTIST, FILTERBY_ALBUM, FILTERBY_YEAR, FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './redux/Constants';
+import { FILTERBY_ARTIST_ADD, FILTERBY_ARTIST_REMOVE, FILTERBY_ALBUM, FILTERBY_YEAR, FILTERBY_DURATION, FILTERBY_POPULARITY, FILTERBY_BPM, FILTERBY_LOUDNESS } from './redux/Constants';
 import PlaylistView from './views/PlaylistView';
 import SliderFilter from './components/SliderFilter';
 import DropdownFilter from './components/DropdownFilter';
@@ -16,32 +16,44 @@ const App = () => {
     return (
         <div>
             <PlaylistView />
-            <SliderFilter 
-                title={"Duration"} 
-                filterDispatch={FILTERBY_DURATION} 
+            <SliderFilter
+                category={"duration"}
+                title={"Duration"}
                 min={0}
                 max={maxDuration}
             />
-            <SliderFilter 
+            <SliderFilter
+                category={"popularity"}
                 title={"Popularity"} 
-                filterDispatch={FILTERBY_POPULARITY}
-                min={1}
+                min={0}
                 max={maxPopularity}
             />
-            <SliderFilter 
+            <SliderFilter
+                category={"bpm"}
                 title={"BPM"} 
-                filterDispatch={FILTERBY_BPM}
                 min={0} 
                 max={maxBPM}
             />
-            <SliderFilter 
+            <SliderFilter
+                category={"loudness"}
                 title={"Loudness"}
-                filterDispatch={FILTERBY_LOUDNESS}
                 min={0}
                 max={maxLoudness}
             />
-            <DropdownFilter title={"Artists"} filterDispatch={FILTERBY_ARTIST}/>
-            <SortBy />
+            <SortBy
+                title={'Artist'}
+                category={'artist'}    
+            />
+            <SortBy
+                title={'Name'}
+                category={'name'}    
+            />
+            <DropdownFilter
+                category={"artist"}
+                title={"Artists"}
+                filterAddDispatch={FILTERBY_ARTIST_ADD}
+                filterRemoveDispatch={FILTERBY_ARTIST_REMOVE}
+            />
         </div>
     )
 }

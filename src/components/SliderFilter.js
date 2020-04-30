@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Slider } from '@material-ui/core';
 import './SliderFilter.css';
+import { FILTER_RANGE } from '../redux/Constants';
 
 const SlideFilter = (props) => {
 
@@ -10,7 +11,7 @@ const SlideFilter = (props) => {
 
     const handleChange = (e, newRange) => {
         setRange(newRange);
-        dispatch({type: props.filterDispatch, range: newRange});
+        dispatch({type: FILTER_RANGE, category: props.category, range: newRange});
     }
 
     return (
