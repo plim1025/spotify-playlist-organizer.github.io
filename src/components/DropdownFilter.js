@@ -13,17 +13,22 @@ const DropdownFilter = (props) => {
 
     const handleChange = e => {
         setArtists(e.target.value);
-        if(e.target.value.length == 1 && artists.length == 0)
+        const prevLength = e.target.value.length;
+        const curLength = artists.length;
+
+        if(prevLength > curLength) {
+            const removed = artists.filter(artist => !e.target.value.includes(artist));
+            dispatch({type: FILTER_REMOVE, category: props.category, removedFilter: removed})
+        }
+
+        if(prevLength == 1 && curLength == 0)
             dispatch({type: FILTERALL_OUT, category: props.category});
-        else if(e.target.value.length == 0 && artists.length == 1)
+        else if(prevLength == 0 && curLength == 1)
             dispatch({type: FILTERALL_IN, category: props.category});
 
-        if(artists.length < e.target.value.length) {
-            let added = e.target.value.filter(artist => !artists.includes(artist));
+        if(curLength < prevLength) {
+            const added = e.target.value.filter(artist => !artists.includes(artist));
             dispatch({type: FILTER_ADD, category: props.category, addedFilter: added});
-        } else {
-            let removed = artists.filter(artist => !e.target.value.includes(artist));
-            dispatch({type: FILTER_REMOVE, category: props.category, removedFilter: removed})
         }
     }
 

@@ -89,23 +89,23 @@ const songs = (state = songList, action) => {
             return [...state.sort((a, b) => (a[action.category] > b[action.category]) ? 1 : -1)];
         case FILTERALL_OUT:
             return [...state.map(song => {
-                return {...song, filteredOutBy: {[action.category]: true }}
+                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: true }}
             })];
         case FILTERALL_IN:
             return [...state.map(song => {
-                return {...song, filteredOutBy: {[action.category]: false }};
+                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: false }};
             })];
         case FILTER_ADD:
             return [...state.map(song => {
                 if(song.artist == action.addedFilter)   
-                    return {...song, filteredOutBy: {[action.category]: false}};
+                    return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: false}};
                 else
                     return song
             })];
         case FILTER_REMOVE:
             return [...state.map(song => {
                 if(song.artist == action.removedFilter)   
-                    return {...song, filteredOutBy: {[action.category]: true}};
+                    return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: true}};
                 else
                     return song
             })];

@@ -7,6 +7,7 @@ const PlaylistView = (props) => {
     const songs = useSelector(state => state.songs);
 
     const songNotFiltered = filterObj => {
+        console.log(filterObj)
         for(var o in filterObj)
             if(filterObj[o])
                 return false;
