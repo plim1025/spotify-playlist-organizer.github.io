@@ -1,4 +1,5 @@
-export const UNSELECT_SONG = 'UNSELECT_SONG';
+export const TOGGLE_SELECT = 'TOGGLE_SELECt';
+
 export const SORT_SONGS = 'SORT_SONGS';
 
 export const FILTER_RANGE = 'FILTER_RANGE';

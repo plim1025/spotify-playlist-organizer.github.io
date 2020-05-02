@@ -1,8 +1,9 @@
-import { UNSELECT_SONG, SORT_SONGS, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
+import { TOGGLE_SELECT, SORT_SONGS, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
 import { combineReducers } from 'redux';
 
 export const songList = [
     {
+        "id": "1",
         "name": "Not Afraid",
         "artist": "Eminem",
         "album": "Recovery",
@@ -11,6 +12,7 @@ export const songList = [
         "popularity": 50,
         "bpm": 3005,
         "loudness": 150,
+        "selected": true,
         "filteredOutBy": {
             "artist": false,
             "album": false,
@@ -22,6 +24,7 @@ export const songList = [
         }
     },
     {
+        "id": "2",
         "name": "Love the Way You Lie",
         "artist": "Eminem",
         "album": "Recovery",
@@ -30,6 +33,7 @@ export const songList = [
         "popularity": 35,
         "bpm": 4000,
         "loudness": 140,
+        "selected": true,
         "filteredOutBy": {
             "artist": false,
             "album": false,
@@ -41,6 +45,7 @@ export const songList = [
         }
     },
     {
+        "id": "3",
         "name": "Space Bound",
         "artist": "Eminem",
         "album": "Recovery",
@@ -49,6 +54,7 @@ export const songList = [
         "popularity": 103,
         "bpm": 2005,
         "loudness": 170,
+        "selected": true,
         "filteredOutBy": {
             "artist": false,
             "album": false,
@@ -60,6 +66,7 @@ export const songList = [
         }
     },
     {
+        "id": "4",
         "name": "Redbone",
         "artist": "Childish Gambino",
         "album": "Awaken My Love",
@@ -68,6 +75,7 @@ export const songList = [
         "popularity": 3,
         "bpm": 1005,
         "loudness": 170,
+        "selected": "true",
         "filteredOutBy": {
             "artist": false,
             "album": false,
@@ -82,9 +90,13 @@ export const songList = [
 
 const songs = (state = songList, action) => {
     switch(action.type) {
-        case UNSELECT_SONG:
-            // use filter function
-            return state;
+        case TOGGLE_SELECT:
+            return [...state.map(song => {
+                if(song.id == action.id)
+                    return {...song, selected: !song.selected};
+                else
+                    return song;
+            })];
         case SORT_SONGS:
             return [...state.sort((a, b) => (a[action.category] > b[action.category]) ? 1 : -1)];
         case FILTERALL_OUT:
