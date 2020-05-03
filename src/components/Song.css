@@ -1,0 +1,55 @@
+#songParent {
+    display: flex;
+    font-size: 16px;
+    height: 16px;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #000;
+    transition: all 0.2s ease;
+}
+
+#songParent:hover {
+    background: #fff;
+}
+
+#songParent:first-child {
+    border-top: 1px solid #000;
+}
+
+#songParent > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 10px;
+}
+
+#checkmark {
+    display: inline-grid;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    padding: 4px;
+    cursor: pointer;
+}
+
+#checkmark svg {
+    fill: transparent;
+    transition: all 0.2s ease;
+}
+
+#checkmark svg:hover {
+    fill: #000;
+}
+
+#name {
+    flex: 2;
+}
+
+#artist {
+    flex: 1;
+}
+
+#album {
+    flex: 1;
+}

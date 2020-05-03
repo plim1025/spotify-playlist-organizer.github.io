@@ -17,9 +17,9 @@ const PlaylistView = (props) => {
         <div>
             {
                 songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) ? 
-                    (song.selected ? 
-                        <Song key={song.name} color={'#000'} details={song}/> 
-                        : <Song key={song.name} color={'#fadfad'} details={song}/>
+                    (!song.selected ? 
+                        <Song key={song.name} details={song}/> 
+                        : <Song key={song.name} background={true} iconFill={true} details={song}/>
                     ) 
                     : null
                 )

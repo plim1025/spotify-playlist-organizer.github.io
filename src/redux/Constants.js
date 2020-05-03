@@ -1,6 +1,7 @@
 export const TOGGLE_SELECT = 'TOGGLE_SELECt';
 
 export const SORT_SONGS = 'SORT_SONGS';
+export const SORT_SONGS_REVERSE = 'SORT_SONGS_REVERSE';
 
 export const FILTER_RANGE = 'FILTER_RANGE';
 export const FILTERALL_OUT = 'FILTERALL_OUT';
