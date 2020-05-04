@@ -10,8 +10,8 @@ const Song = (props) => {
 
     return (
         <div id="songParent" style={{background: props.background ? '#d3d3d3' : null}}>
-            <div id="checkmark" onClick={() => dispatch({type: TOGGLE_SELECT, id: props.details.id})}>
-                <Checkmark style={{fill: props.iconFill ? '#000' : null}}/>
+            <div id="checkmark" style={{background: props.iconFill ? '#606060' : null}} onClick={() => dispatch({type: TOGGLE_SELECT, id: props.details.id})}>
+                <Checkmark style={{fill: props.iconFill ? '#fff' : null}}/>
             </div>
             <div id="name">{props.details.name}</div>
             <div id="artist">{props.details.artist}</div>
