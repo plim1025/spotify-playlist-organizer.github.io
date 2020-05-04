@@ -15,6 +15,7 @@ const App = () => {
 
     return (
         <div>
+            <SortBy />
             <PlaylistView />
             <SliderFilter
                 category={"duration"}
@@ -40,7 +41,6 @@ const App = () => {
                 min={0}
                 max={maxLoudness}
             />
-            <SortBy />
             <DropdownFilter
                 category={"artist"}
                 title={"Artists"}

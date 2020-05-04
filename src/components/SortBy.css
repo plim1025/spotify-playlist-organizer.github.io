@@ -1,4 +1,59 @@
+#sortByParent {
+    display: flex;
+    color: #909090;
+    font-size: 16px;
+    height: 16px;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #606060;
+    transition: all 0.2s ease;
+}
+
+#sortByParent > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 10px;
+}
+
+#sortByParent:first-child {
+    border-top: 1px solid #606060;
+}
+
 #sortIcon {
     height: 16px;
     width: 16px;
+}
+
+#checkmark {
+    display: inline-grid;
+    height: 12px;
+    width: 12px;
+    border-radius: 5px;
+    border: 1px solid #909090;
+    padding: 4px;
+    cursor: pointer;
+}
+
+#checkmark svg {
+    fill: transparent;
+    transition: all 0.2s ease;
+}
+
+#name {
+    flex: 5;
+}
+
+#artist {
+    flex: 2;
+}
+
+#album {
+    flex: 2;
+}
+
+#year {
+    flex: 1;
+    display: flex; 
+    justify-content: center;
 }
