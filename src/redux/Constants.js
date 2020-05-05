@@ -1,5 +1,5 @@
-export const TOGGLE_SELECT = 'TOGGLE_SELECt';
-
+export const TOGGLE_SELECT = 'TOGGLE_SELECT';
+export const TOGGLE_SELECT_ALL = 'TOGGLE_SELECT_ALL';
 export const SORT_SONGS = 'SORT_SONGS';
 export const SORT_SONGS_REVERSE = 'SORT_SONGS_REVERSE';
 

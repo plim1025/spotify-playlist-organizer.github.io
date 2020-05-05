@@ -1,4 +1,4 @@
-import { TOGGLE_SELECT, SORT_SONGS, SORT_SONGS_REVERSE, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
+import { TOGGLE_SELECT, TOGGLE_SELECT_ALL, SORT_SONGS, SORT_SONGS_REVERSE, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
 import { combineReducers } from 'redux';
 
 export const songList = [
@@ -97,18 +97,23 @@ const songs = (state = songList, action) => {
                 else
                     return song;
             })];
+        case TOGGLE_SELECT_ALL:
+            console.log(state);
+            return [...state.map(song => {
+                return {...song, selected: action.mode}
+            })];
         case SORT_SONGS:
             return [...state.sort((a, b) => (a[action.category] > b[action.category]) ? 1 : -1)];
         case SORT_SONGS_REVERSE:
             return [...state.sort((a, b) => (a[action.category] < b[action.category]) ? 1 : -1)];
         case FILTERALL_OUT:
             return [...state.map(song => {
-                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: true }}
-            })];
+                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: true }
+            }})];
         case FILTERALL_IN:
             return [...state.map(song => {
-                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: false }};
-            })];
+                return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: false }
+            }})];
         case FILTER_ADD:
             return [...state.map(song => {
                 if(song.artist == action.addedFilter)   

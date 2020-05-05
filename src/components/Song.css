@@ -39,13 +39,17 @@
 }
 
 #name {
-    flex: 2;
+    flex: 5;
 }
 
 #artist {
-    flex: 1;
+    flex: 2;
 }
 
 #album {
+    flex: 2;
+}
+
+#year {
     flex: 1;
 }
