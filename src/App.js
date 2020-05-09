@@ -6,9 +6,13 @@ import './assets/css/App.css';
 const App = () => {
 
     return (
-        <div>
-            <FilterView />
-            <SongView />
+        <div id="flex">
+            <div id="filters">
+                <FilterView/>
+            </div>
+            <div id="songs">
+                <SongView/>
+            </div>
         </div>
     )
 }

@@ -36,8 +36,8 @@ const SortBy = (props) => {
 
     return (
         <div id="sortByParent">
-            <div id="checkmark" style={{background: checkmark ? '#606060' : null}}>
-                <Checkmark style={{fill: checkmark ? '#fff' : null}} onClick={checkmarkClick}/>
+            <div id="checkmark" style={{background: checkmark ? '#606060' : null}} onClick={checkmarkClick}>
+                <Checkmark style={{fill: checkmark ? '#fff' : null}}/>
             </div>
             <div id="sortName" className="sortSelector" onClick={() => handleSort('name')}>
                 <div className="sortText" style={{color: sortedBy == 'name' ? '#000' : null}}>NAME</div>

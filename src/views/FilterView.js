@@ -11,7 +11,7 @@ const FilterView = () => {
     const maxLoudness = Math.max(...[...songList.map(song => song.loudness)]);
 
     return (
-        <div>
+        <>
             <SliderFilter
                 category={"duration"}
                 title={"Duration"}
@@ -20,13 +20,13 @@ const FilterView = () => {
             />
             <SliderFilter
                 category={"popularity"}
-                title={"Popularity"} 
+                title={"Popularity"}
                 min={0}
                 max={maxPopularity}
             />
             <SliderFilter
                 category={"bpm"}
-                title={"BPM"} 
+                title={"BPM"}
                 min={0} 
                 max={maxBPM}
             />
@@ -40,7 +40,15 @@ const FilterView = () => {
                 category={"artist"}
                 title={"Artists"}
             />
-        </div>
+            <DropdownFilter
+                category={"album"}
+                title={"Album"}
+            />
+            <DropdownFilter
+                category={"year"}
+                title={"Year"}
+            />
+        </>
     )
 }
 

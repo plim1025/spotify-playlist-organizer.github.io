@@ -115,14 +115,14 @@ const songs = (state = songList, action) => {
             }})];
         case FILTER_ADD:
             return [...state.map(song => {
-                if(song.artist == action.addedFilter)   
+                if(song[action.category] == action.addedFilter)   
                     return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: false}};
                 else
                     return song
             })];
         case FILTER_REMOVE:
             return [...state.map(song => {
-                if(song.artist == action.removedFilter)   
+                if(song[action.category] == action.removedFilter)   
                     return {...song, filteredOutBy: {...song.filteredOutBy, [action.category]: true}};
                 else
                     return song

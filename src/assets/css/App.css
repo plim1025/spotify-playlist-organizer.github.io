@@ -2,13 +2,25 @@
 
 body {
     margin: 0px 0px 0px;
-	background: #f1f1f1;
-	overflow:hidden;
+	background: transparent;
+	overflow: hidden;
 	-webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
-			cursor:default!important;
+			cursor: default !important;
+}
+
+#flex {
+    display: flex;
+}
+
+#filters {
+    flex: 1;
+}
+
+#songs {
+    flex: 5;
 }

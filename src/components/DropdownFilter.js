@@ -32,24 +32,22 @@ const DropdownFilter = (props) => {
     }
 
     return (
-        <div>
-            <FormControl>
-                <InputLabel>Filter by {props.title}</InputLabel>
-                <Select multiple value={filters} 
-                    onChange={handleChange}
-                    input={<Input />}
-                    style={{height: 40, width: 250}}
-                    renderValue={item => <div>{item.map(item => <Chip key={item} label={item} />)}</div>} 
-                >
-                    {initialFilters.map(filter => (
-                        <MenuItem key={filter} value={filter}>
-                            <Checkbox checked={filters.indexOf(filter) > -1} />
-                            <ListItemText primary={filter} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
+        <FormControl>
+            <InputLabel>Filter by {props.title}</InputLabel>
+            <Select multiple value={filters} 
+                onChange={handleChange}
+                input={<Input />}
+                style={{height: 40, width: 250}}
+                renderValue={item => <div>{item.map(item => <Chip key={item} label={item} />)}</div>} 
+            >
+                {initialFilters.map(filter => (
+                    <MenuItem key={filter} value={filter}>
+                        <Checkbox checked={filters.indexOf(filter) > -1} />
+                        <ListItemText primary={filter} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     )
 }
 

@@ -15,7 +15,7 @@ const SongView = (props) => {
     }
 
     return (
-        <div>
+        <>
             <SortBy />
             {
                 songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) ? 
@@ -27,7 +27,7 @@ const SongView = (props) => {
                 )
                 : null
             }
-        </div>
+        </>
     )
 }
 
