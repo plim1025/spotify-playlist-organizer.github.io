@@ -98,7 +98,6 @@ const songs = (state = songList, action) => {
                     return song;
             })];
         case TOGGLE_SELECT_ALL:
-            console.log(state);
             return [...state.map(song => {
                 return {...song, selected: action.mode}
             })];

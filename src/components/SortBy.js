@@ -8,13 +8,24 @@ import Checkmark from '../assets/img/checkmark.svg';
 const SortBy = (props) => {
 
     const dispatch = useDispatch();
-    const [sortedBy, sortBy] = useState(null);
     const [checkmark, toggleCheckmark] = useState(false);
+    const [sortedBy, sortBy] = useState(null);
+    const [sortedInOrder, toggleSortMode] = useState(true);
 
     const handleSort = category => {
         if(sortedBy != category) {
+            toggleSortMode(true);
             dispatch({type: SORT_SONGS, category: category});
             sortBy(category);
+        } else {
+            if(sortedInOrder) {
+                dispatch({type: SORT_SONGS_REVERSE, category: category});
+                sortBy(category);
+                toggleSortMode(!sortedInOrder);
+            } else {
+                dispatch({type: SORT_SONGS, category: category});
+                toggleSortMode(!sortedInOrder);
+            }
         }
     }
 
@@ -28,21 +39,21 @@ const SortBy = (props) => {
             <div id="checkmark" style={{background: checkmark ? '#606060' : null}}>
                 <Checkmark style={{fill: checkmark ? '#fff' : null}} onClick={checkmarkClick}/>
             </div>
-            <div id="sortName" className="sortSelector">
-                <div className="sortText" onClick={handleSort}>NAME</div>
-                <SortUpIcon className="sortIcon" onClick={() => dispatch({type: SORT_SONGS_REVERSE, category: sortedBy})}/>
+            <div id="sortName" className="sortSelector" onClick={() => handleSort('name')}>
+                <div className="sortText" style={{color: sortedBy == 'name' ? '#000' : null}}>NAME</div>
+                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'name' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'name' ? 'rotate(180deg)' : null}} />
             </div>
-            <div id="sortArtist" className="sortSelector">
-                <div className="sortText" onClick={handleSort}>ARTIST</div>
-                <SortUpIcon className="sortIcon" onClick={() => dispatch({type: SORT_SONGS_REVERSE, category: sortedBy})}/>
+            <div id="sortArtist" className="sortSelector" onClick={() => handleSort('artist')}>
+                <div className="sortText" style={{color: sortedBy == 'artist' ? '#000' : null}}>ARTIST</div>
+                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'artist' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'artist' ? 'rotate(180deg)' : null}}/>
             </div>
-            <div id="sortAlbum" className="sortSelector">
-                <div className="sortText" onClick={handleSort}>ALBUM</div>
-                <SortUpIcon className="sortIcon" onClick={() => dispatch({type: SORT_SONGS_REVERSE, category: sortedBy})}/>
+            <div id="sortAlbum" className="sortSelector" onClick={() => handleSort('album')}>
+                <div className="sortText" style={{color: sortedBy == 'album' ? '#000' : null}}>ALBUM</div>
+                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'album' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'album' ? 'rotate(180deg)' : null}}/>
             </div>
-            <div id="sortYear" className="sortSelector">
-                <div className="sortText" onClick={handleSort}>YEAR</div>
-                <SortUpIcon className="sortIcon" onClick={() => dispatch({type: SORT_SONGS_REVERSE, category: sortedBy})}/>
+            <div id="sortYear" className="sortSelector" onClick={() => handleSort('year')}>
+                <div className="sortText" style={{color: sortedBy == 'year' ? '#000' : null}}>YEAR</div>
+                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'year' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'year' ? 'rotate(180deg)' : null}}/>
             </div>
         </div>
     )

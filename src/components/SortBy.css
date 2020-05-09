@@ -15,11 +15,6 @@
     margin: 0 10px;
 }
 
-#sortByParent > div:hover {
-    color: #000;
-    text-decoration: underline;
-}
-
 #checkmark {
     display: inline-grid;
     height: 12px;
@@ -37,16 +32,22 @@
 
 .sortSelector {
     display: flex;
+    align-items: center;
+}
+
+.sortSelector:hover {
+    color: #000;
+}
+
+.sortSelector:hover .sortIcon{
+    fill: #000;
 }
 
 .sortIcon {
     height: 16px;
     width: 16px;
     fill: transparent;
-}
-
-.sortIcon:hover {
-    fill: '#000';
+    margin-left: 5px;
 }
 
 #sortName {
