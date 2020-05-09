@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Song from '../components/Song';
+import SortBy from '../components/SortBy';
 
-const PlaylistView = (props) => {
+const SongView = (props) => {
 
     const songs = useSelector(state => state.songs);
 
@@ -15,6 +16,7 @@ const PlaylistView = (props) => {
 
     return (
         <div>
+            <SortBy />
             {
                 songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) ? 
                     (!song.selected ? 
@@ -29,4 +31,4 @@ const PlaylistView = (props) => {
     )
 }
 
-export default PlaylistView;
+export default SongView;

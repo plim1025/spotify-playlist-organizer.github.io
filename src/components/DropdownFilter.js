@@ -8,22 +8,22 @@ const DropdownFilter = (props) => {
 
     const dispatch = useDispatch();
     const songs = useSelector(state => state.songs);
-    const initialArtists = [...new Set(songs.map(song => song.artist))];
-    const [artists, setArtists] = useState([]);
+    const initialFilters = [...new Set(songs.map(song => song[props.category]))];
+    const [filters, setFilters] = useState([]);
 
     const handleChange = e => {
-        setArtists(e.target.value);
-        const prevLength = artists.length;
+        setFilters(e.target.value);
+        const prevLength = filters.length;
         const curLength = e.target.value.length;
 
         if(prevLength == 0 && curLength == 1)
             dispatch({type: FILTERALL_OUT, category: props.category});
     
         if(prevLength > curLength) {
-            const removed = artists.filter(artist => !e.target.value.includes(artist));
+            const removed = filters.filter(filter => !e.target.value.includes(filter));
             dispatch({type: FILTER_REMOVE, category: props.category, removedFilter: removed})
         } else {
-            const added = e.target.value.filter(artist => !artists.includes(artist));
+            const added = e.target.value.filter(filter => !filters.includes(filter));
             dispatch({type: FILTER_ADD, category: props.category, addedFilter: added});
         }
 
@@ -35,16 +35,16 @@ const DropdownFilter = (props) => {
         <div>
             <FormControl>
                 <InputLabel>Filter by {props.title}</InputLabel>
-                <Select multiple value={artists} 
+                <Select multiple value={filters} 
                     onChange={handleChange}
                     input={<Input />}
                     style={{height: 40, width: 250}}
                     renderValue={item => <div>{item.map(item => <Chip key={item} label={item} />)}</div>} 
                 >
-                    {initialArtists.map(artist => (
-                        <MenuItem key={artist} value={artist}>
-                            <Checkbox checked={artists.indexOf(artist) > -1} />
-                            <ListItemText primary={artist} />
+                    {initialFilters.map(filter => (
+                        <MenuItem key={filter} value={filter}>
+                            <Checkbox checked={filters.indexOf(filter) > -1} />
+                            <ListItemText primary={filter} />
                         </MenuItem>
                     ))}
                 </Select>
