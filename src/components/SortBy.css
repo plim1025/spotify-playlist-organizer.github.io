@@ -16,53 +16,57 @@
     margin: 0 10px;
 }
 
-#checkmark {
+.sortByCheckmark {
     display: inline-grid;
     height: 12px;
     width: 12px;
     border-radius: 5px;
-    border: 1px solid #909090;
-    padding: 4px;
+    border: 2px solid #909090;
+    padding: 2px;
     cursor: pointer;
 }
 
-#checkmark svg {
+.sortByCheckmark:hover {
+    border: 2px solid #606060;
+}
+
+.sortByCheckmark svg {
     fill: transparent;
     transition: all 0.2s ease;
 }
 
-.sortSelector {
+.sortBySelector {
     display: flex;
     align-items: center;
 }
 
-.sortSelector:hover {
+.sortBySelector:hover {
     color: #000;
 }
 
-.sortSelector:hover .sortIcon{
+.sortBySelector:hover .sortByIcon{
     fill: #000;
 }
 
-.sortIcon {
+.sortByIcon {
     height: 16px;
     width: 16px;
     fill: transparent;
     margin-left: 5px;
 }
 
-#sortName {
+#sortByName {
     flex: 5;
 }
 
-#sortArtist {
+#sortByArtist {
     flex: 2;
 }
 
-#sortAlbum {
+#sortByAlbum {
     flex: 2;
 }
 
-#sortYear {
+#sortByYear {
     flex: 1;
 }

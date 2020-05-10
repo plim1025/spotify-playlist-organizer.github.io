@@ -19,8 +19,12 @@ body {
 
 #filters {
     flex: 1;
+    max-width: 250px;
+    width: 250px;
+    padding: 0 20px;
+    border-right: 1px solid #606060;
 }
 
 #songs {
-    flex: 5;
+    flex: 3;
 }

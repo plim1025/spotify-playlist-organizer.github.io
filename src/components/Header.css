@@ -1,0 +1,13 @@
+header {
+    height: 50px;
+    background: #606060;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+#spotifyIcon {
+    height: 50px;
+    width: 50px;
+}

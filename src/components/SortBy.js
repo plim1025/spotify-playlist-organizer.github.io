@@ -36,24 +36,24 @@ const SortBy = (props) => {
 
     return (
         <div id="sortByParent">
-            <div id="checkmark" style={{background: checkmark ? '#606060' : null}} onClick={checkmarkClick}>
+            <div className="sortByCheckmark" style={{background: checkmark ? '#606060' : null, border: props.iconFill ? '2px solid #606060' : null}} onClick={checkmarkClick}>
                 <Checkmark style={{fill: checkmark ? '#fff' : null}}/>
             </div>
-            <div id="sortName" className="sortSelector" onClick={() => handleSort('name')}>
-                <div className="sortText" style={{color: sortedBy == 'name' ? '#000' : null}}>NAME</div>
-                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'name' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'name' ? 'rotate(180deg)' : null}} />
+            <div id="sortByName" className="sortBySelector" onClick={() => handleSort('name')}>
+                <div className="sortByText" style={{color: sortedBy == 'name' ? '#000' : null, border: props.iconFill ? '2px solid #606060' : null}}>NAME</div>
+                <SortUpIcon className="sortByIcon" style={{fill: sortedBy == 'name' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'name' ? 'rotate(180deg)' : null}} />
             </div>
-            <div id="sortArtist" className="sortSelector" onClick={() => handleSort('artist')}>
-                <div className="sortText" style={{color: sortedBy == 'artist' ? '#000' : null}}>ARTIST</div>
-                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'artist' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'artist' ? 'rotate(180deg)' : null}}/>
+            <div id="sortByArtist" className="sortBySelector" onClick={() => handleSort('artist')}>
+                <div className="sortByText" style={{color: sortedBy == 'artist' ? '#000' : null, border: props.iconFill ? '2px solid #606060' : null}}>ARTIST</div>
+                <SortUpIcon className="sortByIcon" style={{fill: sortedBy == 'artist' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'artist' ? 'rotate(180deg)' : null}}/>
             </div>
-            <div id="sortAlbum" className="sortSelector" onClick={() => handleSort('album')}>
-                <div className="sortText" style={{color: sortedBy == 'album' ? '#000' : null}}>ALBUM</div>
-                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'album' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'album' ? 'rotate(180deg)' : null}}/>
+            <div id="sortByAlbum" className="sortBySelector" onClick={() => handleSort('album')}>
+                <div className="sortByText" style={{color: sortedBy == 'album' ? '#000' : null, border: props.iconFill ? '2px solid #606060' : null}}>ALBUM</div>
+                <SortUpIcon className="sortByIcon" style={{fill: sortedBy == 'album' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'album' ? 'rotate(180deg)' : null}}/>
             </div>
-            <div id="sortYear" className="sortSelector" onClick={() => handleSort('year')}>
-                <div className="sortText" style={{color: sortedBy == 'year' ? '#000' : null}}>YEAR</div>
-                <SortUpIcon className="sortIcon" style={{fill: sortedBy == 'year' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'year' ? 'rotate(180deg)' : null}}/>
+            <div id="sortByYear" className="sortBySelector" onClick={() => handleSort('year')}>
+                <div className="sortByText" style={{color: sortedBy == 'year' ? '#000' : null, border: props.iconFill ? '2px solid #606060' : null}}>YEAR</div>
+                <SortUpIcon className="sortByIcon" style={{fill: sortedBy == 'year' ? '#000' : null, transform: !sortedInOrder && sortedBy == 'year' ? 'rotate(180deg)' : null}}/>
             </div>
         </div>
     )

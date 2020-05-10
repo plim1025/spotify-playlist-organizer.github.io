@@ -15,8 +15,8 @@ const SlideFilter = (props) => {
     }
 
     return (
-        <div className="sliderWrapper">
-            <div className="sliderTitle">{props.title}</div>
+        <div id="sliderFilterParent">
+            <div id="sliderFilterTitle">{props.title}</div>
             <Slider
                 onChange={handleChange}
                 min={props.min}

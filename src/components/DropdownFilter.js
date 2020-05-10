@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText, Checkbox } from '@material-ui/core';
-import './SliderFilter.css';
+import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import { FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from '../redux/Constants';
+import Checkmark from '../assets/img/checkmark.svg';
+import './DropdownFilter.css';
 
 const DropdownFilter = (props) => {
 
@@ -32,17 +33,20 @@ const DropdownFilter = (props) => {
     }
 
     return (
-        <FormControl>
-            <InputLabel>Filter by {props.title}</InputLabel>
-            <Select multiple value={filters} 
+        <FormControl id="dropdownFilterParent">
+            <InputLabel>{props.title}</InputLabel>
+            <Select 
+                className="dropdownFilterSelect"
+                multiple value={filters} 
                 onChange={handleChange}
                 input={<Input />}
-                style={{height: 40, width: 250}}
-                renderValue={item => <div>{item.map(item => <Chip key={item} label={item} />)}</div>} 
+                renderValue={item => <div>{item.map(item => <Chip key={item} className="dropdownFilterChip" label={item} />)}</div>} 
             >
                 {initialFilters.map(filter => (
-                    <MenuItem key={filter} value={filter}>
-                        <Checkbox checked={filters.indexOf(filter) > -1} />
+                    <MenuItem key={filter} className="dropdownFilterMenuItem" value={filter}>
+                        <div className="dropdownFilterCheckmark" style={{background: filters.indexOf(filter) > -1 ? '#606060' : null, border: filters.indexOf(filter) > -1 ? '2px solid #606060' : null}}>
+                            <Checkmark style={{fill: filters.indexOf(filter) > -1 ? '#fff' : null}}/>
+                        </div>
                         <ListItemText primary={filter} />
                     </MenuItem>
                 ))}

@@ -24,33 +24,37 @@
     margin: 0 10px;
 }
 
-#checkmark {
+.songCheckmark {
     display: inline-grid;
     height: 12px;
     width: 12px;
-    border-radius: 5px;
-    border: 1px solid #909090;
-    padding: 4px;
+    border-radius: 4px;
+    border: 2px solid #909090;
+    padding: 2px;
     cursor: pointer;
 }
 
-#checkmark svg {
+.songCheckmark:hover {
+    border: 2px solid #606060;
+}
+
+.songCheckmark svg {
     fill: transparent;
     transition: all 0.2s ease;
 }
 
-#name {
+.songName {
     flex: 5;
 }
 
-#artist {
+.songArtist {
     flex: 2;
 }
 
-#album {
+.songAlbum {
     flex: 2;
 }
 
-#year {
+.songYear {
     flex: 1;
 }

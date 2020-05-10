@@ -1,9 +1,9 @@
-.sliderWrapper {
+#sliderFilterParent {
     width: 80%;
     margin: 0 auto;
 }
 
-.sliderTitle {
+#sliderFilterTitle {
     display: flex;
     justify-content: center;
 }
