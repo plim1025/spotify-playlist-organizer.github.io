@@ -4,7 +4,7 @@ import { Slider } from '@material-ui/core';
 import './SliderFilter.css';
 import { FILTER_RANGE } from '../redux/Constants';
 
-const SlideFilter = (props) => {
+const SliderFilter = (props) => {
 
     const dispatch = useDispatch();
     const [range, setRange] = useState([0, props.max]);
@@ -22,10 +22,9 @@ const SlideFilter = (props) => {
                 min={props.min}
                 max={props.max}
                 value={range}
-                valueLabelDisplay="auto"
             />
         </div>
     )
 }
 
-export default SlideFilter;
+export default SliderFilter;

@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,800&display=swap');
 
 body {
-    margin: 0px 0px 0px;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
 	background: transparent;
-	overflow: hidden;
 	-webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -15,16 +16,22 @@ body {
 
 #flex {
     display: flex;
+    justify-content: center;
+    margin: 0 20px;
 }
 
 #filters {
-    flex: 1;
-    max-width: 250px;
-    width: 250px;
+    width: 200px;
     padding: 0 20px;
     border-right: 1px solid #606060;
 }
 
 #songs {
     flex: 3;
+}
+
+@media only screen and (max-width: 800px) {
+    #filters {
+        display: none;
+    }
 }

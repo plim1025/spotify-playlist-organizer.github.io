@@ -2,6 +2,7 @@ import React from 'react'
 import { songList } from '../redux/Reducers';
 import DropdownFilter from '../components/DropdownFilter';
 import SliderFilter from '../components/SliderFilter';
+import './FilterView.css';
 
 const FilterView = () => {
 
@@ -24,9 +25,10 @@ const FilterView = () => {
                 category={"year"}
                 title={"Year"}
             />
+            <div style={{height: 20}}/>
             <SliderFilter
                 category={"duration"}
-                title={"Duration"}
+                title={"Duration (s)"}
                 min={0}
                 max={maxDuration}
             />
@@ -38,13 +40,13 @@ const FilterView = () => {
             />
             <SliderFilter
                 category={"bpm"}
-                title={"BPM"}
+                title={"Beats per Minute (BPM)"}
                 min={0} 
                 max={maxBPM}
             />
             <SliderFilter
                 category={"loudness"}
-                title={"Loudness"}
+                title={"Loudness (dB)"}
                 min={0}
                 max={maxLoudness}
             />

@@ -40,7 +40,7 @@ const DropdownFilter = (props) => {
                 multiple value={filters} 
                 onChange={handleChange}
                 input={<Input />}
-                renderValue={item => <div>{item.map(item => <Chip key={item} className="dropdownFilterChip" label={item} />)}</div>} 
+                renderValue={item => <div>{item.map(item => <Chip key={item} style={{height: 20}} label={item} />)}</div>} 
             >
                 {initialFilters.map(filter => (
                     <MenuItem key={filter} className="dropdownFilterMenuItem" value={filter}>
