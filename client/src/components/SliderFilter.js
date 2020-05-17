@@ -22,6 +22,7 @@ const SliderFilter = (props) => {
                 min={props.min}
                 max={props.max}
                 value={range}
+                valueLabelDisplay={'auto'}
             />
         </div>
     )

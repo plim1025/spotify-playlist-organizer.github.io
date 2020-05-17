@@ -1,32 +1,31 @@
 {
   "name": "spotify-playlists",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/plim1025/spotify-bpm-playlists.git",
-  "author": "plim1025 <plim1025@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
-    "babel-loader": "^8.1.0",
-    "css-loader": "^3.5.2",
-    "style-loader": "^1.1.4",
-    "ts-loader": "^7.0.1",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.9.11",
-    "@svgr/webpack": "^5.3.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
-  },
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "client-install": "cd client && yarn install",
+    "test": "node server.js",
+    "server": "nodemon server.js",
+    "client": "cd client && yarn start",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plim1025/spotify-playlists.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plim1025/spotify-playlists/issues"
+  },
+  "homepage": "https://github.com/plim1025/spotify-playlists#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
   }
 }
