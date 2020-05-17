@@ -22,7 +22,10 @@
   },
   "homepage": "https://github.com/plim1025/spotify-playlists#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
