@@ -19,10 +19,8 @@ const generateRandomString = length => {
     return text;
 };
 
-
 app.get('/login', (req, res) => {
     const state = generateRandomString(16);
-    console.log('Login state' + state)
     res.cookie(stateKey, state);
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
@@ -57,7 +55,7 @@ app.get('/callback', (req, res) => {
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
             },
             json: true
         };
@@ -103,7 +101,7 @@ app.get('/refresh_token', (req, res) => {
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         headers: {
-            'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+            'Authorization': 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
         },
         form: {
             grant_type: 'refresh_token',

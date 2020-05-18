@@ -16,6 +16,7 @@ const App = () => {
                 <div id="songs">
                     <SongView/>
                 </div>
+                <button onClick={() => window.location='http://localhost:3000/login'} />
             </div>
         </>
     )
