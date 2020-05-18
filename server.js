@@ -3,6 +3,7 @@ const request = require('request');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 app.use(cookieParser()).use(cors());
@@ -34,9 +35,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/callback', (req, res) => {
-    // your application requests refresh and access tokens
-    // after checking the state parameter
-
     const code = req.query.code || null;
     const state = req.query.state || null;
     const storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -60,8 +58,8 @@ app.get('/callback', (req, res) => {
             json: true
         };
 
-        request.post(authOptions, (error, response, body) => {
-            if (!error && response.statusCode === 200) {
+        request.post(authOptions, (err, response, body) => {
+            if (!err && response.statusCode === 200) {
                 const access_token = body.access_token;
                 const refresh_token = body.refresh_token;
 
@@ -73,22 +71,23 @@ app.get('/callback', (req, res) => {
                     json: true
                 };
 
-                // use the access token to access the Spotify Web API
-                request.get(options, (error, response, body) => {
+                request.get(options, (err, res, body) => {
                     console.log(body);
                 });
 
-                // we can also pass the token to the browser to make requests from there
-                res.redirect('/#' +
+                let uri = process.env.FRONTEND_URI || 'http://localhost:8080';
+                res.redirect(uri +
                     querystring.stringify({
-                        access_token: access_token,
-                        refresh_token: refresh_token
-                    }));
+                    access_token: access_token,
+                    refresh_token: refresh_token
+                    })
+                );
             } else {
                 res.redirect('#' +
                     querystring.stringify({
                         error: 'invalid_token'
-                    }));
+                    })
+                );
             }
         });
     }
