@@ -27,7 +27,7 @@ app.get('/login', (req, res) => {
         querystring.stringify({
             response_type: 'code',
             client_id: process.env.SPOTIFY_CLIENT_ID,
-            scope: 'user-read-private user-read-email',
+            scope: 'user-library-read',
             state: state,
             redirect_uri: redirect_uri
         })
@@ -71,17 +71,8 @@ app.get('/callback', (req, res) => {
                     json: true
                 };
 
-                request.get(options, (err, res, body) => {
-                    console.log(body);
-                });
-
-                let uri = process.env.FRONTEND_URI || 'http://localhost:8080';
-                res.redirect(uri +
-                    querystring.stringify({
-                    access_token: access_token,
-                    refresh_token: refresh_token
-                    })
-                );
+                let uri = process.env.FRONTEND_URI || 'http://localhost:8080/select';
+                res.redirect(uri + '?access_token=' + access_token + '&refresh_token=' + refresh_token);
             } else {
                 res.redirect('#' +
                     querystring.stringify({
@@ -111,7 +102,7 @@ app.get('/refresh_token', (req, res) => {
 
     request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            var access_token = body.access_token;
+            const access_token = body.access_token;
             res.send({
                 'access_token': access_token
             });

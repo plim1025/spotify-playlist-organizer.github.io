@@ -1,4 +1,4 @@
-import { TOGGLE_SELECT, TOGGLE_SELECT_ALL, SORT_SONGS, SORT_SONGS_REVERSE, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
+import { SET_SONGS, TOGGLE_SELECT, TOGGLE_SELECT_ALL, SORT_SONGS, SORT_SONGS_REVERSE, FILTER_RANGE, FILTERALL_OUT, FILTERALL_IN, FILTER_ADD, FILTER_REMOVE } from './Constants';
 import { combineReducers } from 'redux';
 
 export const songList = [
@@ -90,6 +90,8 @@ export const songList = [
 
 const songs = (state = songList, action) => {
     switch(action.type) {
+        case SET_SONGS:
+            return action.songs;
         case TOGGLE_SELECT:
             return [...state.map(song => {
                 if(song.id == action.id)

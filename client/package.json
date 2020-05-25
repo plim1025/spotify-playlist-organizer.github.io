@@ -2,7 +2,7 @@
   "name": "spotify-playlists",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/plim1025/spotify-bpm-playlists.git",
+  "repository": "https://github.com/plim1025/spotify-playlists",
   "author": "plim1025 <plim1025@gmail.com>",
   "license": "MIT",
   "devDependencies": {
@@ -24,6 +24,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
     "redux": "^4.0.5"
   },
   "scripts": {

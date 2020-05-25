@@ -1,3 +1,5 @@
+export const SET_SONGS = 'SET_SONGS';
+
 export const TOGGLE_SELECT = 'TOGGLE_SELECT';
 export const TOGGLE_SELECT_ALL = 'TOGGLE_SELECT_ALL';
 export const SORT_SONGS = 'SORT_SONGS';
