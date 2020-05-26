@@ -1,65 +1,83 @@
 import React, { useState, useEffect } from 'react';
-import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import Checkmark from '../assets/img/checkmark.svg';
 import { useLocation } from 'react-router-dom';
 import { SET_SONGS } from '../redux/Constants';
 
 const Home = () => {
 
+    const dispatch = useDispatch();
     const query = new URLSearchParams(useLocation().search);
-    const [library, setLibrary] = useState([]);
+    const [savedSongs, setSavedSongs] = useState([]);
     const [playlists, setPlaylists] = useState([]);
-    const [songs, setSongs] = useState([]);
+    const [playlistSongs, setPlaylistSongs] = useState([]);
+    const [savedSongsSelected, toggleSavedSongsSelected] = useState(false);
+    const [selectedPlaylists, setSelectedPlaylists] = useState([]);
 
     useEffect(() => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
+
         fetch('https://api.spotify.com/v1/me/tracks', {
             headers: {'Authorization': 'Bearer ' + accessToken }
         })
         .then(response => response.json())
-        .then(data => setLibrary(data.items));
-        // .then(data => console.log(data))
+        .then(data => setSavedSongs(data.items.map(item => item.track)))
+        .catch(err => console.log(err));
 
         fetch('https://api.spotify.com/v1/me/playlists', {
             headers: {'Authorization': 'Bearer ' + accessToken }
         })
         .then(response => response.json())
-        .then(data => setPlaylists(data.items));
-        // .then(data => console.log(data))
+        .then(data => {
+            const items = data.items;
+            setPlaylists(items);
+            for(let i = 0; i < items.length; i++) {
+                fetch(items[i].tracks.href, {
+                    headers: {'Authorization': 'Bearer ' + accessToken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setPlaylistSongs([...playlistSongs, {[items[i].id]: [...data.items.map(item => item.track)]}]);
+                })
+                .catch(err => console.log(err));
+            }
+        })
+        .catch(err => console.log(err));
+        // .then(data => console.log(data.items))
     }, []);
 
-    const handleChange = () => {
-        // dispatch({SET_SONGS, songs}));
+    const handleChange = selectedID => {
+        if(selectedPlaylists.includes(selectedID))
+            setSelectedPlaylists(selectedPlaylists.filter(ID => ID !== selectedID));
+        else
+            setSelectedPlaylists([...selectedPlaylists, selectedID]);
+    }
+
+    const handleSubmit = () => {
+        let songs = [];
+        if(savedSongsSelected)
+            songs = savedSongs;
+        for(let i = 0; i < playlistSongs.length; i++) {
+            if(selectedPlaylists.includes(Object.keys(playlistSongs[i])[0]))
+                songs = [...songs, ...Object.values(playlistSongs[i])[0]];
+        }
+        console.log(songs)
+        // dispatch({type: SET_SONGS, songs: songs});
     }
 
     return (
-        <FormControl id="dropdownFilterParent">
-            <InputLabel>Choose Songs from Playlists</InputLabel>
-            <Select 
-                className="dropdownFilterSelect"
-                multiple value={songs} 
-                onChange={handleChange}
-                input={<Input />}
-                renderValue={item => <div>{item.map(item => <Chip key={item} style={{height: 20}} label={item} />)}</div>} 
-            >
-                <MenuItem value={"Saved Songs"}>
-                    <div style={{background: '#606060', border: '2px solid #606060'}}>
-                        <Checkmark style={{fill: '#fff'}}/>
-                    </div>
-                    <ListItemText primary={"Saved Songs"} />
-                </MenuItem>
-                {playlists.map((playlist, index) => (
-                    <MenuItem key={index} className="dropdownFilterMenuItem" value={playlist.description}>
-                        <div className="dropdownFilterCheckmark" style={{background: '#606060', border: '2px solid #606060'}}>
-                            <Checkmark style={{fill: '#fff'}}/>
-                        </div>
-                        <ListItemText primary={playlist.description} />
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-        // <div></div>
+        <>
+            <div className="playlistParent">
+                <div onClick={() => toggleSavedSongsSelected(prevState => !prevState)}>Saved Songs</div>
+                {
+                    playlists ? 
+                        playlists.map(playlist => <div key={playlist.id} onClick={() => handleChange(playlist.id)}>{playlist.description}</div>)
+                        : null
+                }
+            </div>
+            <div onClick={handleSubmit}>Continue</div>
+        </>
     )
 }
 

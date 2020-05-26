@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Songs from './views/Songs';
 import SelectPlaylist from './views/SelectPlaylist';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 var initialState;
 const store = Store(initialState);
