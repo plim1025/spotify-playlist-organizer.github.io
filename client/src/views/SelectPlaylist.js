@@ -44,7 +44,6 @@ const Home = () => {
             }
         })
         .catch(err => console.log(err));
-        // .then(data => console.log(data.items))
     }, []);
 
     const handleChange = selectedID => {
@@ -62,8 +61,8 @@ const Home = () => {
             if(selectedPlaylists.includes(Object.keys(playlistSongs[i])[0]))
                 songs = [...songs, ...Object.values(playlistSongs[i])[0]];
         }
-        console.log(songs)
-        // dispatch({type: SET_SONGS, songs: songs});
+        dispatch({type: SET_SONGS, songs: songs});
+        // window.location.assign('http://localhost:8080/playlist');
     }
 
     return (

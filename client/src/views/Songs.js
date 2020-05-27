@@ -6,7 +6,7 @@ import SortBy from '../components/SortBy';
 import Song from '../components/Song';
 import './Songs.css';
 
-const SongView = (props) => {
+const Songs = (props) => {
 
     const songs = useSelector(state => state.songs);
 
@@ -78,4 +78,4 @@ const SongView = (props) => {
     )
 }
 
-export default SongView;
+export default Songs;
