@@ -9,7 +9,9 @@ const DropdownFilter = (props) => {
 
     const dispatch = useDispatch();
     const songs = useSelector(state => state.songs);
-    const initialFilters = [...new Set(songs.map(song => song[props.category]))];
+    const initialFilters = props.category !== "artists" ? 
+        [...new Set(songs.map(song => song[props.category]))]
+        : [...new Set([].concat.apply([], songs.map(song => song.artists)))]
     const [filters, setFilters] = useState([]);
 
     const handleChange = e => {
@@ -43,7 +45,7 @@ const DropdownFilter = (props) => {
                 renderValue={item => <div>{item.map(item => <Chip key={item} style={{height: 20}} label={item} />)}</div>} 
             >
                 {initialFilters.map(filter => (
-                    <MenuItem key={filter} className="dropdownFilterMenuItem" value={filter}>
+                    <MenuItem key={filter }className="dropdownFilterMenuItem" value={filter}>
                         <div className="dropdownFilterCheckmark" style={{background: filters.indexOf(filter) > -1 ? '#606060' : null, border: filters.indexOf(filter) > -1 ? '2px solid #606060' : null}}>
                             <Checkmark style={{fill: filters.indexOf(filter) > -1 ? '#fff' : null}}/>
                         </div>

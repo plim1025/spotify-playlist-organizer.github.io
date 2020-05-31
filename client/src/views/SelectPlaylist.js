@@ -24,20 +24,20 @@ const Home = () => {
         .then(response => response.json())
         .then(libraryData => {
             let tracks = libraryData.items.map(item => item.track);
+            let promiseArr = [];
             for(let i = 0; i < tracks.length; i++) {
-                fetch(`https://api.spotify.com/v1/audio-features/${tracks[i].id}`, {
-                    headers: {'Authorization': 'Bearer ' + accessToken}
-                })
-                .then(response => response.json())
-                .then(trackData => {
-                    return tracks.map(item => item.id === tracks[i].id ? {...item, ...trackData} : item);
-                })
-                .then(parsedTracks => {
-                    tracks = parsedTracks;
-                    if(i === tracks.length - 1)
-                        setSavedSongs(tracks);
-                })
+                promiseArr.push(
+                    fetch(`https://api.spotify.com/v1/audio-features/${tracks[i].id}`, {
+                        headers: {'Authorization': 'Bearer ' + accessToken}
+                    })
+                    .then(response => response.json())
+                    .then(trackData => {
+                        tracks = tracks.map(item => item.id === tracks[i].id ? {...item, ...trackData} : item)
+                    })
+                    .catch(err => console.log(err))
+                );
             }
+            Promise.all(promiseArr).then(() => setSavedSongs(tracks));
         })
         .catch(err => console.log(err));
 
@@ -55,20 +55,20 @@ const Home = () => {
                 .then(response => response.json())
                 .then(playlistData => {
                     let tracks =  playlistData.items.map(item => item.track);
+                    let promiseArr = [];
                     for(let j = 0; j < tracks.length; j++) {
-                        fetch(`https://api.spotify.com/v1/audio-features/${tracks[j].id}`, {
-                            headers: {'Authorization': 'Bearer ' + accessToken}
-                        })
-                        .then(response => response.json())
-                        .then(trackData => {
-                            return tracks.map(item => item.id === tracks[j].id ? {...item, ...trackData} : item);
-                        })
-                        .then(parsedTracks => {
-                            tracks = parsedTracks
-                            if(j === tracks.length - 1)
-                                setPlaylistSongs([...playlistSongs, {[playlists[i].id]: tracks}]);
-                        })
+                        promiseArr.push(
+                            fetch(`https://api.spotify.com/v1/audio-features/${tracks[j].id}`, {
+                                headers: {'Authorization': 'Bearer ' + accessToken}
+                            })
+                            .then(response => response.json())
+                            .then(trackData => {
+                                tracks = tracks.map(item => item.id === tracks[j].id ? {...item, ...trackData} : item);
+                            })
+                            .catch(err => console.log(err))
+                        )
                     }
+                    Promise.all(promiseArr).then(() => setPlaylistSongs([...playlistSongs, {[playlists[i].id]: tracks}]));
                 })
                 .catch(err => console.log(err));
             }
@@ -91,7 +91,6 @@ const Home = () => {
             if(selectedPlaylists.includes(Object.keys(playlistSongs[i])[0]))
                 songs = [...songs, ...Object.values(playlistSongs[i])[0]];
         }
-        console.log(songs)
         const parsedSongs = songs.map(song => {
             return {
                 id: song.id,
@@ -103,7 +102,7 @@ const Home = () => {
                 popularity: song.popularity,
                 preview: song.preview_url,
                 bpm: parseInt(song.tempo),
-                loudness: song.loudness,
+                loudness: parseInt(song.loudness),
                 selected: false,
                 filteredOutBy: {
                     artist: false,

@@ -91,7 +91,6 @@ export const songList = [
 const songs = (state = [], action) => {
     switch(action.type) {
         case SET_SONGS:
-            console.log(state)
             return action.songs;
         case TOGGLE_SELECT:
             return [...state.map(song => {

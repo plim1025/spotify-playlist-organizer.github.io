@@ -7,7 +7,7 @@ import { FILTER_RANGE } from '../redux/Constants';
 const SliderFilter = (props) => {
 
     const dispatch = useDispatch();
-    const [range, setRange] = useState([0, props.max]);
+    const [range, setRange] = useState([props.min, props.max]);
 
     const handleChange = (e, newRange) => {
         setRange(newRange);

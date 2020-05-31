@@ -23,7 +23,7 @@ const Songs = (props) => {
             <div id="flex">
                 <div id="filters">
                     <DropdownFilter
-                        category={"artist"}
+                        category={"artists"}
                         title={"Artists"}
                     />
                     <DropdownFilter
@@ -56,7 +56,7 @@ const Songs = (props) => {
                     <SliderFilter
                         category={"loudness"}
                         title={"Loudness (dB)"}
-                        min={0}
+                        min={Math.min(...[...songs.map(song => song.loudness)])}
                         max={Math.max(...[...songs.map(song => song.loudness)])}
                     />
                 </div>
