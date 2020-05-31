@@ -14,7 +14,7 @@ const Song = (props) => {
                 <Checkmark style={{fill: props.iconFill ? '#fff' : null}}/>
             </div>
             <div className="songName">{props.details.name}</div>
-            <div className="songArtist">{props.details.artist}</div>
+            <div className="songArtist">{props.details.artists.join(', ')}</div>
             <div className="songAlbum">{props.details.album}</div>
             <div className="songYear">{props.details.year}</div>
         </div>

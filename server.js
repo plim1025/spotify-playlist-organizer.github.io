@@ -27,7 +27,7 @@ app.get('/login', (req, res) => {
         querystring.stringify({
             response_type: 'code',
             client_id: process.env.SPOTIFY_CLIENT_ID,
-            scope: 'user-library-read',
+            scope: 'user-library-read user-read-email playlist-read-private',
             state: state,
             redirect_uri: redirect_uri
         })
@@ -63,15 +63,7 @@ app.get('/callback', (req, res) => {
                 const access_token = body.access_token;
                 const refresh_token = body.refresh_token;
 
-                const options = {
-                    url: 'https://api.spotify.com/v1/me',
-                    headers: {
-                        'Authorization': 'Bearer ' + access_token
-                    },
-                    json: true
-                };
-
-                let uri = process.env.FRONTEND_URI || 'http://localhost:8080/select';
+                const uri = process.env.FRONTEND_URI || 'http://localhost:8080/select';
                 res.redirect(uri + '?access_token=' + access_token + '&refresh_token=' + refresh_token);
             } else {
                 res.redirect('#' +

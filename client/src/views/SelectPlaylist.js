@@ -22,23 +22,53 @@ const Home = () => {
             headers: {'Authorization': 'Bearer ' + accessToken }
         })
         .then(response => response.json())
-        .then(data => setSavedSongs(data.items.map(item => item.track)))
+        .then(libraryData => {
+            let tracks = libraryData.items.map(item => item.track);
+            for(let i = 0; i < tracks.length; i++) {
+                fetch(`https://api.spotify.com/v1/audio-features/${tracks[i].id}`, {
+                    headers: {'Authorization': 'Bearer ' + accessToken}
+                })
+                .then(response => response.json())
+                .then(trackData => {
+                    return tracks.map(item => item.id === tracks[i].id ? {...item, ...trackData} : item);
+                })
+                .then(parsedTracks => {
+                    tracks = parsedTracks;
+                    if(i === tracks.length - 1)
+                        setSavedSongs(tracks);
+                })
+            }
+        })
         .catch(err => console.log(err));
 
         fetch('https://api.spotify.com/v1/me/playlists', {
-            headers: {'Authorization': 'Bearer ' + accessToken }
+            headers: {'Authorization': 'Bearer ' + accessToken}
         })
         .then(response => response.json())
-        .then(data => {
-            const items = data.items;
-            setPlaylists(items);
-            for(let i = 0; i < items.length; i++) {
-                fetch(items[i].tracks.href, {
-                    headers: {'Authorization': 'Bearer ' + accessToken }
+        .then(playlistsData => {
+            const playlists = playlistsData.items;
+            setPlaylists(playlists);
+            for(let i = 0; i < playlists.length; i++) {
+                fetch(playlists[i].tracks.href, {
+                    headers: {'Authorization': 'Bearer ' + accessToken}
                 })
                 .then(response => response.json())
-                .then(data => {
-                    setPlaylistSongs([...playlistSongs, {[items[i].id]: [...data.items.map(item => item.track)]}]);
+                .then(playlistData => {
+                    let tracks =  playlistData.items.map(item => item.track);
+                    for(let j = 0; j < tracks.length; j++) {
+                        fetch(`https://api.spotify.com/v1/audio-features/${tracks[j].id}`, {
+                            headers: {'Authorization': 'Bearer ' + accessToken}
+                        })
+                        .then(response => response.json())
+                        .then(trackData => {
+                            return tracks.map(item => item.id === tracks[j].id ? {...item, ...trackData} : item);
+                        })
+                        .then(parsedTracks => {
+                            tracks = parsedTracks
+                            if(j === tracks.length - 1)
+                                setPlaylistSongs([...playlistSongs, {[playlists[i].id]: tracks}]);
+                        })
+                    }
                 })
                 .catch(err => console.log(err));
             }
@@ -61,17 +91,42 @@ const Home = () => {
             if(selectedPlaylists.includes(Object.keys(playlistSongs[i])[0]))
                 songs = [...songs, ...Object.values(playlistSongs[i])[0]];
         }
-        dispatch({type: SET_SONGS, songs: songs});
-        // window.location.assign('http://localhost:8080/playlist');
+        console.log(songs)
+        const parsedSongs = songs.map(song => {
+            return {
+                id: song.id,
+                name: song.name,
+                artists: song.artists.map(artist => artist.name),
+                album: song.album.name,
+                year: song.album.release_date.substring(0,4),
+                duration: song.duration_ms,
+                popularity: song.popularity,
+                preview: song.preview_url,
+                bpm: parseInt(song.tempo),
+                loudness: song.loudness,
+                selected: false,
+                filteredOutBy: {
+                    artist: false,
+                    album: false,
+                    year: false,
+                    duration: false,
+                    popularity: false,
+                    bpm: false,
+                    loudness: false
+                }
+            }
+        });
+        dispatch({type: SET_SONGS, songs: parsedSongs});
+        window.location.assign('http://localhost:8080/playlist');
     }
 
     return (
         <>
             <div className="playlistParent">
-                <div onClick={() => toggleSavedSongsSelected(prevState => !prevState)}>Saved Songs</div>
+            <div onClick={() => toggleSavedSongsSelected(prevState => !prevState)}>Saved Songs ({savedSongs.length})</div>
                 {
                     playlists ? 
-                        playlists.map(playlist => <div key={playlist.id} onClick={() => handleChange(playlist.id)}>{playlist.description}</div>)
+                        playlists.map(playlist => <div key={playlist.id} onClick={() => handleChange(playlist.id)}>{playlist.name} ({playlist.tracks.total})</div>)
                         : null
                 }
             </div>

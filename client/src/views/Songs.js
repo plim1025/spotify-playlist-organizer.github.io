@@ -5,6 +5,7 @@ import SliderFilter from '../components/SliderFilter';
 import SortBy from '../components/SortBy';
 import Song from '../components/Song';
 import './Songs.css';
+// import {songList} from '../redux/Reducers';
 
 const Songs = (props) => {
 
@@ -19,7 +20,6 @@ const Songs = (props) => {
 
     return (
         <>
-
             <div id="flex">
                 <div id="filters">
                     <DropdownFilter
@@ -65,9 +65,9 @@ const Songs = (props) => {
                     {
                         songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) ? 
                             (!song.selected ? 
-                                <Song key={song.name} details={song}/> 
-                                : <Song key={song.name} background={true} iconFill={true} details={song}/>
-                            ) 
+                                <Song key={song.id} details={song}/> 
+                                : <Song key={song.id} background={true} iconFill={true} details={song}/>
+                            )
                             : null
                         )
                         : null
