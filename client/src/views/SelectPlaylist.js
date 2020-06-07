@@ -86,26 +86,21 @@ const Home = () => {
             songs = savedSongs;
         playlistSongs.map(playlistSong => {
             if(selectedPlaylists.includes(Object.keys(playlistSong)[0]))
-            songs = [...songs, ...Object.values(playlistSong)[0]];
+                songs = [...songs, ...Object.values(playlistSong)[0]];
         });
         await fetch('http://localhost:3000/song', {
             method: 'DELETE'
         });
-        let promiseArr = [];
-        songs.map(song => {
-            promiseArr.push(
-                fetch('http://localhost:3000/song', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(song)
-                })
-                .catch(err => console.log(err))
-            );
-        });
-        Promise.all(promiseArr).then(() => window.location.href ='songs');
+        fetch('http://localhost:3000/songs', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(songs)
+        })
+        .then(() => window.location.href ='songs')
+        .catch(err => console.log(err));
     }
 
     return (

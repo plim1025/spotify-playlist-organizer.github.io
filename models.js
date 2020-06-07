@@ -20,7 +20,8 @@ const SongSchema = new Schema({
     speechiness: Number,
     tempo: Number,
     time_signature: Number,
-    valence: Number
+    valence: Number,
+    year: Number
 });
 
 const Song = mongoose.model('song', SongSchema);
