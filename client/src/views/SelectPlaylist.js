@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import Checkmark from '../assets/img/checkmark.svg';
 import { useLocation } from 'react-router-dom';
-import { SET_SONGS } from '../redux/Constants';
 
 const Home = () => {
 
-    const dispatch = useDispatch();
     const query = new URLSearchParams(useLocation().search);
     const [savedSongs, setSavedSongs] = useState([]);
     const [playlists, setPlaylists] = useState([]);
@@ -25,18 +22,18 @@ const Home = () => {
         .then(libraryData => {
             let tracks = libraryData.items.map(item => item.track);
             let promiseArr = [];
-            for(let i = 0; i < tracks.length; i++) {
+            tracks.map(track => {
                 promiseArr.push(
-                    fetch(`https://api.spotify.com/v1/audio-features/${tracks[i].id}`, {
+                    fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
                         headers: {'Authorization': 'Bearer ' + accessToken}
                     })
                     .then(response => response.json())
                     .then(trackData => {
-                        tracks = tracks.map(item => item.id === tracks[i].id ? {...item, ...trackData} : item)
+                        tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item)
                     })
                     .catch(err => console.log(err))
                 );
-            }
+            })
             Promise.all(promiseArr).then(() => setSavedSongs(tracks));
         })
         .catch(err => console.log(err));
@@ -48,30 +45,30 @@ const Home = () => {
         .then(playlistsData => {
             const playlists = playlistsData.items;
             setPlaylists(playlists);
-            for(let i = 0; i < playlists.length; i++) {
-                fetch(playlists[i].tracks.href, {
+            playlists.map(playlist => {
+                fetch(playlist.tracks.href, {
                     headers: {'Authorization': 'Bearer ' + accessToken}
                 })
                 .then(response => response.json())
                 .then(playlistData => {
                     let tracks =  playlistData.items.map(item => item.track);
                     let promiseArr = [];
-                    for(let j = 0; j < tracks.length; j++) {
+                    tracks.map(track => {
                         promiseArr.push(
-                            fetch(`https://api.spotify.com/v1/audio-features/${tracks[j].id}`, {
+                            fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
                                 headers: {'Authorization': 'Bearer ' + accessToken}
                             })
                             .then(response => response.json())
                             .then(trackData => {
-                                tracks = tracks.map(item => item.id === tracks[j].id ? {...item, ...trackData} : item);
+                                tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item);
                             })
                             .catch(err => console.log(err))
                         )
-                    }
-                    Promise.all(promiseArr).then(() => setPlaylistSongs([...playlistSongs, {[playlists[i].id]: tracks}]));
+                    });
+                    Promise.all(promiseArr).then(() => setPlaylistSongs([...playlistSongs, {[playlist.id]: tracks}]));
                 })
                 .catch(err => console.log(err));
-            }
+            })
         })
         .catch(err => console.log(err));
     }, []);
@@ -83,40 +80,32 @@ const Home = () => {
             setSelectedPlaylists([...selectedPlaylists, selectedID]);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         let songs = [];
         if(savedSongsSelected)
             songs = savedSongs;
-        for(let i = 0; i < playlistSongs.length; i++) {
-            if(selectedPlaylists.includes(Object.keys(playlistSongs[i])[0]))
-                songs = [...songs, ...Object.values(playlistSongs[i])[0]];
-        }
-        const parsedSongs = songs.map(song => {
-            return {
-                id: song.id,
-                name: song.name,
-                artists: song.artists.map(artist => artist.name),
-                album: song.album.name,
-                year: song.album.release_date.substring(0,4),
-                duration: song.duration_ms,
-                popularity: song.popularity,
-                preview: song.preview_url,
-                bpm: parseInt(song.tempo),
-                loudness: parseInt(song.loudness),
-                selected: false,
-                filteredOutBy: {
-                    artist: false,
-                    album: false,
-                    year: false,
-                    duration: false,
-                    popularity: false,
-                    bpm: false,
-                    loudness: false
-                }
-            }
+        playlistSongs.map(playlistSong => {
+            if(selectedPlaylists.includes(Object.keys(playlistSong)[0]))
+            songs = [...songs, ...Object.values(playlistSong)[0]];
         });
-        dispatch({type: SET_SONGS, songs: parsedSongs});
-        window.location.assign('http://localhost:8080/playlist');
+        await fetch('http://localhost:3000/song', {
+            method: 'DELETE'
+        });
+        let promiseArr = [];
+        songs.map(song => {
+            promiseArr.push(
+                fetch('http://localhost:3000/song', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(song)
+                })
+                .catch(err => console.log(err))
+            );
+        });
+        Promise.all(promiseArr).then(() => window.location.href ='songs');
     }
 
     return (

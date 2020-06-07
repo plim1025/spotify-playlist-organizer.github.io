@@ -1,18 +1,23 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import DropdownFilter from '../components/DropdownFilter';
 import SliderFilter from '../components/SliderFilter';
 import SortBy from '../components/SortBy';
 import Song from '../components/Song';
 import './Songs.css';
-// import {songList} from '../redux/Reducers';
 
 const Songs = (props) => {
 
-    const songs = useSelector(state => state.songs);
+    const [songs, setSongs] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:3000/song')
+        .then(response => response.json())
+        .then(data => setSongs(data))
+        .catch(err => console.log(err));
+    }, []);
 
     const songNotFiltered = filterObj => {
-        for(var o in filterObj)
+        for(let o in filterObj)
             if(filterObj[o])
                 return false;
         return true;
@@ -48,10 +53,10 @@ const Songs = (props) => {
                         max={Math.max(...[...songs.map(song => song.popularity)])}
                     />
                     <SliderFilter
-                        category={"bpm"}
-                        title={"Beats per Minute (BPM)"}
+                        category={"Tempo"}
+                        title={"Tempo"}
                         min={0} 
-                        max={Math.max(...[...songs.map(song => song.bpm)])}
+                        max={Math.max(...[...songs.map(song => song.tempo)])}
                     />
                     <SliderFilter
                         category={"loudness"}

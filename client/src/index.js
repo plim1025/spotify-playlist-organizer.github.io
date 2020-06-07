@@ -11,15 +11,14 @@ import SelectPlaylist from './views/SelectPlaylist';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
-
 render(
     <Provider store={Store}>
         <Header />  
             <BrowserRouter>
                 <Switch>
                     <Route path='/' exact render={() => <button onClick={() => window.location='http://localhost:3000/login'}>Login</button>} />
-                    <Route path='/select' exact component={SelectPlaylist} />
-                    <Route path='/playlist' component={Songs} />
+                    <Route path='/playlists' exact component={SelectPlaylist} />
+                    <Route path='/songs' component={Songs} />
                     <Route path='/' render={() => <div>404</div>} />
                 </Switch>
             </BrowserRouter>
