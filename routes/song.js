@@ -11,7 +11,11 @@ router.get('/song', async(req, res) => {
             const sortBy = req.query.sortBy;
             const sortDirection = req.query.sortDirection;
             if(sortBy) {
-                songs = await Song.find({}).sort({[sortBy]: sortDirection});
+                if(sortBy === 'artist') {
+                    songs = await Song.find({}).sort({'artists.0': sortDirection});
+                } else {
+                    songs = await Song.find({}).sort({[sortBy]: sortDirection});
+                }
             }
         }
     } catch(err) {

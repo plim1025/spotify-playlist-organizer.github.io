@@ -4,7 +4,7 @@ import SliderFilter from '../components/SliderFilter';
 import SortCategory from '../components/SortCategory';
 import Song from '../components/Song';
 import './Songs.css';
-import Checkmark from '../assets/img/Checkmark.svg';
+import Checkmark from '../assets/img/checkmark.svg';
 
 const Songs = (props) => {
 
