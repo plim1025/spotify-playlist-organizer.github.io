@@ -35,7 +35,7 @@ const DropdownFilter = (props) => {
     }
 
     return (
-        <FormControl id="dropdownFilterParent">
+        <FormControl className="dropdownFilterParent">
             <InputLabel>{props.title}</InputLabel>
             <Select 
                 className="dropdownFilterSelect"
@@ -45,7 +45,7 @@ const DropdownFilter = (props) => {
                 renderValue={item => <div>{item.map(item => <Chip key={item} style={{height: 20}} label={item} />)}</div>} 
             >
                 {initialFilters.map(filter => (
-                    <MenuItem key={filter }className="dropdownFilterMenuItem" value={filter}>
+                    <MenuItem key={filter} className="dropdownFilterMenuItem" value={filter}>
                         <div className="dropdownFilterCheckmark" style={{background: filters.indexOf(filter) > -1 ? '#606060' : null, border: filters.indexOf(filter) > -1 ? '2px solid #606060' : null}}>
                             <Checkmark style={{fill: filters.indexOf(filter) > -1 ? '#fff' : null}}/>
                         </div>

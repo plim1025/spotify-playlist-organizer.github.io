@@ -9,7 +9,7 @@ const Song = (props) => {
     const dispatch = useDispatch();
 
     return (
-        <div id="songParent" style={{background: props.background ? '#d3d3d3' : null}}>
+        <div className="songParent" style={{background: props.background ? '#d3d3d3' : null}}>
             <div className="songCheckmark" style={{background: props.iconFill ? '#606060' : null, border: props.iconFill ? '2px solid #606060' : null}} onClick={() => dispatch({type: TOGGLE_SELECT, id: props.details.id})}>
                 <Checkmark style={{fill: props.iconFill ? '#fff' : null}}/>
             </div>

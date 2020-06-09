@@ -3,14 +3,27 @@ const router = express.Router();
 const Song = require('../models');
 
 router.get('/song', async(req, res) => {
-    const songs = await Song.find({}).lean();
-    console.log(songs)
+    let songs;
+    try {
+        if(Object.keys(req.query).length === 0) {
+            songs = await Song.find({}).lean();
+        } else {
+            const sortBy = req.query.sortBy;
+            const sortDirection = req.query.sortDirection;
+            if(sortBy) {
+                songs = await Song.find({}).sort({[sortBy]: sortDirection});
+            }
+        }
+    } catch(err) {
+        console.log(err)
+    }
     res.send(songs);
 });
 
-router.post('/song', async(req, res) => {
-    await Song.countDocuments({id: req.body.id}, (err, count) => {
-        if(count == 0) {
+router.post('/song', (req, res) => {
+    Song.countDocuments({id: req.body.id}, (err, count) => {
+        if (err) console.log(err)
+        else if(count == 0) {
             const song = new Song({
                 album: req.body.album.name,
                 artists: req.body.artists.map(artist => artist.name),
@@ -31,41 +44,48 @@ router.post('/song', async(req, res) => {
                 valence: req.body.valence,
                 year: parseInt(req.body.album.release_date.substring(0, 5))
             });
-            song.save(e => e ? console.log(e) : null);
+            song.save(err => {
+                if(err) console.log(err)
+                else res.sendStatus(200);
+            });
         }
     });
 });
 
 router.post('/songs', (req, res) => {
-    const pastIDs = [];
     const songs = req.body.map(song => {
-        const newSong =  pastIDs.includes(song.id) ? 
-            null: {
-                album: song.album.name,
-                artists: song.artists.map(artist => artist.name),
-                danceability: song.danceability,
-                duration: song.duration_ms,
-                energy: song.energy,
-                id: song.id,
-                instrumentalness: song.instrumentalness,
-                key: song.key,
-                liveness: song.liveness,
-                loudness: song.loudness,
-                name: song.name,
-                popularity: song.popularity,
-                preview: song.preview_url,
-                speechiness: song.speechiness,
-                tempo: song.tempo,
-                time_signature: song.time_signature,
-                valence: song.valence,
-                year: parseInt(song.album.release_date.substring(0, 5))
-            }
-        pastIDs.push(song.id);
-        return newSong;
+        return {
+            album: song.album.name,
+            artists: song.artists.map(artist => artist.name),
+            danceability: song.danceability,
+            duration: song.duration_ms,
+            energy: song.energy,
+            id: song.id,
+            instrumentalness: song.instrumentalness,
+            key: song.key,
+            liveness: song.liveness,
+            loudness: song.loudness,
+            name: song.name,
+            popularity: song.popularity,
+            preview: song.preview_url,
+            speechiness: song.speechiness,
+            tempo: song.tempo,
+            time_signature: song.time_signature,
+            valence: song.valence,
+            year: parseInt(song.album.release_date.substring(0, 5))
+        }
     });
-    Song.insertMany(songs)
-        .then(() => res.sendStatus(200))
-        .catch(err => console.log(err));
+    const filteredSongs = [];
+    const pastIDs = [];
+    for(let i = 0; i < songs.length; i++) {
+        if(!pastIDs.includes(songs[i].id))
+            filteredSongs.push(songs[i])
+        pastIDs.push(songs[i].id);
+    }
+    Song.insertMany(filteredSongs, err => {
+        if(err) console.log(err)
+        else res.sendStatus(200)
+    })
 });
 
 // router.put('/song', (req, res) => {
@@ -74,9 +94,11 @@ router.post('/songs', (req, res) => {
 //     console.log(req.body)
 // });
 
-router.delete('/song', async(req, res) => {
-    await Song.deleteMany({});
-    res.sendStatus(200);
+router.delete('/song', (req, res) => {
+    Song.deleteMany({}, (err) => {
+        if(err) console.log(err)
+        else res.sendStatus(200)
+    });
 });
 
 module.exports = router;

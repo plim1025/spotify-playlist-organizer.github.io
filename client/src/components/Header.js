@@ -5,7 +5,7 @@ import SpotifyIcon from '../assets/img/spotify.svg';
 const Header = () => {
     return (
         <header>
-            <SpotifyIcon id="spotifyIcon"/>
+            <SpotifyIcon className="spotifyIcon"/>
             <div>Spotify Playlist Generator</div>
         </header>
     )

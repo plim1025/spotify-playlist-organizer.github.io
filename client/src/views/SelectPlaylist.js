@@ -43,31 +43,34 @@ const Home = () => {
         })
         .then(response => response.json())
         .then(playlistsData => {
+            let playlistTrackPromiseArr = [];
+            let playlistTracks = [];
             const playlists = playlistsData.items;
             setPlaylists(playlists);
             playlists.map(playlist => {
-                fetch(playlist.tracks.href, {
-                    headers: {'Authorization': 'Bearer ' + accessToken}
-                })
-                .then(response => response.json())
-                .then(playlistData => {
-                    let tracks =  playlistData.items.map(item => item.track);
-                    let promiseArr = [];
-                    tracks.map(track => {
-                        promiseArr.push(
-                            fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
-                                headers: {'Authorization': 'Bearer ' + accessToken}
-                            })
-                            .then(response => response.json())
-                            .then(trackData => {
-                                tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item);
-                            })
-                            .catch(err => console.log(err))
-                        )
-                    });
-                    Promise.all(promiseArr).then(() => setPlaylistSongs([...playlistSongs, {[playlist.id]: tracks}]));
-                })
-                .catch(err => console.log(err));
+                playlistTrackPromiseArr.push(
+                    fetch(playlist.tracks.href, {
+                        headers: {'Authorization': 'Bearer ' + accessToken}
+                    })
+                    .then(response => response.json())
+                    .then(playlistData => {
+                        let trackPromiseArr = [];
+                        let tracks =  playlistData.items.map(item => item.track);
+                        tracks.map(track => {
+                            trackPromiseArr.push(
+                                fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
+                                    headers: {'Authorization': 'Bearer ' + accessToken}
+                                })
+                                .then(response => response.json())
+                                .then(trackData => tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item))
+                                .catch(err => console.log(err))
+                            )
+                        });
+                        Promise.all(trackPromiseArr).then(() => playlistTracks.push({[playlist.id]: tracks}));
+                    })
+                    .catch(err => console.log(err))
+                );
+                Promise.all(playlistTrackPromiseArr).then(() => setPlaylistSongs(playlistTracks));
             })
         })
         .catch(err => console.log(err));
@@ -80,7 +83,7 @@ const Home = () => {
             setSelectedPlaylists([...selectedPlaylists, selectedID]);
     }
 
-    const handleSubmit = async() => {
+    const handleSubmit = () => {
         let songs = [];
         if(savedSongsSelected)
             songs = savedSongs;
@@ -88,17 +91,21 @@ const Home = () => {
             if(selectedPlaylists.includes(Object.keys(playlistSong)[0]))
                 songs = [...songs, ...Object.values(playlistSong)[0]];
         });
-        await fetch('http://localhost:3000/song', {
+
+        fetch('http://localhost:3000/song', {
             method: 'DELETE'
-        });
-        fetch('http://localhost:3000/songs', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(songs)
         })
+        .then(() => 
+            fetch('http://localhost:3000/songs', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(songs)
+                }
+            )   
+        )
         .then(() => window.location.href ='songs')
         .catch(err => console.log(err));
     }

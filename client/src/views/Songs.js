@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import DropdownFilter from '../components/DropdownFilter';
 import SliderFilter from '../components/SliderFilter';
-import SortBy from '../components/SortBy';
+import SortCategory from '../components/SortCategory';
 import Song from '../components/Song';
 import './Songs.css';
+import Checkmark from '../assets/img/Checkmark.svg';
 
 const Songs = (props) => {
 
     const [songs, setSongs] = useState([]);
+    const [checkmark, toggleCheckmark] = useState(false);
+    const [sortedBy, sortBy] = useState(null);
+    const [sortDirection, toggleSortDirection] = useState(1);
 
     useEffect(() => {
         fetch('http://localhost:3000/song')
@@ -16,17 +20,33 @@ const Songs = (props) => {
         .catch(err => console.log(err));
     }, []);
 
-    const songNotFiltered = filterObj => {
-        for(let o in filterObj)
-            if(filterObj[o])
-                return false;
-        return true;
+    useEffect(() => {
+        if(sortedBy) {
+            fetch(`http://localhost:3000/song?sortBy=${sortedBy}&sortDirection=${sortDirection}`)
+            .then(response => response.json())
+            .then(data => setSongs(data))
+            .catch(err => console.log(err));
+        }
+    }, [sortedBy, sortDirection]);
+    
+    const sort = category => {
+        if(sortedBy !== category) {
+            toggleSortDirection(1);
+            sortBy(category);
+        } else {
+            if(sortDirection == 1) toggleSortDirection(-1);
+            else toggleSortDirection(1);
+        }
+    }
+
+    const checkmarkClick = () => {
+        toggleCheckmark(checkmark => !checkmark);
     }
 
     return (
         <>
-            <div id="flex">
-                <div id="filters">
+            <div className="flex">
+                <div className="filters">
                     <DropdownFilter
                         category={"artists"}
                         title={"Artists"}
@@ -65,17 +85,18 @@ const Songs = (props) => {
                         max={Math.max(...[...songs.map(song => song.loudness)])}
                     />
                 </div>
-                <div id="songs">
-                    <SortBy />
+                <div className="songs">
+                    <div className="sortByParent">
+                        <div className="sortByCheckmark" style={{background: checkmark ? '#606060' : null, border: checkmark ? '2px solid #606060' : null}} onClick={checkmarkClick}>
+                            <Checkmark style={{fill: checkmark ? '#fff' : null}}/>
+                        </div>
+                        <SortCategory category={'name'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
+                        <SortCategory category={'artist'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
+                        <SortCategory category={'album'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
+                    </div>
                     {
-                        songs.length ? songs.map(song => songNotFiltered(song.filteredOutBy) ? 
-                            (!song.selected ? 
-                                <Song key={song.id} details={song}/> 
-                                : <Song key={song.id} background={true} iconFill={true} details={song}/>
-                            )
+                        songs.length ? songs.map(song => <Song key={song.id} details={song}/>)
                             : null
-                        )
-                        : null
                     }
                 </div>
             </div>

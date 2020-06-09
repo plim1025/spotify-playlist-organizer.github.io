@@ -1,0 +1,23 @@
+.sortBySelector {
+    display: flex;
+    align-items: center;
+}
+
+.sortBySelector:hover {
+    color: #000;
+}
+
+.sortBySelector:hover .sortByIcon{
+    fill: #000;
+}
+
+.sortByText {
+    text-transform: uppercase;
+}
+
+.sortByIcon {
+    height: 16px;
+    width: 16px;
+    fill: transparent;
+    margin-left: 5px;
+}
