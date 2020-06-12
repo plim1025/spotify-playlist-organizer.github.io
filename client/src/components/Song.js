@@ -1,17 +1,13 @@
 import React from 'react';
 import './Song.css';
-import { useDispatch } from 'react-redux';
-import { TOGGLE_SELECT } from '../redux/Constants';
 import Checkmark from '../assets/img/checkmark.svg';
 
 const Song = (props) => {
 
-    const dispatch = useDispatch();
-
     return (
-        <div className="songParent" style={{background: props.background ? '#d3d3d3' : null}}>
-            <div className="songCheckmark" style={{background: props.iconFill ? '#606060' : null, border: props.iconFill ? '2px solid #606060' : null}} onClick={() => dispatch({type: TOGGLE_SELECT, id: props.details.id})}>
-                <Checkmark style={{fill: props.iconFill ? '#fff' : null}}/>
+        <div className="songParent" style={{background: props.toggled ? '#d3d3d3' : null}}>
+            <div onClick={() => props.handleToggle(!props.toggled, props.details.id)} className="songCheckmark" style={{background: props.toggled ? '#606060' : null, border: props.toggled ? '2px solid #606060' : null}}>
+                <Checkmark style={{fill: props.toggled ? '#fff' : null}}/>
             </div>
             <div className="songName">{props.details.name}</div>
             <div className="songArtist">{props.details.artists.join(', ')}</div>

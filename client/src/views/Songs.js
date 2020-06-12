@@ -8,10 +8,11 @@ import Checkmark from '../assets/img/checkmark.svg';
 
 const Songs = (props) => {
 
-    const [songs, setSongs] = useState([]);
     const [checkmark, toggleCheckmark] = useState(false);
     const [sortedBy, sortBy] = useState(null);
     const [sortDirection, toggleSortDirection] = useState(1);
+    const [songs, setSongs] = useState([]);
+    const [toggledSongIDs, setToggledSongIDs] = useState([]);
 
     useEffect(() => {
         fetch('http://localhost:3000/song')
@@ -28,7 +29,14 @@ const Songs = (props) => {
             .catch(err => console.log(err));
         }
     }, [sortedBy, sortDirection]);
-    
+
+    useEffect(() => {
+        if(checkmark)
+            setToggledSongIDs(songs.map(song => song.id));
+        else
+            setToggledSongIDs([]);
+    }, [checkmark]);
+
     const sort = category => {
         if(sortedBy !== category) {
             toggleSortDirection(1);
@@ -39,8 +47,11 @@ const Songs = (props) => {
         }
     }
 
-    const checkmarkClick = () => {
-        toggleCheckmark(checkmark => !checkmark);
+    const toggleSong = (selected, id) => {
+        if(selected)
+            setToggledSongIDs([...toggledSongIDs, id]);
+        else
+            setToggledSongIDs(toggledSongIDs.filter(songid => songid !== id ? songid : null));
     }
 
     return (
@@ -87,7 +98,7 @@ const Songs = (props) => {
                 </div>
                 <div className="songs">
                     <div className="sortByParent">
-                        <div className="sortByCheckmark" style={{background: checkmark ? '#606060' : null, border: checkmark ? '2px solid #606060' : null}} onClick={checkmarkClick}>
+                        <div className="sortByCheckmark" style={{background: checkmark ? '#606060' : null, border: checkmark ? '2px solid #606060' : null}} onClick={() => toggleCheckmark(checkmark => !checkmark)}>
                             <Checkmark style={{fill: checkmark ? '#fff' : null}}/>
                         </div>
                         <SortCategory category={'name'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
@@ -95,8 +106,14 @@ const Songs = (props) => {
                         <SortCategory category={'album'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
                     </div>
                     {
-                        songs.length ? songs.map(song => <Song key={song.id} details={song}/>)
-                            : null
+                        songs.length ? songs.map(song => 
+                            <Song 
+                                key={song.id} 
+                                details={song} 
+                                handleToggle={toggleSong}
+                                toggled={toggledSongIDs.includes(song.id)}
+                            />
+                        ) : null
                     }
                 </div>
             </div>
