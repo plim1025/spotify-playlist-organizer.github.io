@@ -8,14 +8,19 @@ router.get('/song', async(req, res) => {
         if(Object.keys(req.query).length === 0) {
             songs = await Song.find({}).lean();
         } else {
-            const sortBy = req.query.sortBy;
+            const category = req.query.category;
             const sortDirection = req.query.sortDirection;
-            if(sortBy) {
-                if(sortBy === 'artist') {
+            const min = req.query.min;
+            const max = req.query.max;
+            if(sortDirection) {
+                if(category === 'artist') {
                     songs = await Song.find({}).sort({'artists.0': sortDirection});
                 } else {
-                    songs = await Song.find({}).sort({[sortBy]: sortDirection});
+                    songs = await Song.find({}).sort({[category]: sortDirection});
                 }
+            }
+            if(min && max) {
+                songs = await Song.find({[category]: { $gte: min, $lte: max}});
             }
         }
     } catch(err) {
@@ -38,12 +43,12 @@ router.post('/song', (req, res) => {
                 instrumentalness: req.body.instrumentalness,
                 key: req.body.key,
                 liveness: req.body.liveness,
-                loudness: req.body.loudness,
+                loudness: parseInt(req.body.loudness),
                 name: req.body.name,
                 popularity: req.body.popularity,
                 preview: req.body.preview_url,
                 speechiness: req.body.speechiness,
-                tempo: req.body.tempo,
+                tempo: parseInt(req.body.tempo),
                 time_signature: req.body.time_signature,
                 valence: req.body.valence,
                 year: parseInt(req.body.album.release_date.substring(0, 5))
@@ -68,12 +73,12 @@ router.post('/songs', (req, res) => {
             instrumentalness: song.instrumentalness,
             key: song.key,
             liveness: song.liveness,
-            loudness: song.loudness,
+            loudness: parseInt(song.loudness),
             name: song.name,
             popularity: song.popularity,
             preview: song.preview_url,
             speechiness: song.speechiness,
-            tempo: song.tempo,
+            tempo: parseInt(song.tempo),
             time_signature: song.time_signature,
             valence: song.valence,
             year: parseInt(song.album.release_date.substring(0, 5))

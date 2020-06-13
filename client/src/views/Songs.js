@@ -13,6 +13,8 @@ const Songs = (props) => {
     const [sortDirection, toggleSortDirection] = useState(1);
     const [songs, setSongs] = useState([]);
     const [toggledSongIDs, setToggledSongIDs] = useState([]);
+    const [componentLoaded, toggleComponentLoaded] = useState(false);
+    const [filterRanges, setFilterRanges] = useState(null);
 
     useEffect(() => {
         fetch('http://localhost:3000/song')
@@ -20,10 +22,42 @@ const Songs = (props) => {
         .then(data => setSongs(data))
         .catch(err => console.log(err));
     }, []);
+    
+    useEffect(() => {
+        if(!filterRanges && songs.length) {
+            setFilterRanges(
+                {
+                    duration: {
+                        min: 0,
+                        max: Math.max(...[...songs.map(song => song.duration)])
+                    },
+                    popularity: {
+                        min: 1,
+                        max: Math.max(...[...songs.map(song => song.popularity)])
+                    },
+                    tempo: {
+                        min: 0,
+                        max: Math.max(...[...songs.map(song => song.tempo)])
+                    },
+                    loudness: {
+                        min: Math.min(...[...songs.map(song => song.loudness)]),
+                        max: Math.max(...[...songs.map(song => song.loudness)])
+                    }
+                }
+            );
+        }
+    }, [songs]);
+
+    useEffect(() => {
+        if(filterRanges) {
+            console.log(filterRanges)
+            toggleComponentLoaded(true);
+        }
+    }, [filterRanges]);
 
     useEffect(() => {
         if(sortedBy) {
-            fetch(`http://localhost:3000/song?sortBy=${sortedBy}&sortDirection=${sortDirection}`)
+            fetch(`http://localhost:3000/song?category=${sortedBy}&sortDirection=${sortDirection}`)
             .then(response => response.json())
             .then(data => setSongs(data))
             .catch(err => console.log(err));
@@ -36,6 +70,13 @@ const Songs = (props) => {
         else
             setToggledSongIDs([]);
     }, [checkmark]);
+
+    const filter = (e, selections, category) => {
+        fetch(`http://localhost:3000/song?category=${category}&min=${selections[0]}&max=${selections[1]}`)
+        .then(response => response.json())
+        .then(data => setSongs(data))
+        .catch(err => console.log(err));
+    }
 
     const sort = category => {
         if(sortedBy !== category) {
@@ -55,45 +96,53 @@ const Songs = (props) => {
     }
 
     return (
+        componentLoaded ? 
         <>
             <div className="flex">
                 <div className="filters">
                     <DropdownFilter
                         category={"artists"}
                         title={"Artists"}
+                        handleFilter={filter}
                     />
                     <DropdownFilter
                         category={"album"}
                         title={"Album"}
+                        handleFilter={filter}
                     />
                     <DropdownFilter
                         category={"year"}
                         title={"Year"}
+                        handleFilter={filter}
                     />
                     <div style={{height: 20}}/>
                     <SliderFilter
                         category={"duration"}
                         title={"Duration (s)"}
-                        min={0}
-                        max={Math.max(...[...songs.map(song => song.duration)])}
+                        min={filterRanges?.duration.min}
+                        max={filterRanges?.duration.max}
+                        handleFilter={filter}
                     />
                     <SliderFilter
                         category={"popularity"}
                         title={"Popularity"}
-                        min={0}
-                        max={Math.max(...[...songs.map(song => song.popularity)])}
+                        min={filterRanges?.popularity.min}
+                        max={filterRanges?.popularity.max}
+                        handleFilter={filter}
                     />
                     <SliderFilter
                         category={"Tempo"}
                         title={"Tempo"}
-                        min={0} 
-                        max={Math.max(...[...songs.map(song => song.tempo)])}
+                        min={filterRanges?.tempo.min} 
+                        max={filterRanges?.tempo.max}
+                        handleFilter={filter}
                     />
                     <SliderFilter
                         category={"loudness"}
                         title={"Loudness (dB)"}
-                        min={Math.min(...[...songs.map(song => song.loudness)])}
-                        max={Math.max(...[...songs.map(song => song.loudness)])}
+                        min={filterRanges?.loudness.min}
+                        max={filterRanges?.loudness.max}
+                        handleFilter={filter}
                     />
                 </div>
                 <div className="songs">
@@ -117,7 +166,7 @@ const Songs = (props) => {
                     }
                 </div>
             </div>
-        </>
+        </> : <></>
     )
 }
 
