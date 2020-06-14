@@ -8,19 +8,23 @@ router.get('/song', async(req, res) => {
         if(Object.keys(req.query).length === 0) {
             songs = await Song.find({}).lean();
         } else {
-            const category = req.query.category;
-            const sortDirection = req.query.sortDirection;
-            const min = req.query.min;
-            const max = req.query.max;
-            if(sortDirection) {
-                if(category === 'artist') {
+            if(req.query.sortCategory) {
+                const sortCategory = req.query.sortCategory;
+                const sortDirection = req.query.sortDirection;
+                if(category === 'artist')
                     songs = await Song.find({}).sort({'artists.0': sortDirection});
-                } else {
-                    songs = await Song.find({}).sort({[category]: sortDirection});
-                }
+                else
+                    songs = await Song.find({}).sort({[sortCategory]: sortDirection});
             }
-            if(min && max) {
-                songs = await Song.find({[category]: { $gte: min, $lte: max}});
+            if(req.query.filterCategories) {
+                let filter = {};
+                const filterCategories = req.query.filterCategories.split(',');
+                const mins = req.query.mins.split(',');
+                const maxes = req.query.maxes.split(',');
+                for(let i = 0; i < filterCategories.length; i++)
+                    filter[filterCategories[i]] = { $gte: mins[i], $lte: maxes[i] };
+                console.log(filter)
+                songs = await Song.find(filter);
             }
         }
     } catch(err) {
