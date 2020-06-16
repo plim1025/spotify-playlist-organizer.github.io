@@ -14,23 +14,17 @@ const Songs = (props) => {
     const [songs, setSongs] = useState([]);
     const [toggledSongIDs, setToggledSongIDs] = useState([]);
     const [componentLoaded, toggleComponentLoaded] = useState(false);
-    const [filterRanges, setFilterRanges] = useState(null);
-    const [filters, setFilters] = useState({
-        duration: [],
-        popularity: [],
-        tempo: [],
-        loudness: []
-    });
+    const [filterRanges, setFilterRanges] = useState({});
+    const [sliderFilters, setSliderFilters] = useState({});
+    const [initialDropdownFilters, setInitialDropdownFilters] = useState({});
+    const [dropdownFilters, setDropdownFilters] = useState({});
 
     useEffect(() => {
-        fetch('http://localhost:3000/song')
-        .then(response => response.json())
-        .then(data => setSongs(data))
-        .catch(err => console.log(err));
+        getSongsFromURL('http://localhost:3000/song')
     }, []);
     
     useEffect(() => {
-        if(!filterRanges && songs.length) {
+        if(!Object.keys(filterRanges).length && songs.length) {
             setFilterRanges({
                     duration: [0, Math.max(...[...songs.map(song => song.duration)])],
                     popularity: [1, Math.max(...[...songs.map(song => song.popularity)])],
@@ -38,20 +32,23 @@ const Songs = (props) => {
                     loudness: [Math.min(...[...songs.map(song => song.loudness)]), Math.max(...[...songs.map(song => song.loudness)])]
             });
         }
+        if(!Object.keys(initialDropdownFilters).length && songs.length) {
+            setInitialDropdownFilters({
+                artists: [...new Set([].concat.apply([], songs.map(song => song.artists)))],
+                album: [...new Set(songs.map(song => song.album))],
+                year: [...new Set(songs.map(song => song.year))]
+            });
+        }
     }, [songs]);
 
     useEffect(() => {
-        if(filterRanges)
+        if(Object.keys(filterRanges).length && Object.keys(initialDropdownFilters).length)
             toggleComponentLoaded(true);
-    }, [filterRanges]);
+    }, [filterRanges, initialDropdownFilters]);
 
     useEffect(() => {
-        if(sortedBy) {
-            fetch(`http://localhost:3000/song?sortCategory=${sortedBy}&sortDirection=${sortDirection}`)
-            .then(response => response.json())
-            .then(data => setSongs(data))
-            .catch(err => console.log(err));
-        }
+        if(sortedBy)
+            getSongsFromURL(`http://localhost:3000/song?sortCategory=${sortedBy}&sortDirection=${sortDirection}`);
     }, [sortedBy, sortDirection]);
 
     useEffect(() => {
@@ -62,26 +59,43 @@ const Songs = (props) => {
     }, [checkmark]);
 
     useEffect(() => {
-        let fetchString = 'http://localhost:3000/song?';
-        let categories = [];
-        Object.keys(filters).map(filter => filters[filter].length ? categories.push(filter) : null);
-        console.log(categories.toString())
-        fetchString += `filterCategories=${categories.toString()}&`;
-        let mins = []
-        categories.forEach(category => mins.push(filters[category][0]));
-        fetchString += `mins=${mins.toString()}&`;
-        let maxes = []
-        categories.forEach(category => maxes.push(filters[category][1]));
-        fetchString += `maxes=${maxes.toString()}`;
+        if(Object.keys(sliderFilters).length) {
+            let fetchString = 'http://localhost:3000/song?';
+            let categories = [];
+            Object.keys(sliderFilters).forEach(filter => sliderFilters[filter].length ? categories.push(filter) : null);
+            fetchString += `sliderFilterCategories=${categories.toString()}&`;
+            let mins = []
+            categories.forEach(category => mins.push(sliderFilters[category][0]));
+            fetchString += `mins=${mins.toString()}&`;
+            let maxes = []
+            categories.forEach(category => maxes.push(sliderFilters[category][1]));
+            fetchString += `maxes=${maxes.toString()}`;
+            getSongsFromURL(fetchString);
+        }
+    }, [sliderFilters]);
 
-        fetch(fetchString)
-        .then(response => response.json())
-        .then(data => setSongs(data))
-        .catch(err => console.log(err));
-    }, [filters]);
+    useEffect(() => {
+        if(Object.keys(dropdownFilters).length) {
+            let fetchString = 'http://localhost:3000/song?';
+            let categories = [];
+            Object.keys(dropdownFilters).forEach(filter => dropdownFilters[filter].length ? categories.push(filter) : null);
+            fetchString += `dropdownFilterCategories=${categories.toString()}&`;
+            categories.forEach((category, index) => {
+                fetchString += category + '=';
+                fetchString += dropdownFilters[category].toString();
+                if(index != categories.length - 1)
+                    fetchString += '&';
+            });
+            getSongsFromURL(encodeURI(fetchString));
+        }
+    }, [dropdownFilters]);
 
-    const filter = (e, selections, category) => {
-        setFilters({...filters, [category]: selections});
+    const sliderFilter = (e, selections, category) => {
+        setSliderFilters({...sliderFilters, [category]: selections});
+    }
+
+    const dropdownFilter = (e, category) => {
+        setDropdownFilters({...dropdownFilters, [category]: [...e.target.value]});
     }
 
     const sort = category => {
@@ -101,6 +115,13 @@ const Songs = (props) => {
             setToggledSongIDs(toggledSongIDs.filter(songid => songid !== id ? songid : null));
     }
 
+    const getSongsFromURL = URL => {
+        fetch(URL)
+        .then(response => response.json())
+        .then(data => setSongs(data))
+        .catch(err => console.log(err));
+    }
+
     return (
         componentLoaded ? 
         <>
@@ -109,17 +130,23 @@ const Songs = (props) => {
                     <DropdownFilter
                         category={'artists'}
                         title={'Artists'}
-                        handleFilter={filter}
+                        handleFilter={dropdownFilter}
+                        initialFilters={initialDropdownFilters.artists || []}
+                        selectedFilters={dropdownFilters.artists || []}
                     />
                     <DropdownFilter
                         category={'album'}
                         title={'Album'}
-                        handleFilter={filter}
+                        handleFilter={dropdownFilter}
+                        initialFilters={initialDropdownFilters.album || []}
+                        selectedFilters={dropdownFilters.album || []}
                     />
                     <DropdownFilter
                         category={'year'}
                         title={'Year'}
-                        handleFilter={filter}
+                        handleFilter={dropdownFilter}
+                        initialFilters={initialDropdownFilters.year || []}
+                        selectedFilters={dropdownFilters.year || []}
                     />
                     <div style={{height: 20}}/>
                     <SliderFilter
@@ -127,28 +154,28 @@ const Songs = (props) => {
                         title={'Duration (s)'}
                         min={filterRanges.duration[0]}
                         max={filterRanges.duration[1]}
-                        handleFilter={filter}
+                        handleFilter={sliderFilter}
                     />
                     <SliderFilter
                         category={'popularity'}
                         title={'Popularity'}
                         min={filterRanges.popularity[0]}
                         max={filterRanges.popularity[1]}
-                        handleFilter={filter}
+                        handleFilter={sliderFilter}
                     />
                     <SliderFilter
                         category={'tempo'}
                         title={'Tempo'}
                         min={filterRanges.tempo[0]} 
                         max={filterRanges.tempo[1]}
-                        handleFilter={filter}
+                        handleFilter={sliderFilter}
                     />
                     <SliderFilter
                         category={'loudness'}
                         title={'Loudness (dB)'}
                         min={filterRanges.loudness[0]}
                         max={filterRanges.loudness[1]}
-                        handleFilter={filter}
+                        handleFilter={sliderFilter}
                     />
                 </div>
                 <div className='songs'>

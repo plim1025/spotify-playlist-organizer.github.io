@@ -11,20 +11,24 @@ router.get('/song', async(req, res) => {
             if(req.query.sortCategory) {
                 const sortCategory = req.query.sortCategory;
                 const sortDirection = req.query.sortDirection;
-                if(category === 'artist')
+                if(sortCategory === 'artist')
                     songs = await Song.find({}).sort({'artists.0': sortDirection});
                 else
                     songs = await Song.find({}).sort({[sortCategory]: sortDirection});
             }
-            if(req.query.filterCategories) {
+            if(req.query.sliderFilterCategories) {
                 let filter = {};
-                const filterCategories = req.query.filterCategories.split(',');
+                const sliderFilterCategories = req.query.sliderFilterCategories.split(',');
                 const mins = req.query.mins.split(',');
                 const maxes = req.query.maxes.split(',');
-                for(let i = 0; i < filterCategories.length; i++)
-                    filter[filterCategories[i]] = { $gte: mins[i], $lte: maxes[i] };
-                console.log(filter)
+                for(let i = 0; i < sliderFilterCategories.length; i++)
+                    filter[sliderFilterCategories[i]] = { $gte: mins[i], $lte: maxes[i] };
                 songs = await Song.find(filter);
+            }
+            if(req.query.dropdownFilterCategories) {
+                let filter = {};
+                const sliderFilterCategories = req.query.dropdownFilterCategories.split(',');
+                
             }
         }
     } catch(err) {
