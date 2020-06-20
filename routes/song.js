@@ -18,17 +18,20 @@ router.get('/song', async(req, res) => {
             }
             if(req.query.sliderFilterCategories) {
                 let filter = {};
-                const sliderFilterCategories = req.query.sliderFilterCategories.split(',');
-                const mins = req.query.mins.split(',');
-                const maxes = req.query.maxes.split(',');
+                const sliderFilterCategories = JSON.parse(req.query.sliderFilterCategories);
+                const mins = JSON.parse(req.query.mins);
+                const maxes = JSON.parse(req.query.maxes);
                 for(let i = 0; i < sliderFilterCategories.length; i++)
                     filter[sliderFilterCategories[i]] = { $gte: mins[i], $lte: maxes[i] };
                 songs = await Song.find(filter);
             }
             if(req.query.dropdownFilterCategories) {
                 let filter = {};
-                const sliderFilterCategories = req.query.dropdownFilterCategories.split(',');
-                
+                const sliderFilterCategories = JSON.parse(req.query.dropdownFilterCategories);
+                sliderFilterCategories.forEach(category => {
+                    filter[category] = { $in: req.query[category] ? JSON.parse(req.query[category]) : null };
+                });
+                songs = await Song.find(filter);
             }
         }
     } catch(err) {

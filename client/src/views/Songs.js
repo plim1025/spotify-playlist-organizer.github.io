@@ -63,30 +63,31 @@ const Songs = (props) => {
             let fetchString = 'http://localhost:3000/song?';
             let categories = [];
             Object.keys(sliderFilters).forEach(filter => sliderFilters[filter].length ? categories.push(filter) : null);
-            fetchString += `sliderFilterCategories=${categories.toString()}&`;
-            let mins = []
+            fetchString += `sliderFilterCategories=${JSON.stringify(categories)}&`;
+            let mins = [];
             categories.forEach(category => mins.push(sliderFilters[category][0]));
-            fetchString += `mins=${mins.toString()}&`;
-            let maxes = []
+            fetchString += `mins=${JSON.stringify(mins)}&`;
+            let maxes = [];
             categories.forEach(category => maxes.push(sliderFilters[category][1]));
-            fetchString += `maxes=${maxes.toString()}`;
+            fetchString += `maxes=${JSON.stringify(maxes)}`;
             getSongsFromURL(fetchString);
         }
     }, [sliderFilters]);
 
     useEffect(() => {
-        if(Object.keys(dropdownFilters).length) {
+        let categories = [];
+        Object.keys(dropdownFilters).forEach(filter => dropdownFilters[filter].length ? categories.push(filter) : null);
+        if(categories.length) {
             let fetchString = 'http://localhost:3000/song?';
-            let categories = [];
-            Object.keys(dropdownFilters).forEach(filter => dropdownFilters[filter].length ? categories.push(filter) : null);
-            fetchString += `dropdownFilterCategories=${categories.toString()}&`;
-            categories.forEach((category, index) => {
+            fetchString += `dropdownFilterCategories=${JSON.stringify(categories)}`;
+            categories.forEach(category => {
+                fetchString += '&';
                 fetchString += category + '=';
-                fetchString += dropdownFilters[category].toString();
-                if(index != categories.length - 1)
-                    fetchString += '&';
+                fetchString += JSON.stringify(dropdownFilters[category]);
             });
             getSongsFromURL(encodeURI(fetchString));
+        } else {
+            getSongsFromURL('http://localhost:3000/song');
         }
     }, [dropdownFilters]);
 
