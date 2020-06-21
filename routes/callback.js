@@ -9,7 +9,7 @@ router.get('/callback', (req, res) => {
     const code = req.query.code || null;
     const state = req.query.state || null;
     const storedState = req.cookies ? req.cookies.spotify_auth_state : null;
-    if (state === null || state !== storedState) {
+    if(state === null || state !== storedState) {
         res.redirect('#' +
             queryString.stringify({
                 error: 'state_mismatch'
@@ -30,16 +30,26 @@ router.get('/callback', (req, res) => {
             json: true
         };
         request.post(authOptions, (err, response, body) => {
-            if (!err && response.statusCode === 200) {
+            if(!err && response.statusCode === 200) {
                 const access_token = body.access_token;
                 const refresh_token = body.refresh_token;
                 const uri = (process.env.FRONTEND_URI || 'http://localhost:8080') + '/playlists?'
-                res.redirect(uri + 
-                    queryString.stringify({
-                        access_token: access_token,
-                        refresh_token: refresh_token
-                    })
-                );
+                
+                const options = {
+                    url: 'https://api.spotify.com/v1/me',
+                    headers: { 'Authorization': 'Bearer ' + access_token },
+                    json: true
+                };
+
+                request.get(options, (err, response, body) => {
+                    res.redirect(uri + 
+                        queryString.stringify({
+                            access_token: access_token,
+                            refresh_token: refresh_token,
+                            user_id: body.id
+                        })
+                    );
+                })
             } else {
                 res.redirect('#' +
                     queryString.stringify({

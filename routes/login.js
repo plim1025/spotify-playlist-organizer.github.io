@@ -6,8 +6,9 @@ const redirect_uri = process.env.REDIRECT_URI || 'http://localhost:3000/callback
 const generateRandomString = length => {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < length; i++)
+    for(var i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
     return text;
 };
 
@@ -18,7 +19,7 @@ router.get('/login', (req, res) => {
         queryString.stringify({
             response_type: 'code',
             client_id: process.env.SPOTIFY_CLIENT_ID,
-            scope: 'user-library-read user-read-email playlist-read-private',
+            scope: 'user-library-read playlist-read-private playlist-modify-public playlist-modify-private',
             state: state,
             redirect_uri: redirect_uri
         })

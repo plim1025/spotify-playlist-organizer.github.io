@@ -20,6 +20,7 @@ const SongSchema = new Schema({
     speechiness: Number,
     tempo: Number,
     time_signature: Number,
+    uri: String,
     valence: Number,
     year: Number
 });

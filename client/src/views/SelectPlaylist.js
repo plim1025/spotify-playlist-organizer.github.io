@@ -77,21 +77,27 @@ const Home = () => {
     }, []);
 
     const handleChange = selectedID => {
-        if(selectedPlaylists.includes(selectedID))
+        if(selectedPlaylists.includes(selectedID)) {
             setSelectedPlaylists(selectedPlaylists.filter(ID => ID !== selectedID));
-        else
+        } else {
             setSelectedPlaylists([...selectedPlaylists, selectedID]);
+        }
     }
 
     const handleSubmit = () => {
         let songs = [];
-        if(savedSongsSelected)
+        if(savedSongsSelected) {
             songs = savedSongs;
+        }
         playlistSongs.map(playlistSong => {
-            if(selectedPlaylists.includes(Object.keys(playlistSong)[0]))
+            if(selectedPlaylists.includes(Object.keys(playlistSong)[0])) {
                 songs = [...songs, ...Object.values(playlistSong)[0]];
+            }
         });
 
+        const accessToken = query.get('access_token');
+        const refreshToken = query.get('refresh_token');
+        const userID = query.get('user_id');
         fetch('http://localhost:3000/song', {
             method: 'DELETE'
         })
@@ -106,7 +112,9 @@ const Home = () => {
                 }
             )   
         )
-        .then(() => window.location.href ='songs')
+        .then(() => {
+            window.location.href =`songs?access_token=${accessToken}&refresh_token=${refreshToken}&user_id=${userID}`;
+        })
         .catch(err => console.log(err));
     }
 

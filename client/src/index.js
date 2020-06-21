@@ -1,7 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import { Provider } from 'react-redux';
-import Store from './redux/Store';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Songs from './views/Songs';
@@ -12,7 +10,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 render(
-    <Provider store={Store}>
+    <div>
         <Header />  
             <BrowserRouter>
                 <Switch>
@@ -22,7 +20,7 @@ render(
                     <Route path='/' render={() => <div>404</div>} />
                 </Switch>
             </BrowserRouter>
-    </Provider>, 
+    </div>,
     document.getElementById("app")
 );
 

@@ -11,39 +11,35 @@ router.get('/song', async(req, res) => {
             if(req.query.sortCategory) {
                 const sortCategory = req.query.sortCategory;
                 const sortDirection = req.query.sortDirection;
-                if(sortCategory === 'artist')
+                if(sortCategory === 'artist') {
                     songs = await Song.find({}).sort({'artists.0': sortDirection});
-                else
+                } else {
                     songs = await Song.find({}).sort({[sortCategory]: sortDirection});
+                }
             }
-            if(req.query.sliderFilterCategories) {
-                let filter = {};
-                const sliderFilterCategories = JSON.parse(req.query.sliderFilterCategories);
-                const mins = JSON.parse(req.query.mins);
-                const maxes = JSON.parse(req.query.maxes);
-                for(let i = 0; i < sliderFilterCategories.length; i++)
-                    filter[sliderFilterCategories[i]] = { $gte: mins[i], $lte: maxes[i] };
-                songs = await Song.find(filter);
+            if(req.query.sliderFilterCategory) {
+                const category = req.query.sliderFilterCategory;
+                const min = req.query.min;
+                const max = req.query.max;
+                songs = await Song.find({[category]: { $gte: min, $lte: max}});
             }
-            if(req.query.dropdownFilterCategories) {
-                let filter = {};
-                const sliderFilterCategories = JSON.parse(req.query.dropdownFilterCategories);
-                sliderFilterCategories.forEach(category => {
-                    filter[category] = { $in: req.query[category] ? JSON.parse(req.query[category]) : null };
-                });
-                songs = await Song.find(filter);
+            if(req.query.dropdownFilterCategory) {
+                const category = req.query.dropdownFilterCategory;
+                const list = JSON.parse(req.query.list);
+                songs = await Song.find({ [category]: { $in: list }});
             }
         }
     } catch(err) {
-        console.log(err)
+        console.log(err);
     }
     res.send(songs);
 });
 
 router.post('/song', (req, res) => {
     Song.countDocuments({id: req.body.id}, (err, count) => {
-        if (err) console.log(err)
-        else if(count == 0) {
+        if(err) {
+            console.log(err)
+        } else if(count == 0) {
             const song = new Song({
                 album: req.body.album.name,
                 artists: req.body.artists.map(artist => artist.name),
@@ -61,12 +57,16 @@ router.post('/song', (req, res) => {
                 speechiness: req.body.speechiness,
                 tempo: parseInt(req.body.tempo),
                 time_signature: req.body.time_signature,
+                uri: req.body.uri,
                 valence: req.body.valence,
                 year: parseInt(req.body.album.release_date.substring(0, 5))
             });
             song.save(err => {
-                if(err) console.log(err)
-                else res.sendStatus(200);
+                if(err) {
+                    console.log(err)
+                } else {
+                    res.sendStatus(200);
+                }
             });
         }
     });
@@ -91,6 +91,7 @@ router.post('/songs', (req, res) => {
             speechiness: song.speechiness,
             tempo: parseInt(song.tempo),
             time_signature: song.time_signature,
+            uri: song.uri,
             valence: song.valence,
             year: parseInt(song.album.release_date.substring(0, 5))
         }
@@ -98,13 +99,17 @@ router.post('/songs', (req, res) => {
     const filteredSongs = [];
     const pastIDs = [];
     for(let i = 0; i < songs.length; i++) {
-        if(!pastIDs.includes(songs[i].id))
+        if(!pastIDs.includes(songs[i].id)) {
             filteredSongs.push(songs[i])
+        }
         pastIDs.push(songs[i].id);
     }
     Song.insertMany(filteredSongs, err => {
-        if(err) console.log(err)
-        else res.sendStatus(200)
+        if(err) {
+            console.log(err)
+        } else {
+            res.sendStatus(200);
+        }
     })
 });
 
@@ -116,8 +121,11 @@ router.post('/songs', (req, res) => {
 
 router.delete('/song', (req, res) => {
     Song.deleteMany({}, (err) => {
-        if(err) console.log(err)
-        else res.sendStatus(200)
+        if(err) {
+            console.log(err)
+        } else {
+            res.sendStatus(200);
+        }
     });
 });
 
