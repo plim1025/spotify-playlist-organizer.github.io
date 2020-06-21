@@ -1,39 +1,28 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Slider } from '@material-ui/core';
 import './SliderFilter.css';
-import { SongsContext } from '../views/Songs';
+import { SongFiltersContext } from '../views/Songs';
 
 const SliderFilter = (props) => {
 
-    const {songs, setSongs} = useContext(SongsContext);
-    const [initialRange, setInitialRange] = useState([])
+    const {songFilters, setSongFilters} = useContext(SongFiltersContext);
+    const [initialRange, setInitialRange] = useState([]);
     const [range, setRange] = useState([]);
 
     useEffect(() => {
-        if(!range.length && songs.length) {
-            let min;
-            let max;
-            if(props.category === 'popularity') {
-                min = 1;
-                max = Math.max(...[...songs.map(song => song.popularity)])
-            } else if (props.category === 'loudness') {
-                min = Math.min(...[...songs.map(song => song.loudness)]);
-                max = Math.max(...[...songs.map(song => song.loudness)]);
-            } else {
-                min = 0;
-                max = Math.max(...[...songs.map(song => song[props.category])]);
-            }
-            setInitialRange([min,  max]);
+        if(!initialRange.length) {
+            setInitialRange(songFilters[props.category]);
+        }
+    }, [songFilters]);
+
+    useEffect(() => {
+        if(!range.length) {
             setRange(initialRange);
         }
-    }, [songs]);
+    }, [initialRange]);
 
     const handleFilter = () => {
-        const fetchString = `http://localhost:3000/song?sliderFilterCategory=${props.category}&min=${range[0]}&max=${range[1]}`;
-        fetch(fetchString)
-        .then(response => response.json())
-        .then(data => setSongs(data))
-        .catch(err => console.log(err));
+        setSongFilters({...songFilters, [props.category]: range});
     }
 
     return (

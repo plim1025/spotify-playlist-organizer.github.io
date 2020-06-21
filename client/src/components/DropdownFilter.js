@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import Checkmark from '../assets/img/checkmark.svg';
 import './DropdownFilter.css';
-import { SongsContext } from '../views/Songs';
+import { SongsContext, SongFiltersContext } from '../views/Songs';
 
 const DropdownFilter = (props) => {
 
-    const {songs, setSongs} = useContext(SongsContext);
+    const songs = useContext(SongsContext);
+    const {songFilters, setSongFilters} = useContext(SongFiltersContext);
     const [initialFilters, setInitialFilters] = useState([]);
     const [selectedFilters, setSelectedFilters] = useState([]);
 
@@ -21,15 +22,7 @@ const DropdownFilter = (props) => {
     }, [songs]);
 
     useEffect(() => {
-        let fetchString = 'http://localhost:3000/song';
-        if(selectedFilters.length) {
-            fetchString += `?dropdownFilterCategory=${props.category}&items=${JSON.stringify(selectedFilters)}`;
-            fetchString = encodeURI(fetchString);
-        }
-        fetch(fetchString)
-        .then(response => response.json())
-        .then(data => setSongs(data))
-        .catch(err => console.log(err));
+        setSongFilters({...songFilters, [props.category]: selectedFilters});
     }, [selectedFilters]);
 
     return (

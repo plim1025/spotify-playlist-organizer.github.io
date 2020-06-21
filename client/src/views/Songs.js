@@ -8,11 +8,25 @@ import './Songs.css';
 import Checkmark from '../assets/img/checkmark.svg';
 
 export const SongsContext = React.createContext();
+export const SongFiltersContext = React.createContext();
 
 const Songs = (props) => {
 
     const query = new URLSearchParams(useLocation().search);
     const [songs, setSongs] = useState([]);
+    const [songFilters, setSongFilters] = useState({
+        sort: {
+            category: '',
+            direction: 1
+        },
+        artists: [],
+        album: [],
+        year: [],
+        duration: [],
+        popularity: [],
+        tempo: [],
+        loudness: []
+    });
     const [checkmark, toggleCheckmark] = useState(false);
     const [sortedBy, sortBy] = useState(null);
     const [sortDirection, toggleSortDirection] = useState(1);
@@ -37,13 +51,30 @@ const Songs = (props) => {
         }
     }, [checkmark]);
 
+    useEffect(() => {
+        if(songs.length) {
+            let fetchString = `http://localhost:3000/song?`;
+            Object.keys(songFilters).forEach(category => {
+                if(category === 'sort') {
+                    fetchString += `sortCategory=${songFilters.sort.category}&sortDirection=${songFilters.sort.direction}`;
+                } else {
+                    fetchString += `&${category}=${JSON.stringify(songFilters[category])}`;
+                }
+            });
+            getSongsFromURL(encodeURI(fetchString));
+        }
+    }, [songFilters]);
+
     const sort = category => {
         if(sortedBy !== category) {
             toggleSortDirection(1);
             sortBy(category);
         } else {
-            if(sortDirection == 1) toggleSortDirection(-1);
-            else toggleSortDirection(1);
+            if(sortDirection == 1) {
+                toggleSortDirection(-1);
+            } else {
+                toggleSortDirection(1);
+            }
         }
     }
 
@@ -106,7 +137,8 @@ const Songs = (props) => {
     }
 
     return (
-        <SongsContext.Provider value={{songs: songs, setSongs: setSongs}}>
+        <SongsContext.Provider value={songs}>
+        <SongFiltersContext.Provider value={{songFilters: songFilters, setSongFilters: setSongFilters}}>
             <div className='flex'>
                 <div className='filters'>
                     <DropdownFilters/>
@@ -136,6 +168,7 @@ const Songs = (props) => {
             </div>
             <input placeholder={'Enter Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
             <button onClick={generatePlaylist}>Generate Playlist</button>
+        </SongFiltersContext.Provider>
         </SongsContext.Provider>
     )
 }

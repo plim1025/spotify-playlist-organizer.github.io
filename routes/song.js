@@ -5,30 +5,29 @@ const Song = require('../models');
 router.get('/song', async(req, res) => {
     let songs;
     try {
-        if(Object.keys(req.query).length === 0) {
-            songs = await Song.find({}).lean();
-        } else {
-            if(req.query.sortCategory) {
-                const sortCategory = req.query.sortCategory;
-                const sortDirection = req.query.sortDirection;
-                if(sortCategory === 'artist') {
-                    songs = await Song.find({}).sort({'artists.0': sortDirection});
-                } else {
-                    songs = await Song.find({}).sort({[sortCategory]: sortDirection});
-                }
-            }
-            if(req.query.sliderFilterCategory) {
-                const category = req.query.sliderFilterCategory;
-                const min = req.query.min;
-                const max = req.query.max;
-                songs = await Song.find({[category]: { $gte: min, $lte: max}});
-            }
-            if(req.query.dropdownFilterCategory) {
-                const category = req.query.dropdownFilterCategory;
-                const list = JSON.parse(req.query.list);
-                songs = await Song.find({ [category]: { $in: list }});
+        if(req.query.sortCategory) {
+            const sortCategory = req.query.sortCategory;
+            const sortDirection = req.query.sortDirection;
+            if(sortCategory === 'artist') {
+                songs = await Song.find({}).sort({'artists.0': sortDirection});
+            } else {
+                songs = await Song.find({}).sort({[sortCategory]: sortDirection});
             }
         }
+        let categories = Object.keys(req.query).filter(category => category !== 'sortCategory' && category !== 'sortDirection');
+        let filter = {};
+        categories.forEach(category => {
+            categoryArr = JSON.parse(req.query[category]);
+            if(category === 'artists' || category === 'album' || category === 'year') {
+                if(categoryArr.length) {
+                    filter[category] = { $in: categoryArr };
+                }
+            } else {
+                filter[category] = { $gte: categoryArr[0], $lte: categoryArr[1] };
+            }
+        });
+        console.log(filter)
+        songs = await Song.find(filter);
     } catch(err) {
         console.log(err);
     }
