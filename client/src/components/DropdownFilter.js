@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import Checkmark from '../assets/img/checkmark.svg';
 import './DropdownFilter.css';
@@ -22,11 +22,14 @@ const DropdownFilter = (props) => {
     }, [songs]);
 
     useEffect(() => {
-        setSongFilters({...songFilters, [props.category]: selectedFilters});
+        if(initialFilters.length) {
+            setSongFilters({...songFilters, [props.category]: selectedFilters});
+        }
     }, [selectedFilters]);
 
     return (
-        initialFilters.length ? <FormControl className="dropdownFilterParent">
+        initialFilters.length ? 
+        <FormControl className="dropdownFilterParent">
             <InputLabel>{props.title}</InputLabel>
             <Select 
                 className="dropdownFilterSelect"

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Sort from '../views/Sort';
 import DropdownFilters from '../views/DropdownFilters';
 import SliderFilters from '../views/SliderFilters';
-import SortCategory from '../components/SortCategory';
 import Song from '../components/Song';
 import './Songs.css';
-import Checkmark from '../assets/img/checkmark.svg';
 
 export const SongsContext = React.createContext();
 export const SongFiltersContext = React.createContext();
@@ -28,8 +27,6 @@ const Songs = (props) => {
         loudness: []
     });
     const [checkmark, toggleCheckmark] = useState(false);
-    const [sortedBy, sortBy] = useState(null);
-    const [sortDirection, toggleSortDirection] = useState(1);
     const [toggledSongIDs, setToggledSongIDs] = useState([]);
     const [playlistName, setPlaylistName] = useState('');
 
@@ -38,10 +35,17 @@ const Songs = (props) => {
     }, []);
 
     useEffect(() => {
-        if(sortedBy) {
-            getSongsFromURL(`http://localhost:3000/song?sortCategory=${sortedBy}&sortDirection=${sortDirection}`);
-        }   
-    }, [sortedBy, sortDirection]);
+        let fetchString = `http://localhost:3000/song?`;
+        Object.keys(songFilters).forEach(category => {
+            if(category === 'sort') {
+                fetchString += `sortCategory=${songFilters.sort.category}&sortDirection=${songFilters.sort.direction}`;
+            } else {
+                fetchString += `&${category}=${JSON.stringify(songFilters[category])}`;
+            }
+        });
+        console.log(fetchString)
+        getSongsFromURL(encodeURI(fetchString));
+    }, [songFilters]);
 
     useEffect(() => {
         if(checkmark) {
@@ -50,33 +54,6 @@ const Songs = (props) => {
             setToggledSongIDs([]);
         }
     }, [checkmark]);
-
-    useEffect(() => {
-        if(songs.length) {
-            let fetchString = `http://localhost:3000/song?`;
-            Object.keys(songFilters).forEach(category => {
-                if(category === 'sort') {
-                    fetchString += `sortCategory=${songFilters.sort.category}&sortDirection=${songFilters.sort.direction}`;
-                } else {
-                    fetchString += `&${category}=${JSON.stringify(songFilters[category])}`;
-                }
-            });
-            getSongsFromURL(encodeURI(fetchString));
-        }
-    }, [songFilters]);
-
-    const sort = category => {
-        if(sortedBy !== category) {
-            toggleSortDirection(1);
-            sortBy(category);
-        } else {
-            if(sortDirection == 1) {
-                toggleSortDirection(-1);
-            } else {
-                toggleSortDirection(1);
-            }
-        }
-    }
 
     const toggleSong = (selected, id) => {
         if(selected) {
@@ -146,14 +123,7 @@ const Songs = (props) => {
                     <SliderFilters/>
                 </div>
                 <div className='songs'>
-                    <div className='sortByParent'>
-                        <div className='sortByCheckmark' style={{background: checkmark ? '#606060' : null, border: checkmark ? '2px solid #606060' : null}} onClick={() => toggleCheckmark(checkmark => !checkmark)}>
-                            <Checkmark style={{fill: checkmark ? '#fff' : null}}/>
-                        </div>
-                        <SortCategory category={'name'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
-                        <SortCategory category={'artist'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
-                        <SortCategory category={'album'} sortedBy={sortedBy} sortDirection={sortDirection} handleSort={sort}/>
-                    </div>
+                    <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} />
                     {
                         songs.length ? songs.map(song => 
                             <Song 

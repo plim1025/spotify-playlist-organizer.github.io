@@ -5,15 +5,6 @@ const Song = require('../models');
 router.get('/song', async(req, res) => {
     let songs;
     try {
-        if(req.query.sortCategory) {
-            const sortCategory = req.query.sortCategory;
-            const sortDirection = req.query.sortDirection;
-            if(sortCategory === 'artist') {
-                songs = await Song.find({}).sort({'artists.0': sortDirection});
-            } else {
-                songs = await Song.find({}).sort({[sortCategory]: sortDirection});
-            }
-        }
         let categories = Object.keys(req.query).filter(category => category !== 'sortCategory' && category !== 'sortDirection');
         let filter = {};
         categories.forEach(category => {
@@ -26,8 +17,18 @@ router.get('/song', async(req, res) => {
                 filter[category] = { $gte: categoryArr[0], $lte: categoryArr[1] };
             }
         });
-        console.log(filter)
-        songs = await Song.find(filter);
+        const sortCategory = req.query.sortCategory;
+        const sortDirection = req.query.sortDirection
+        if(sortCategory === 'artist') {
+            console.log(1, filter)
+            songs = await Song.find({filter}).sort({'artists.0': sortDirection});
+        } else if(sortCategory) {
+            console.log(2, filter)
+            songs = await Song.find({filter}).sort({[sortCategory]: sortDirection});
+        } else {
+            console.log(3, filter)
+            songs = await Song.find(filter);
+        }
     } catch(err) {
         console.log(err);
     }

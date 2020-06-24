@@ -8,7 +8,6 @@ const SliderFilters = (props) => {
     const {songFilters, setSongFilters} = useContext(SongFiltersContext);
 
     useEffect(() => {
-        console.log(songFilters);
         if(songs.length && !songFilters.duration.length && !songFilters.popularity.length && !songFilters.tempo.length && !songFilters.loudness.length) {
             let filter = {...songFilters};
             if(!songFilters.duration.length) {
