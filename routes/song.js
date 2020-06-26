@@ -20,13 +20,10 @@ router.get('/song', async(req, res) => {
         const sortCategory = req.query.sortCategory;
         const sortDirection = req.query.sortDirection
         if(sortCategory === 'artist') {
-            console.log(1, filter)
-            songs = await Song.find({filter}).sort({'artists.0': sortDirection});
+            songs = await Song.find(filter).sort({'artists.0': sortDirection});
         } else if(sortCategory) {
-            console.log(2, filter)
-            songs = await Song.find({filter}).sort({[sortCategory]: sortDirection});
+            songs = await Song.find(filter).sort({[sortCategory]: sortDirection});
         } else {
-            console.log(3, filter)
             songs = await Song.find(filter);
         }
     } catch(err) {
