@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Checkmark from '../assets/img/checkmark.svg';
 import { useLocation } from 'react-router-dom';
 
 const Home = () => {

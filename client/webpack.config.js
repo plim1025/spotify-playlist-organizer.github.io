@@ -9,7 +9,7 @@ module.exports = {
         rules: [
             { test: /\.(t|j)sx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
             { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
-            { test: /\.svg$/, use: [ '@svgr/webpack'] }
+            { test: /\.(png|jpg|)$/, loader: 'url-loader' }
         ]
     },
     resolve: {
