@@ -43,7 +43,6 @@ const Songs = (props) => {
                 fetchString += `&${category}=${JSON.stringify(songFilters[category])}`;
             }
         });
-        console.log(fetchString)
         getSongsFromURL(encodeURI(fetchString));
     }, [songFilters]);
 
@@ -55,9 +54,9 @@ const Songs = (props) => {
         }
     }, [checkmark]);
 
-    const toggleSong = (selected, id) => {
+    const toggleSong = (selected, song) => {
         if(selected) {
-            setToggledSongIDs([...toggledSongIDs, id]);
+            setToggledSongIDs([...toggledSongIDs, song.id]);
         } else {
             setToggledSongIDs(toggledSongIDs.filter(songid => songid !== id ? songid : null));
         }
@@ -71,46 +70,49 @@ const Songs = (props) => {
     }
 
     const generatePlaylist = () => {
-        // if(playlistName && .length) {
-        //     const accessToken = query.get('access_token');
-        //     const userID = query.get('user_id');
-        //     fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Authorization': 'Bearer ' + accessToken,
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({name: playlistName})
-        //     })
-        //     .then(response => response.json())
-        //     .then(playlistData => {
-        //         const songURIs = .map(song => song.uri);
-        //         for(let i = 0; i < songURIs.length; i += 100) {
-        //             fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Authorization': 'Bearer ' + accessToken,
-        //                     'Accept': 'application/json',
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify({uris: songURIs.slice(i, i+100)})
-        //             })
-        //             .then(response => response.json())
-        //             .then(data => console.log(data))
-        //             .catch(err => console.log(err));
-        //         }
-        //     })
-        //     .catch(err => console.log(err));
-        // } else {
-        //     if(!playlistName && !songs.length) {
-        //         alert('Playlist name cannot be blank and must have at least one song selected');
-        //     } else if (!playlistName) {
-        //         alert('Playlist name cannot be blank');
-        //     } else if (!songs.length) {
-        //         alert('Must have at least one song selected');
-        //     }
-        // }
+        if(playlistName && toggledSongIDs.length) {
+            const accessToken = query.get('access_token');
+            const userID = query.get('user_id');
+            fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: playlistName})
+            })
+            .then(response => response.json())
+            .then(playlistData => {
+                let songURIs = [];
+                toggledSongIDs.forEach(id => {
+                    songs.filter(song => song.id === id ? songURIs.push(song.uri): null);
+                });
+                for(let i = 0; i < songURIs.length; i += 100) {
+                    fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + accessToken,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({uris: songURIs.slice(i, i+100)})
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(err => console.log(err));
+                }
+            })
+            .catch(err => console.log(err));
+        } else {
+            if(!playlistName && !songs.length) {
+                alert('Playlist name cannot be blank and must have at least one song selected');
+            } else if (!playlistName) {
+                alert('Playlist name cannot be blank');
+            } else if (!songs.length) {
+                alert('Must have at least one song selected');
+            }
+        }
     }
 
     return (
@@ -129,7 +131,7 @@ const Songs = (props) => {
                             <Song 
                                 key={song.id} 
                                 details={song} 
-                                handleToggle={toggleSong}
+                                handleToggle={() => toggleSong(!toggledSongIDs.includes(song.id), song)}
                                 toggled={toggledSongIDs.includes(song.id)}
                             />
                         ) : null
