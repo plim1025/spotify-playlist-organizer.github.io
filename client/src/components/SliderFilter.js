@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Slider } from '@material-ui/core';
-import './SliderFilter.css';
 import { SongFiltersContext } from '../views/Songs';
 
 const SliderFilter = (props) => {

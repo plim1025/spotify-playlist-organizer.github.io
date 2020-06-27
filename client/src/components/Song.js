@@ -1,5 +1,4 @@
 import React from 'react';
-import './Song.css';
 import Checkmark from '../assets/img/checkmark.svg';
 
 const Song = (props) => {

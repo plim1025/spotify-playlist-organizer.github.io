@@ -1,6 +1,5 @@
 import React from 'react';
 import SortUpIcon from '../assets/img/sort-up.svg';
-import './SortCategory.css';
 
 const SortBy = (props) => {
 

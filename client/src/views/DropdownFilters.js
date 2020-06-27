@@ -1,6 +1,5 @@
 import React from 'react';
 import DropdownFilter from '../components/DropdownFilter';
-import './DropdownFilter.css';
 
 const DropdownFilters = (props) => {
 

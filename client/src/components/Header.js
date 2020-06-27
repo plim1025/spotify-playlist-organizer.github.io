@@ -1,5 +1,4 @@
 import React from 'react';
-import './Header.css';
 import SpotifyIcon from '../assets/img/spotify.svg';
 
 const Header = () => {

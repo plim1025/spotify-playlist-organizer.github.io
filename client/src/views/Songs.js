@@ -4,7 +4,6 @@ import Sort from '../views/Sort';
 import DropdownFilters from '../views/DropdownFilters';
 import SliderFilters from '../views/SliderFilters';
 import Song from '../components/Song';
-import './Songs.css';
 
 export const SongsContext = React.createContext();
 export const SongFiltersContext = React.createContext();

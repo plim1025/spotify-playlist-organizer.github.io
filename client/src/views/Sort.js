@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import SortCategory from '../components/SortCategory';
-import './Sort.css';
 import Checkmark from '../assets/img/checkmark.svg';
 import { SongFiltersContext } from '../views/Songs';
 

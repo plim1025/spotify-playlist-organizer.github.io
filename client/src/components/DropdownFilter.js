@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import Checkmark from '../assets/img/checkmark.svg';
-import './DropdownFilter.css';
 import { SongsContext, SongFiltersContext } from '../views/Songs';
 
 const DropdownFilter = (props) => {
