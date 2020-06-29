@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Login from './views/Login';
 import Songs from './views/Songs';
-import SelectPlaylist from './views/SelectPlaylist';
 
 // For async/await
 import "core-js/stable";
@@ -16,7 +15,6 @@ render(
             <BrowserRouter>
                 <Switch>
                     <Route path='/' exact component={Login} />
-                    <Route path='/playlists' exact component={SelectPlaylist} />
                     <Route path='/songs' component={Songs} />
                     <Route path='/' render={() => <div>404</div>} />
                 </Switch>

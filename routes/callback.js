@@ -33,7 +33,7 @@ router.get('/callback', (req, res) => {
             if(!err && response.statusCode === 200) {
                 const access_token = body.access_token;
                 const refresh_token = body.refresh_token;
-                const uri = (process.env.FRONTEND_URI || 'http://localhost:8080') + '/playlists?'
+                const uri = (process.env.FRONTEND_URI || 'http://localhost:8080') + '?'
                 
                 const options = {
                     url: 'https://api.spotify.com/v1/me',
