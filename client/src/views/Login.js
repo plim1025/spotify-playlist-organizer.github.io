@@ -8,91 +8,81 @@ import background from '../assets/img/login-background.jpg';
 const Login = () => {
 
     const query = new URLSearchParams(useLocation().search);
-    const [accessToken, setAccessToken] = useState('');
-    const [savedSongs, setSavedSongs] = useState([]);
     const [playlists, setPlaylists] = useState([]);
-    const [playlistSongs, setPlaylistSongs] = useState([]);
-    const [savedSongsSelected, toggleSavedSongsSelected] = useState(false);
     const [selectedPlaylists, setSelectedPlaylists] = useState([]);
 
     useEffect(() => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
-        setAccessToken(accessToken);
 
-        fetch('https://api.spotify.com/v1/me/tracks', {
-            headers: {'Authorization': 'Bearer ' + accessToken }
-        })
-        .then(response => response.json())
-        .then(libraryData => {
-            let tracks = libraryData.items.map(item => item.track);
-            let promiseArr = [];
-            tracks.map(track => {
+        const fetchedPlaylists = [];
+
+        Promise.all([
+            fetch('https://api.spotify.com/v1/me/tracks', {
+                headers: {'Authorization': `Bearer ${accessToken}` }
+            })
+            .then(response => response.json())
+            .catch(err => console.log(err)),
+            fetch('https://api.spotify.com/v1/me/playlists', {
+                headers: {'Authorization': `Bearer ${accessToken}`}
+            })
+            .then(response => response.json())
+            .catch(err => console.log(err))
+        ])
+        .then(([savedSongsData, playlistData]) => {
+            const promiseArr = [];
+            let savedSongTracks = savedSongsData.items.map(item => item.track);
+            savedSongTracks.map(track => {
                 promiseArr.push(
                     fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
-                        headers: {'Authorization': 'Bearer ' + accessToken}
+                        headers: {'Authorization': `Bearer ${accessToken}`}
                     })
                     .then(response => response.json())
                     .then(trackData => {
-                        tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item)
+                        savedSongTracks = savedSongTracks.map(item => item.id === track.id ? {...item, ...trackData} : item)
                     })
                     .catch(err => console.log(err))
                 );
             })
-            Promise.all(promiseArr).then(() => setSavedSongs(tracks));
-        })
-        .catch(err => console.log(err));
-
-        fetch('https://api.spotify.com/v1/me/playlists', {
-            headers: {'Authorization': 'Bearer ' + accessToken}
-        })
-        .then(response => response.json())
-        .then(playlistsData => {
-            let playlistTrackPromiseArr = [];
-            let playlistTracks = [];
-            const playlists = playlistsData.items;
-            setPlaylists(playlists);
-            playlists.map(playlist => {
-                playlistTrackPromiseArr.push(
+            playlistData.items.map(playlist => {
+                promiseArr.push(
                     fetch(playlist.tracks.href, {
-                        headers: {'Authorization': 'Bearer ' + accessToken}
+                        headers: {'Authorization': `Bearer ${accessToken}`}
                     })
                     .then(response => response.json())
-                    .then(playlistData => {
-                        let trackPromiseArr = [];
-                        let tracks =  playlistData.items.map(item => item.track);
-                        tracks.map(track => {
+                    .then(async(playlistData) => {
+                        const trackPromiseArr = [];
+                        let playlistTracks =  playlistData.items.map(item => item.track);
+                        playlistTracks.map(track => {
                             trackPromiseArr.push(
                                 fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
-                                    headers: {'Authorization': 'Bearer ' + accessToken}
+                                    headers: {'Authorization': `Bearer ${accessToken}`}
                                 })
                                 .then(response => response.json())
-                                .then(trackData => tracks = tracks.map(item => item.id === track.id ? {...item, ...trackData} : item))
+                                .then(trackData => playlistTracks = playlistTracks.map(item => item.id === track.id ? {...item, ...trackData} : item))
                                 .catch(err => console.log(err))
                             )
                         });
-                        Promise.all(trackPromiseArr).then(() => playlistTracks.push({[playlist.id]: tracks}));
+                        await Promise.all(trackPromiseArr).then(() => fetchedPlaylists.push({ id: playlist.id, name: playlist.name, tracks: playlistTracks }));
                     })
                     .catch(err => console.log(err))
                 );
-                Promise.all(playlistTrackPromiseArr).then(() => setPlaylistSongs(playlistTracks));
             })
+
+            Promise.all(promiseArr).then(() => {
+                if(savedSongTracks.length) {
+                    fetchedPlaylists.push({ id: savedSongsData.href, name: 'Saved Songs', tracks: savedSongTracks });
+                }
+                setPlaylists(fetchedPlaylists);
+            });
         })
-        .catch(err => console.log(err));
     }, []);
 
     const handleSubmit = () => {
-        let songs = [];
-        if(savedSongsSelected) {
-            songs = savedSongs;
-        }
-        const selectedPlaylistIDs = selectedPlaylists.map(playlist => playlist.id);
-        playlistSongs.map(playlistSong => {
-            if(selectedPlaylistIDs.includes(Object.keys(playlistSong)[0])) {
-                songs = [...songs, ...Object.values(playlistSong)[0]];
-            }
-        });
+        let songs = selectedPlaylists.map(playlist => playlist.tracks);
+        songs = songs.flat();
 
+        const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
         const userID = query.get('user_id');
         fetch('http://localhost:3000/song', {
@@ -122,7 +112,7 @@ const Login = () => {
                 <div className={css(ss.textBody)}>playlist your music based on attributes such as beats per minute, mood, popularity, and more.</div>
             </div>
             {
-                accessToken ?
+                query.get('access_token') ?
                     <>
                         <FormControl>
                             <InputLabel>Select Playlists</InputLabel>
@@ -137,7 +127,7 @@ const Login = () => {
                                         <div style={{background: playlists.indexOf(playlist) > -1 ? '#606060' : null, border: playlists.indexOf(playlist) > -1 ? '2px solid #606060' : null}}>
                                             <svg style={{fill: playlists.indexOf(playlist) > -1 ? '#fff' : null}} className={css(ss.checkmarkIcon)} viewBox="0 0 512 512"> <path d="M504.502,75.496c-9.997-9.998-26.205-9.998-36.204,0L161.594,382.203L43.702,264.311c-9.997-9.998-26.205-9.997-36.204,0 c-9.998,9.997-9.998,26.205,0,36.203l135.994,135.992c9.994,9.997,26.214,9.99,36.204,0L504.502,111.7 C514.5,101.703,514.499,85.494,504.502,75.496z" /></svg>
                                         </div>
-                                        <ListItemText primary={`${playlist.name} (${playlist.tracks.total})`} />
+                                        <ListItemText primary={`${playlist.name} (${playlist.tracks.length})`} />
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -152,7 +142,6 @@ const Login = () => {
                     />
             }
         </div>
-
     )
 }
 
