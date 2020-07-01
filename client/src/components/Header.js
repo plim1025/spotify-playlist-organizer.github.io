@@ -17,7 +17,7 @@ const ss = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: '#DCDCDC',
+        background: '#f9f9f9',
         height: 70
     },
     iconWrapper: {
