@@ -1,10 +1,11 @@
 import React from 'react';
 import DropdownFilter from '../components/DropdownFilter';
+import { css, StyleSheet } from 'aphrodite/no-important';
 
 const DropdownFilters = (props) => {
 
     return (
-        <div>
+        <div className={css(ss.wrapper)}>
             <DropdownFilter
                 category={'artists'}
                 title={'Artists'}
@@ -21,4 +22,12 @@ const DropdownFilters = (props) => {
     )
 }
 
-export default DropdownFilters
+const ss = StyleSheet.create({
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginLeft: 20
+    }
+})
+
+export default DropdownFilters;

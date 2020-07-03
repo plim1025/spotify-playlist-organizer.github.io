@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import SliderFilter from '../components/SliderFilter';
 import { SongsContext, SongFiltersContext } from './Songs';
+import { css, StyleSheet } from 'aphrodite/no-important';
 
 const SliderFilters = (props) => {
 
@@ -27,7 +28,7 @@ const SliderFilters = (props) => {
     }, [songs]);
 
     return (
-        <div>
+        <div className={css(ss.wrapper)}>
             <SliderFilter
                 category={'duration'}
                 title={'Duration (s)'}
@@ -38,7 +39,7 @@ const SliderFilters = (props) => {
             />
             <SliderFilter
                 category={'tempo'}
-                title={'Tempo'}
+                title={'Tempo (BPM)'}
             />
             <SliderFilter
                 category={'loudness'}
@@ -48,4 +49,10 @@ const SliderFilters = (props) => {
     )
 }
 
-export default SliderFilters
+const ss = StyleSheet.create({
+    wrapper: {
+        marginLeft: 20
+    }
+});
+
+export default SliderFilters;

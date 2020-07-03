@@ -4,6 +4,7 @@ import Sort from '../views/Sort';
 import DropdownFilters from '../views/DropdownFilters';
 import SliderFilters from '../views/SliderFilters';
 import Song from '../components/Song';
+import { css, StyleSheet } from 'aphrodite/no-important';
 
 export const SongsContext = React.createContext();
 export const SongFiltersContext = React.createContext();
@@ -117,15 +118,14 @@ const Songs = (props) => {
     return (
         <SongsContext.Provider value={songs}>
         <SongFiltersContext.Provider value={{songFilters: songFilters, setSongFilters: setSongFilters}}>
-            <div className='flex'>
-                <div className='filters'>
+            <div className={css(ss.wrapper)}>
+                <div className={css(ss.filters)}>
                     <DropdownFilters/>
-                    <div style={{height: 20}}/>
                     <SliderFilters/>
                 </div>
-                <div className='songs'>
+                <div>
                     <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} />
-                    {
+                    {/* {
                         songs.length ? songs.map(song => 
                             <Song 
                                 key={song.id} 
@@ -134,7 +134,7 @@ const Songs = (props) => {
                                 toggled={toggledSongIDs.includes(song.id)}
                             />
                         ) : null
-                    }
+                    } */}
                 </div>
             </div>
             <input placeholder={'Enter Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
@@ -143,5 +143,15 @@ const Songs = (props) => {
         </SongsContext.Provider>
     )
 }
+
+const ss = StyleSheet.create({
+    wrapper: {
+        display: 'flex'
+    },
+    filters: {
+        display: 'flex',
+        flexDirection: 'column'
+    }
+});
 
 export default Songs;

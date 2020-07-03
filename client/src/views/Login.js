@@ -193,9 +193,9 @@ const ss = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 5,
+        padding: 3,
         borderRadius: 8,
-        marginRight: 5,
+        marginRight: 10,
         border: '2px solid #606060'
     },
     checkmarkIcon: {

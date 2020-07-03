@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Slider } from '@material-ui/core';
 import { SongFiltersContext } from '../views/Songs';
+import { css, StyleSheet } from 'aphrodite/no-important';
 
 const SliderFilter = (props) => {
 
@@ -26,8 +27,8 @@ const SliderFilter = (props) => {
 
     return (
         initialRange.length === 2 && range.length === 2 ?
-        <div className="sliderFilterParent">
-            <div className="sliderFilterTitle">{props.title}</div>
+        <div className={css(ss.wrapper)}>
+            <div>{props.title}</div>
             <Slider
                 onChange={(e, newRange) => setRange(newRange)}
                 onChangeCommitted={handleFilter}
@@ -40,5 +41,15 @@ const SliderFilter = (props) => {
         : <></>
     )
 }
+
+const ss = StyleSheet.create({
+    wrapper: {
+        width: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
 
 export default SliderFilter;

@@ -22,4 +22,3 @@ render(
     </>,
     document.getElementById("app")
 );
-
