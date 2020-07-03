@@ -19,14 +19,20 @@ const ss = StyleSheet.create({
     wrapper: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        ':hover': {
+            color: '#000'
+        },
+        ':hover svg': {
+            fill: '#000 !important'
+        }
     },
     title: {
         marginRight: 5  
     },
     sortIcon: {
-        height: 24,
-        width: 24
+        height: 16,
+        width: 16,
     }
 });
 
