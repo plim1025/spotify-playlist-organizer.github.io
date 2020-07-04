@@ -119,26 +119,28 @@ const Songs = (props) => {
         <SongsContext.Provider value={songs}>
         <SongFiltersContext.Provider value={{songFilters: songFilters, setSongFilters: setSongFilters}}>
             <div className={css(ss.wrapper)}>
-                <div className={css(ss.filters)}>
-                    <DropdownFilters/>
-                    <SliderFilters/>
+                <div className={css(ss.flexWrapper)}>
+                    <div className={css(ss.filterWrapper)}>
+                        <DropdownFilters/>
+                        <SliderFilters/>
+                    </div>
+                    <div className={css(ss.songWrapper)}>
+                        <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} />
+                        {/* {
+                            songs.length ? songs.map(song => 
+                                <Song 
+                                    key={song.id} 
+                                    details={song} 
+                                    handleToggle={() => toggleSong(!toggledSongIDs.includes(song.id), song)}
+                                    toggled={toggledSongIDs.includes(song.id)}
+                                />
+                            ) : null
+                        } */}
+                    </div>
                 </div>
-                <div>
-                    <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} />
-                    {/* {
-                        songs.length ? songs.map(song => 
-                            <Song 
-                                key={song.id} 
-                                details={song} 
-                                handleToggle={() => toggleSong(!toggledSongIDs.includes(song.id), song)}
-                                toggled={toggledSongIDs.includes(song.id)}
-                            />
-                        ) : null
-                    } */}
-                </div>
+                <input placeholder={'Enter Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
+                <button onClick={generatePlaylist}>Generate Playlist</button>
             </div>
-            <input placeholder={'Enter Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
-            <button onClick={generatePlaylist}>Generate Playlist</button>
         </SongFiltersContext.Provider>
         </SongsContext.Provider>
     )
@@ -146,11 +148,20 @@ const Songs = (props) => {
 
 const ss = StyleSheet.create({
     wrapper: {
-        display: 'flex'
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#f0f0f0',
+        height: '100%'
     },
-    filters: {
+    flexWrapper: {
+        display: 'flex',
+    },
+    filterWrapper: {
         display: 'flex',
         flexDirection: 'column'
+    },
+    songWrapper: {
+        width: '100%'
     }
 });
 

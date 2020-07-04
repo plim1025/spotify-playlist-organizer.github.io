@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { css, StyleSheet } from 'aphrodite/no-important';
 
 const SortBy = (props) => {
-
-    useEffect(() => {
-        console.log(props)
-    }, [])
 
     return (
         <div style={{flex: props.flex}} className={css(ss.wrapper)} onClick={() => props.handleSort(props.category)}>
@@ -28,7 +24,7 @@ const ss = StyleSheet.create({
         }
     },
     title: {
-        marginRight: 5  
+        margin: '0 10px'
     },
     sortIcon: {
         height: 16,
