@@ -125,17 +125,18 @@ const Songs = (props) => {
                         <SliderFilters/>
                     </div>
                     <div className={css(ss.songWrapper)}>
-                        <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} />
-                        {/* {
+                        <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} flex={[1,1,1,0.5]} />
+                        {
                             songs.length ? songs.map(song => 
                                 <Song 
                                     key={song.id} 
                                     details={song} 
                                     handleToggle={() => toggleSong(!toggledSongIDs.includes(song.id), song)}
                                     toggled={toggledSongIDs.includes(song.id)}
+                                    flex={[1,1,1,0.5]}
                                 />
                             ) : null
-                        } */}
+                        }
                     </div>
                 </div>
                 <input placeholder={'Enter Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
@@ -151,17 +152,19 @@ const ss = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         background: '#f0f0f0',
-        height: '100%'
+        height: 'calc(100% - 70px)'
     },
     flexWrapper: {
-        display: 'flex',
+        display: 'flex'
     },
     filterWrapper: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginRight: 20,
     },
     songWrapper: {
-        width: '100%'
+        width: '100%',
+        overflow: 'hidden'
     }
 });
 

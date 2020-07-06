@@ -14,21 +14,25 @@ const SortBy = (props) => {
 const ss = StyleSheet.create({
     wrapper: {
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
+        margin: '0 10px',
         ':hover': {
             color: '#000'
         },
         ':hover svg': {
             fill: '#000 !important'
-        }
+        },
+        minWidth: 0
     },
     title: {
-        margin: '0 10px'
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        marginRight: 10
     },
     sortIcon: {
         height: 16,
-        width: 16,
+        width: 16
     }
 });
 
