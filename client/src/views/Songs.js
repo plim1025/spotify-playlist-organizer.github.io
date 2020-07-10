@@ -47,6 +47,7 @@ const Songs = (props) => {
     }, [songFilters]);
 
     useEffect(() => {
+        console.log('toggled')
         if(checkmark) {
             setToggledSongIDs(songs.map(song => song.id));
         } else {
@@ -58,7 +59,7 @@ const Songs = (props) => {
         if(selected) {
             setToggledSongIDs([...toggledSongIDs, song.id]);
         } else {
-            setToggledSongIDs(toggledSongIDs.filter(songid => songid !== id ? songid : null));
+            setToggledSongIDs(toggledSongIDs.filter(songid => songid !== song.id ? songid : null));
         }
     }
 
