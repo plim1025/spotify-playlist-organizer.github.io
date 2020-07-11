@@ -125,6 +125,7 @@ const Songs = (props) => {
                         <DropdownFilters/>
                         <SliderFilters/>
                     </div>
+                    <div className={css(ss.divider)} />
                     <div className={css(ss.songWrapper)}>
                         <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} flex={[1,1,1,0.5]} />
                         {
@@ -161,7 +162,13 @@ const ss = StyleSheet.create({
     filterWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        marginRight: 20,
+        margin: '0 10px',
+        padding: 20
+    },
+    divider: {
+        height: '100%',
+        width: 1,
+        background: '#dbdbdb'
     },
     songWrapper: {
         width: '100%',

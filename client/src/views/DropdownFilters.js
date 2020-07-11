@@ -25,8 +25,7 @@ const DropdownFilters = (props) => {
 const ss = StyleSheet.create({
     wrapper: {
         display: 'flex',
-        flexDirection: 'column',
-        marginLeft: 20
+        flexDirection: 'column'
     }
 })
 

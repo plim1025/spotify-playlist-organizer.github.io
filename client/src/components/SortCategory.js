@@ -28,7 +28,8 @@ const ss = StyleSheet.create({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-        marginRight: 10
+        marginRight: 10,
+        fontWeight: 700
     },
     sortIcon: {
         height: 16,

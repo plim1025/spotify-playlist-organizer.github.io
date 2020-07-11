@@ -51,7 +51,6 @@ const SliderFilters = (props) => {
 
 const ss = StyleSheet.create({
     wrapper: {
-        marginLeft: 20
     }
 });
 

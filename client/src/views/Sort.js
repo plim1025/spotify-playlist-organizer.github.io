@@ -45,19 +45,20 @@ const ss = StyleSheet.create({
     wrapper: {
         display: 'flex',
         alignItems: 'center',
-        height: 50
+        height: 50,
+        padding: '0 10px'
     },
     checkmark: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 16,
-        width: 16,
+        height: 12,
+        width: 12,
         padding: 3,
-        borderRadius: 8,
+        borderRadius: 6,
         marginRight: 10,
         cursor: 'pointer',
-        border: '2px solid #606060'
+        border: '2px solid #606060',
     },
     checkmarkIcon: {
         display: 'flex',
