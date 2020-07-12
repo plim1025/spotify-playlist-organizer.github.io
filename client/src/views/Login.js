@@ -104,7 +104,7 @@ const Login = () => {
             )   
         )
         .then(() => {
-            window.location.href =`songs?access_token=${accessToken}&refresh_token=${refreshToken}&user_id=${userID}`;
+            window.location.href = `songs?access_token=${accessToken}&refresh_token=${refreshToken}&user_id=${userID}`;
         })
         .catch(err => console.log(err));
     }
