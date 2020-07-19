@@ -30,8 +30,7 @@ const Login = () => {
             .then(([savedSongsData, playlistData]) => {
                 const promiseArr = [];
                 let savedSongTracks = savedSongsData.items.map(item => item.track);
-                if(savedSongsData.length) {
-                    
+                if(savedSongsData.items.length) {
                     savedSongTracks.map(track => {
                         promiseArr.push(
                             fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
@@ -83,12 +82,10 @@ const Login = () => {
     }, []);
 
     const handleSubmit = () => {
-        let songs = selectedPlaylists.map(playlist => playlist.tracks);
-        songs = songs.flat();
-
+        const songs = selectedPlaylists.map(playlist => playlist.tracks).flat();
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
-        const userID = query.get('user_id');
+        const userID = query.get('user_id');        
         fetch('http://localhost:3000/song', {
             method: 'DELETE'
         })
