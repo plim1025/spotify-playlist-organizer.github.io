@@ -39,8 +39,8 @@ const Song = (props) => {
                     <svg width='12' height='12' viewBox="0 0 50 50"><path d="M0,50V0L50,25Z"/></svg>
                 }
             </div>
-            <div onClick={props.handleToggle} style={{background: props.toggled ? '#606060' : null, border: props.toggled ? '2px solid #606060' : null}} className={css(ss.checkmark)}>
-                <svg style={{fill: props.toggled ? '#fff' : 'transparent'}} className={css(ss.checkmarkIcon)} viewBox="0 0 512 512"> <path d="M504.502,75.496c-9.997-9.998-26.205-9.998-36.204,0L161.594,382.203L43.702,264.311c-9.997-9.998-26.205-9.997-36.204,0 c-9.998,9.997-9.998,26.205,0,36.203l135.994,135.992c9.994,9.997,26.214,9.99,36.204,0L504.502,111.7 C514.5,101.703,514.499,85.494,504.502,75.496z" /></svg>
+            <div onClick={props.handleToggle} style={{background: props.toggled ? '#808080' : null, border: props.toggled ? '2px solid #808080' : null}} className={css(ss.checkmark)}>
+                <svg style={{fill: props.toggled ? '#fff' : 'transparent'}} height='16' width='16' viewBox="0 0 512 512"> <path d="M504.502,75.496c-9.997-9.998-26.205-9.998-36.204,0L161.594,382.203L43.702,264.311c-9.997-9.998-26.205-9.997-36.204,0 c-9.998,9.997-9.998,26.205,0,36.203l135.994,135.992c9.994,9.997,26.214,9.99,36.204,0L504.502,111.7 C514.5,101.703,514.499,85.494,504.502,75.496z" /></svg>
             </div>
             <div style={{flex: props.flex[0]}} className={css(ss.category)}>{props.details.name}</div>
             <div style={{flex: props.flex[1]}} className={css(ss.category)}>{props.details.artists.join(', ')}</div>
@@ -66,24 +66,23 @@ const ss = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        borderRadius: 6,
+        ':hover': {
+            background: '#808080'
+        }
     },
     checkmark: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 12,
-        width: 12,
-        padding: 3,
+        height: 16,
+        width: 16,
+        padding: 2,
         borderRadius: 6,
         marginRight: 10,
         cursor: 'pointer',
-        border: '2px solid #606060',
-    },
-    checkmarkIcon: {
-        display: 'flex',
-        height: '100%',
-        width: '100%'
+        border: '2px solid #808080',
     },
     category: {
         margin: '0 10px',

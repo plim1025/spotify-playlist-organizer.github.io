@@ -11,10 +11,11 @@ import { css, StyleSheet } from 'aphrodite/no-important';
 export const SongsContext = React.createContext();
 export const SongFiltersContext = React.createContext();
 
-const Songs = (props) => {
+const Songs = () => {
 
     const query = new URLSearchParams(useLocation().search);
     const [songs, setSongs] = useState([]);
+    const [checkedCategories, setCheckedCategories] = useState(['Name', 'Artist', 'Album', 'Year']);
     const [songFilters, setSongFilters] = useState({
         sort: {
             category: '',
@@ -139,7 +140,7 @@ const Songs = (props) => {
                     </div>
                     <div className={css(ss.divider)} />
                     <div className={css(ss.songWrapper)}>
-                        <Sort checkmark={checkmark} handleSelectAll={toggleCheckmark} flex={[1,1,1,0.5]} />
+                        <Sort checkmark={checkmark} checkedCategories={checkedCategories} handleSetCheckedCategories={setCheckedCategories} handleSelectAll={toggleCheckmark} flex={[1,1,1,0.5]} />
                         {
                             songs.length ? songs.map(song => 
                                 <Song 
