@@ -30,6 +30,12 @@ const Song = (props) => {
         }
     }
 
+    const msToMinsSecs = ms => {
+        const minutes = Math.floor(ms / 60000);
+        const seconds = ((ms % 60000) / 1000).toFixed(0);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
     return (
         <div style={{background: props.toggled ? '#d3d3d3' : null}} className={css(ss.wrapper)}>
             <div className={css(ss.audioIcon)} onClick={toggleAudio}>
@@ -39,13 +45,41 @@ const Song = (props) => {
                     <svg width='12' height='12' viewBox="0 0 50 50"><path d="M0,50V0L50,25Z"/></svg>
                 }
             </div>
-            <div onClick={props.handleToggle} style={{background: props.toggled ? '#808080' : null, border: props.toggled ? '2px solid #808080' : null}} className={css(ss.checkmark)}>
+            <div onClick={props.handleToggle} style={{background: props.toggled ? '#606060' : null, border: props.toggled ? '2px solid #606060' : null}} className={css(ss.checkmark)}>
                 <svg style={{fill: props.toggled ? '#fff' : 'transparent'}} height='16' width='16' viewBox="0 0 512 512"> <path d="M504.502,75.496c-9.997-9.998-26.205-9.998-36.204,0L161.594,382.203L43.702,264.311c-9.997-9.998-26.205-9.997-36.204,0 c-9.998,9.997-9.998,26.205,0,36.203l135.994,135.992c9.994,9.997,26.214,9.99,36.204,0L504.502,111.7 C514.5,101.703,514.499,85.494,504.502,75.496z" /></svg>
             </div>
-            <div style={{flex: props.flex[0]}} className={css(ss.category)}>{props.details.name}</div>
-            <div style={{flex: props.flex[1]}} className={css(ss.category)}>{props.details.artists.join(', ')}</div>
-            <div style={{flex: props.flex[2]}} className={css(ss.category)}>{props.details.album}</div>
-            <div style={{flex: props.flex[3]}} className={css(ss.category)}>{props.details.year}</div>
+            {
+                props.categories.map(category => {
+                    switch(category) {
+                        case 'Album':
+                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.album}</div>
+                        case 'Artists':
+                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.artists.join(', ')}</div>
+                        case 'Danceability':
+                            return <div style={{width: 130}} className={css(ss.category)}>{Math.round(props.details.danceability * 100) + '%'}</div>
+                        case 'Duration':
+                            return <div style={{width: 100}} className={css(ss.category)}>{msToMinsSecs(props.details.duration)}</div>
+                        case 'Energy':
+                            return <div style={{width: 83}} className={css(ss.category)}>{Math.round(props.details.energy * 100) + '%'}</div>
+                        case 'Instrumentalness':
+                            return <div style={{width: 136}} className={css(ss.category)}>{Math.round(props.details.instrumentalness * 100) + '%'}</div>
+                        case 'Loudness':
+                            return <div style={{width: 105}} className={css(ss.category)}>{props.details.loudness + ' dB'}</div>
+                        case 'Name':
+                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.name}</div>
+                        case 'Popularity':
+                            return <div style={{width: 113}} className={css(ss.category)}>{props.details.popularity + 'th percentile'}</div>
+                        case 'Speechiness':
+                            return <div style={{width: 128}} className={css(ss.category)}>{Math.round(props.details.speechiness * 100) + '%'}</div>
+                        case 'Tempo':
+                            return <div style={{width: 82}} className={css(ss.category)}>{props.details.tempo + ' bpm'}</div>
+                        case 'Valence':
+                            return <div style={{width: 94}} className={css(ss.category)}>{Math.round(props.details.valence * 100) + '% positive'}</div>
+                        case 'Year':
+                            return <div style={{width: 64}} className={css(ss.category)}>{props.details.year}</div>
+                    }
+                })
+            }
         </div>
     )
 }
@@ -69,7 +103,7 @@ const ss = StyleSheet.create({
         cursor: 'pointer',
         borderRadius: 6,
         ':hover': {
-            background: '#808080'
+            background: '#d9d9d9'
         }
     },
     checkmark: {
@@ -82,7 +116,7 @@ const ss = StyleSheet.create({
         borderRadius: 6,
         marginRight: 10,
         cursor: 'pointer',
-        border: '2px solid #808080',
+        border: '2px solid #606060',
     },
     category: {
         margin: '0 10px',

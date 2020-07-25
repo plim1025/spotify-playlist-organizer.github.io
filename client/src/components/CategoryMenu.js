@@ -24,10 +24,10 @@ const CategoryMenu = (props) => {
                     {['Album', 'Artists', 'Danceability', 'Duration', 'Energy', 'Instrumentalness', 'Loudness', 'Name', 'Popularity', 'Speechiness', 'Tempo', 'Valence', 'Year']
                         .map(category => 
                             <ListItem key={category} onClick={() => setCategories(category)} className={css(ss.listItem)}>
-                                <div style={{background: props.checkedCategories.indexOf(category) > -1 ? '#808080' : null}} className={css(ss.checkmark)}>
+                                <div style={{background: props.checkedCategories.indexOf(category) > -1 ? '#606060' : null}} className={css(ss.checkmark)}>
                                     <svg style={{fill: props.checkedCategories.indexOf(category) > -1 ? '#fff' : 'transparent'}} className={css(ss.checkmarkIcon)} viewBox="0 0 512 512"> <path d="M504.502,75.496c-9.997-9.998-26.205-9.998-36.204,0L161.594,382.203L43.702,264.311c-9.997-9.998-26.205-9.997-36.204,0 c-9.998,9.997-9.998,26.205,0,36.203l135.994,135.992c9.994,9.997,26.214,9.99,36.204,0L504.502,111.7 C514.5,101.703,514.499,85.494,504.502,75.496z" /></svg>
                                 </div>
-                                <ListItemText primary={category} />
+                                <ListItemText primary={category === 'Instrumentalness' ? 'Instrumental' : category === 'Speechiness' ? 'Speech' : category} />
                             </ListItem>
                         )
                     }
@@ -71,7 +71,7 @@ const ss = StyleSheet.create({
         padding: 3,
         borderRadius: 8,
         marginRight: 20,
-        border: '2px solid #808080',
+        border: '2px solid #606060',
         cursor: 'pointer'
     },
     checkmarkIcon: {

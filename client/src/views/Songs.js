@@ -15,7 +15,7 @@ const Songs = () => {
 
     const query = new URLSearchParams(useLocation().search);
     const [songs, setSongs] = useState([]);
-    const [checkedCategories, setCheckedCategories] = useState(['Name', 'Artist', 'Album', 'Year']);
+    const [checkedCategories, setCheckedCategories] = useState(['Name', 'Artists', 'Album', 'Year']);
     const [songFilters, setSongFilters] = useState({
         sort: {
             category: '',
@@ -140,7 +140,7 @@ const Songs = () => {
                     </div>
                     <div className={css(ss.divider)} />
                     <div className={css(ss.songWrapper)}>
-                        <Sort checkmark={checkmark} checkedCategories={checkedCategories} handleSetCheckedCategories={setCheckedCategories} handleSelectAll={toggleCheckmark} flex={[1,1,1,0.5]} />
+                        <Sort checkmark={checkmark} checkedCategories={checkedCategories} handleSetCheckedCategories={setCheckedCategories} handleSelectAll={toggleCheckmark} />
                         {
                             songs.length ? songs.map(song => 
                                 <Song 
@@ -148,7 +148,7 @@ const Songs = () => {
                                     details={song} 
                                     handleToggle={() => toggleSong(!toggledSongIDs.includes(song.id), song)}
                                     toggled={toggledSongIDs.includes(song.id)}
-                                    flex={[1,1,1,0.5]}
+                                    categories={checkedCategories}
                                 />
                             ) : null
                         }
