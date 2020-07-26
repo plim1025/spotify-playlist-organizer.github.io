@@ -52,31 +52,31 @@ const Song = (props) => {
                 props.categories.map(category => {
                     switch(category) {
                         case 'Album':
-                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.album}</div>
+                            return <div key={category} style={{flex: 1}} className={css(ss.category)}>{props.details.album}</div>
                         case 'Artists':
-                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.artists.join(', ')}</div>
+                            return <div key={category} style={{flex: 1}} className={css(ss.category)}>{props.details.artists.join(', ')}</div>
                         case 'Danceability':
-                            return <div style={{width: 130}} className={css(ss.category)}>{Math.round(props.details.danceability * 100) + '%'}</div>
+                            return <div key={category} style={{width: 130}} className={css(ss.category)}>{Math.round(props.details.danceability * 100) + '%'}</div>
                         case 'Duration':
-                            return <div style={{width: 100}} className={css(ss.category)}>{msToMinsSecs(props.details.duration)}</div>
+                            return <div key={category} style={{width: 100}} className={css(ss.category)}>{msToMinsSecs(props.details.duration)}</div>
                         case 'Energy':
-                            return <div style={{width: 83}} className={css(ss.category)}>{Math.round(props.details.energy * 100) + '%'}</div>
+                            return <div key={category} style={{width: 83}} className={css(ss.category)}>{Math.round(props.details.energy * 100) + '%'}</div>
                         case 'Instrumentalness':
-                            return <div style={{width: 136}} className={css(ss.category)}>{Math.round(props.details.instrumentalness * 100) + '%'}</div>
+                            return <div key={category} style={{width: 136}} className={css(ss.category)}>{Math.round(props.details.instrumentalness * 100) + '%'}</div>
                         case 'Loudness':
-                            return <div style={{width: 105}} className={css(ss.category)}>{props.details.loudness + ' dB'}</div>
+                            return <div key={category} style={{width: 105}} className={css(ss.category)}>{props.details.loudness + ' dB'}</div>
                         case 'Name':
-                            return <div style={{flex: 1}} className={css(ss.category)}>{props.details.name}</div>
+                            return <div key={category} style={{flex: 1}} className={css(ss.category)}>{props.details.name}</div>
                         case 'Popularity':
-                            return <div style={{width: 113}} className={css(ss.category)}>{props.details.popularity + 'th percentile'}</div>
+                            return <div key={category} style={{width: 113}} className={css(ss.category)}>{props.details.popularity + 'th percentile'}</div>
                         case 'Speechiness':
-                            return <div style={{width: 128}} className={css(ss.category)}>{Math.round(props.details.speechiness * 100) + '%'}</div>
+                            return <div key={category} style={{width: 128}} className={css(ss.category)}>{Math.round(props.details.speechiness * 100) + '%'}</div>
                         case 'Tempo':
-                            return <div style={{width: 82}} className={css(ss.category)}>{props.details.tempo + ' bpm'}</div>
+                            return <div key={category} style={{width: 82}} className={css(ss.category)}>{props.details.tempo + ' bpm'}</div>
                         case 'Valence':
-                            return <div style={{width: 94}} className={css(ss.category)}>{Math.round(props.details.valence * 100) + '% positive'}</div>
+                            return <div key={category} style={{width: 105}} className={css(ss.category)}>{Math.round(props.details.valence * 100) + '%'}</div>
                         case 'Year':
-                            return <div style={{width: 64}} className={css(ss.category)}>{props.details.year}</div>
+                            return <div key={category} style={{width: 64}} className={css(ss.category)}>{props.details.year}</div>
                     }
                 })
             }

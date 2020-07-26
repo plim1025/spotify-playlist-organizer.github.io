@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import { css, StyleSheet } from 'aphrodite/no-important';
-import { SongsContext, SongFiltersContext } from '../views/Songs';
+import { SongsContext, SongFiltersContext } from '../views/GeneratePlaylist';
 
 const DropdownFilter = (props) => {
 
@@ -29,7 +29,7 @@ const DropdownFilter = (props) => {
     return (
         initialFilters.length ? 
         <FormControl className={css(ss.wrapper)}>
-            <InputLabel>{props.title}</InputLabel>
+            <InputLabel style={{color: '#000'}}>{props.title}</InputLabel>
             <Select 
                 multiple value={selectedFilters} 
                 onChange={e => setSelectedFilters([...e.target.value])}

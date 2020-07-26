@@ -101,7 +101,7 @@ const Login = () => {
             )   
         )
         .then(() => {
-            window.location.href = `songs?access_token=${accessToken}&refresh_token=${refreshToken}&user_id=${userID}`;
+            window.location.href = `generatePlaylist?access_token=${accessToken}&refresh_token=${refreshToken}&user_id=${userID}`;
         })
         .catch(err => console.log(err));
     }
@@ -190,8 +190,8 @@ const ss = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 3,
-        borderRadius: 8,
+        padding: 2,
+        borderRadius: 6,
         marginRight: 10,
         border: '2px solid #606060'
     },
