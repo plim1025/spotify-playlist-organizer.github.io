@@ -37,9 +37,19 @@ const GeneratePlaylist = () => {
     const [playlistName, setPlaylistName] = useState('');
     const [generating, setGenerating] = useState(false);
     const [checkedCategories, setCheckedCategories] = useState(['Name', 'Artists', 'Album', 'Year']);
+    const [navburger, setNavburger] = useState(window.outerWidth <= 800);
+    const [sidebar, setSidebar] = useState(false);
 
     useEffect(() => {
         getSongsFromURL('http://localhost:3000/song');
+        window.onresize = () => {
+            if(window.outerWidth > 800) {
+                setSidebar(false);
+                setNavburger(false);
+            } else {
+                setNavburger(true);
+            }
+        }
     }, []);
 
     useEffect(() => {
@@ -120,41 +130,58 @@ const GeneratePlaylist = () => {
     return (
         <SongsContext.Provider value={songs}>
         <SongFiltersContext.Provider value={{songFilters: songFilters, setSongFilters: setSongFilters}}>
-            <div className={css(ss.wrapper)}>
-                <div className={css(ss.flexWrapper)}>
-                    <div className={css(ss.filterWrapper)}>
-                        <DropdownFilters categories={checkedCategories} />
-                        <SliderFilters categories={checkedCategories} />
+            {!sidebar ? 
+                <>
+                    <div className={css(ss.wrapper)}>
+                        <div className={css(ss.flexWrapper)}>
+                            <div className={css(ss.filterWrapper)}>
+                                <DropdownFilters categories={checkedCategories} />
+                                <SliderFilters categories={checkedCategories} />
+                            </div>
+                            <div className={css(ss.divider)} />
+                            <Songs checkedCategories={checkedCategories} setCheckedCategories={setCheckedCategories} songs={songs} toggledSongs={toggledSongIDs} setSongs={setToggledSongIDs} />
+                        </div>
+                        <div className={css(ss.generateWrapper)}>
+                            <TextField variant="outlined" className={css(ss.generateInput)} placeholder={'Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
+                            <Button text={'GENERATE'} onClickHandler={generatePlaylist} />
+                        </div>
                     </div>
-                    <div className={css(ss.divider)} />
-                    <Songs checkedCategories={checkedCategories} setCheckedCategories={setCheckedCategories} songs={songs} toggledSongs={toggledSongIDs} setSongs={setToggledSongIDs} />
+                    <div className={css(ss.properties)}>
+                        <div className={css(ss.propertiesTitle)}>Track Properties</div>
+                        <ol>
+                            <li><b>Album</b> - The album that the track is featured in</li>
+                            <li><b>Artists</b> - The artists featured in the track</li>
+                            <li><b>Danceability</b> - The higher the percentage, the easier it is to dance to this song</li>
+                            <li><b>Length</b> - The length of the track in minutes and seconds</li>
+                            <li><b>Energy</b> - The higher the percentage, the more energetic the song</li>
+                            <li><b>Instrumental</b> - The higher the percentage, the more instrumental the song</li>
+                            <li><b>Loudness (dB)</b> - The higher the value, the louder the song</li>
+                            <li><b>Name</b> - The title of the track</li>
+                            <li><b>Popularity</b> - The higher the percentile the more popular the song</li>
+                            <li><b>Positivity</b> - The higher the percentage, the more positive the song</li>
+                            <li><b>Speech</b> - The higher the percentage, the more speech in the song</li>
+                            <li><b>Tempo (bpm)</b> - The number of beats per minute in the song</li>
+                            <li><b>Year</b> - The release date of the track</li>
+                        </ol>
+                    </div>
+                </> : 
+                <div className={css(ss.sidebar)} style={{opacity: sidebar ? 1 : 0}}>
+                    <div style={{opacity: 0, width: 20}} />
+                    <DropdownFilters />
+                    <div style={{opacity: 0, width: 20}} />
+                    <SliderFilters />
+                    <div className={css(ss.sidebarClose)} onClick={() => setSidebar(false)}>&times;</div>
                 </div>
-                <div className={css(ss.generateWrapper)}>
-                    <TextField variant="outlined" className={css(ss.generateInput)} placeholder={'Playlist Name: '} onChange={e => setPlaylistName(e.target.value)}/>
-                    <Button text={'GENERATE'} onClickHandler={generatePlaylist} />
-                </div>
-            </div>
-            <div className={css(ss.properties)}>
-                <div className={css(ss.propertiesTitle)}>Track Properties</div>
-                <ol>
-                    <li><b>Album</b> - The album that the track is featured in</li>
-                    <li><b>Artists</b> - The artists featured in the track</li>
-                    <li><b>Danceability</b> - The higher the percentage, the easier it is to dance to this song</li>
-                    <li><b>Length</b> - The length of the track in minutes and seconds</li>
-                    <li><b>Energy</b> - The higher the percentage, the more energetic the song</li>
-                    <li><b>Instrumental</b> - The higher the percentage, the more instrumental the song</li>
-                    <li><b>Loudness (dB)</b> - The higher the value, the louder the song</li>
-                    <li><b>Name</b> - The title of the track</li>
-                    <li><b>Popularity</b> - The higher the percentile the more popular the song</li>
-                    <li><b>Positivity</b> - The higher the percentage, the more positive the song</li>
-                    <li><b>Speech</b> - The higher the percentage, the more speech in the song</li>
-                    <li><b>Tempo (bpm)</b> - The number of beats per minute in the song</li>
-                    <li><b>Year</b> - The release date of the track</li>
-                </ol>
-            </div>
+            }
             <Backdrop transitionDuration={300} open={generating} className={css(ss.backdrop)}>
                 <CircularProgress color="inherit" />
             </Backdrop>
+            {navburger ? 
+                <div className={css(ss.navburger)} onClick={() => setSidebar(sidebar => !sidebar)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill='#000' viewBox="0 0 384 384"> <rect x="0" y="277.333" width="384" height="42.667" /> <rect x="0" y="170.667" width="384" height="42.667" /> <rect x="0" y="64" width="384" height="42.667" /> </svg>
+                </div>
+                : null
+            }
         </SongFiltersContext.Provider>
         </SongsContext.Provider>
     )
@@ -173,7 +200,10 @@ const ss = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         margin: '0 10px',
-        padding: 20
+        padding: 20,
+        '@media(max-width:800px)': {
+            display: 'none'
+        }
     },
     divider: {
         height: '100%',
@@ -196,7 +226,8 @@ const ss = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '0 20px'
+        margin: '0 20px',
+        marginBottom: 20
     },
     propertiesTitle: {
         display: 'flex',
@@ -209,6 +240,40 @@ const ss = StyleSheet.create({
     backdrop: {
         zIndex: 2,
         color: '#fff'
+    },
+    navburger: {
+		width: 24,
+		height: 24,
+        position: 'absolute',
+        top: 23,
+		left: 23,
+		cursor: 'pointer'
+    },
+    sidebar: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        background: '#f0f0f0',
+        position: 'relative',
+        height: 'calc(100% - 70px)'
+    },
+    sidebarFlex: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative'
+    },
+    sidebarClose: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 32,
+        height: 32,
+        width: 32,
+        cursor: 'pointer',
+        position: 'absolute',
+        top: 8,
+        right: 8
     }
 });
 

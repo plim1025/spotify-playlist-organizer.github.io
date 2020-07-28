@@ -6,18 +6,9 @@ const DropdownFilters = (props) => {
 
     return (
         <div className={css(ss.wrapper)}>
-            {
-                props.categories.map(category => {
-                    switch(category) {
-                        case 'Artists':
-                            return <DropdownFilter category={'artists'} title={'Artists'} />
-                        case 'Album':
-                            return <DropdownFilter category={'album'} title={'Album'} />
-                        case 'Year':
-                            return <DropdownFilter category={'year'} title={'Year'} />
-                    }
-                })
-            }
+            <DropdownFilter category={'artists'} title={'Artists'} />
+            <DropdownFilter category={'album'} title={'Album'} />
+            <DropdownFilter category={'year'} title={'Year'} />
         </div>
     )
 }

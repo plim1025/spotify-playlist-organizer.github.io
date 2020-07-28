@@ -30,6 +30,10 @@ const SliderFilter = (props) => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
 
+    const decimalToPercentage = decimal => {
+        return Math.round(decimal * 100) + '%';
+    }
+
     return (
         initialRange.length === 2 && range.length === 2 ?
         <div className={css(ss.wrapper)}>
@@ -40,9 +44,18 @@ const SliderFilter = (props) => {
                 onChangeCommitted={handleFilter}
                 min={initialRange[0]}
                 max={initialRange[1]}
+                step={props.category === 'duration' || props.category === 'loudness' || props.category === 'popularity' || props.category === 'tempo' ? 1 : 0.01}
                 value={range}
                 valueLabelDisplay={'auto'}
-                valueLabelFormat={props.category === 'duration' ? ms => msToMinsSecs(ms) : label => label}
+                valueLabelFormat={
+                    props.category === 'duration' ? ms => msToMinsSecs(ms) :
+                    props.category === 'danceability' ? decimal => decimalToPercentage(decimal) :
+                    props.category === 'energy' ? decimal => decimalToPercentage(decimal) :
+                    props.category === 'instrumental' ? decimal => decimalToPercentage(decimal) :
+                    props.category === 'speechiness' ? decimal => decimalToPercentage(decimal) :
+                    props.category === 'valence' ? decimal => decimalToPercentage(decimal) :
+                    label => label
+                }
             />
         </div>
         : <></>
