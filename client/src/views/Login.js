@@ -2,10 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 import { css, StyleSheet } from 'aphrodite/no-important';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '../components/Button';
 
-const Login = () => {
+const useStyles = makeStyles({
+    labelRoot: {
+        color: '#000 !important',
+    },
+    inputUnderline: {
+        '&:after': {
+            borderBottom: 'none !important'
+        }
+    }
+})
 
+const Login = () => {
+    const classes = useStyles();
     const query = new URLSearchParams(useLocation().search);
     const [playlists, setPlaylists] = useState([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState([]);
@@ -116,11 +128,11 @@ const Login = () => {
                 query.get('access_token') ?
                     <>
                         <FormControl className={css(ss.dropdownParent)}>
-                            <InputLabel className={css(ss.dropdownLabel)}>Select Playlists</InputLabel>
+                            <InputLabel classes={{root: classes.labelRoot}} className={css(ss.dropdownLabel)}>Select Playlists</InputLabel>
                             <Select 
                                 multiple value={selectedPlaylists} 
                                 onChange={e => setSelectedPlaylists([...e.target.value])}
-                                input={<Input />}
+                                input={<Input classes={{underline: classes.inputUnderline}}/>}
                                 renderValue={item => <div>{item.map(item => <Chip key={item.id} className={css(ss.dropdownChip)} label={item.name} />)}</div>} 
                                 className={css(ss.dropdownSelect)}
                             >

@@ -2,9 +2,21 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FormControl, Input, InputLabel, Select, MenuItem, Chip, ListItemText } from '@material-ui/core';
 import { css, StyleSheet } from 'aphrodite/no-important';
 import { SongsContext, SongFiltersContext } from '../views/GeneratePlaylist';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    labelRoot: {
+        color: '#000 !important',
+    },
+    inputUnderline: {
+        '&:after': {
+            borderBottom: 'none !important'
+        }
+    }
+})
 
 const DropdownFilter = (props) => {
-
+    const classes = useStyles();
     const songs = useContext(SongsContext);
     const {songFilters, setSongFilters} = useContext(SongFiltersContext);
     const [initialFilters, setInitialFilters] = useState([]);
@@ -13,9 +25,9 @@ const DropdownFilter = (props) => {
     useEffect(() => {
         if(!initialFilters.length && songs.length) {
             if(props.category === 'artists') {
-                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists)))]);
+                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists)))].sort());
             } else {
-                setInitialFilters([...new Set(songs.map(song => song[props.category]))]);
+                setInitialFilters([...new Set(songs.map(song => song[props.category]))].sort());
             }
         }
     }, [songs]);
@@ -29,12 +41,12 @@ const DropdownFilter = (props) => {
     return (
         initialFilters.length ? 
         <FormControl className={css(ss.wrapper)}>
-            <InputLabel style={{color: '#000'}}>{props.title}</InputLabel>
-            <Select 
+            <InputLabel classes={{root: classes.labelRoot}}>{props.title}</InputLabel>
+            <Select
                 multiple value={selectedFilters} 
                 onChange={e => setSelectedFilters([...e.target.value])}
-                input={<Input />}
                 renderValue={item => <div>{item.map(item => <Chip key={item} className={css(ss.chip)} label={item} />)}</div>} 
+                input={<Input classes={{underline: classes.inputUnderline}}/>}
             >
                 {initialFilters.map(filter => (
                     <MenuItem key={filter} value={filter}>

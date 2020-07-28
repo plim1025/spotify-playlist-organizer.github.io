@@ -2,8 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Slider } from '@material-ui/core';
 import { SongFiltersContext } from '../views/GeneratePlaylist';
 import { css, StyleSheet } from 'aphrodite/no-important';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    valueLabel: {
+        fontSize: 12
+    }
+})
 
 const SliderFilter = (props) => {
+    const classes = useStyles();
     const {songFilters, setSongFilters} = useContext(SongFiltersContext);
     const [initialRange, setInitialRange] = useState([]);
     const [range, setRange] = useState([]);
@@ -39,6 +47,7 @@ const SliderFilter = (props) => {
         <div className={css(ss.wrapper)}>
             <div>{props.title}</div>
             <Slider
+                classes={{valueLabel: classes.valueLabel}}
                 style={{color: '#000'}}
                 onChange={(e, newRange) => setRange(newRange)}
                 onChangeCommitted={handleFilter}
