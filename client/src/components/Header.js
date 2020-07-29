@@ -41,10 +41,6 @@ const ss = StyleSheet.create({
         cursor: 'pointer',
         paddingRight: 5,
         borderRadius: 8,
-        transition: '0.2s ease-in-out',
-        ':hover': {
-            background: '#d0d0d0'
-        }
     },
     spotifyIcon: {
         height: 60,

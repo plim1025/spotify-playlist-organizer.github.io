@@ -10,7 +10,7 @@ const songRouter = require('./routes/song');
 
 const app = express();
 dotenv.config();
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser()).use(cors());
 app.use(loginRouter);

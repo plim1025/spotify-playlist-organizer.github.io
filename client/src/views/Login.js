@@ -36,7 +36,7 @@ const Login = () => {
                     headers: { Authorization: `Bearer ${accessToken}`}
                 })
                 .then(response => response.json())
-                .catch(err => console.log(err))
+                .catch(err => console.log('yeet1'))
             ])
             .then(([savedSongsData, playlistData]) => fetchTracks(savedSongsData, playlistData))
             .catch(e => {
@@ -104,7 +104,7 @@ const Login = () => {
         const songs = selectedPlaylists.map(playlist => playlist.tracks).flat();
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
-        const userID = query.get('user_id');        
+        const userID = query.get('user_id');
         fetch('http://localhost:3000/song', {
             method: 'DELETE'
         })

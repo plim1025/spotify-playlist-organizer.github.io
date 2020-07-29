@@ -12,6 +12,10 @@ const useStyles = makeStyles({
         '&:after': {
             borderBottom: 'none !important'
         }
+    },
+    chipRoot: {
+        height: 20,
+        marginLeft: 5
     }
 })
 
@@ -25,9 +29,9 @@ const DropdownFilter = (props) => {
     useEffect(() => {
         if(!initialFilters.length && songs.length) {
             if(props.category === 'artists') {
-                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists)))].sort());
+                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists).filter(song => song)))].sort());
             } else {
-                setInitialFilters([...new Set(songs.map(song => song[props.category]))].sort());
+                setInitialFilters([...new Set(songs.map(song => song[props.category]).filter(song => song))].sort());
             }
         }
     }, [songs]);
@@ -45,7 +49,7 @@ const DropdownFilter = (props) => {
             <Select
                 multiple value={selectedFilters} 
                 onChange={e => setSelectedFilters([...e.target.value])}
-                renderValue={item => <div>{item.map(item => <Chip key={item} className={css(ss.chip)} label={item} />)}</div>} 
+                renderValue={item => <div>{item.map(item => <Chip key={item} classes={{root: classes.chipRoot}} label={item} />)}</div>} 
                 input={<Input classes={{underline: classes.inputUnderline}}/>}
             >
                 {initialFilters.map(filter => (
@@ -65,10 +69,6 @@ const DropdownFilter = (props) => {
 const ss = StyleSheet.create({
     wrapper: {
         width: 200
-    },
-    chip: {
-        height: '20px !important',
-        marginLeft: 5
     },
     checkmark: {
         display: 'flex',

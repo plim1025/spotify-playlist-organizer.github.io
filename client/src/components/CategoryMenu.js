@@ -49,7 +49,7 @@ const ss = StyleSheet.create({
         height: 480,
         outline: 'none',
         background: '#f0f0f0',
-        borderRadius: 8
+        borderRadius: 6
     },
     listTitle: {
         display: 'flex',

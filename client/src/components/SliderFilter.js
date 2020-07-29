@@ -61,6 +61,7 @@ const SliderFilter = (props) => {
                     props.category === 'danceability' ? decimal => decimalToPercentage(decimal) :
                     props.category === 'energy' ? decimal => decimalToPercentage(decimal) :
                     props.category === 'instrumental' ? decimal => decimalToPercentage(decimal) :
+                    props.category === 'popularity' ? number => number + '%' :
                     props.category === 'speechiness' ? decimal => decimalToPercentage(decimal) :
                     props.category === 'valence' ? decimal => decimalToPercentage(decimal) :
                     label => label

@@ -11,10 +11,18 @@ router.get('/song', async(req, res) => {
             categoryArr = JSON.parse(req.query[category]);
             if(category === 'artists' || category === 'album' || category === 'year') {
                 if(categoryArr.length) {
-                    filter[category] = { $in: categoryArr };
+                    if(filter['$and']) {
+                        filter['$and'].push({'$or': [{[category]: {$in: categoryArr}}, {[category]: {$exists: false}}]});
+                    } else {
+                        filter['$and'] = [{'$or': [{[category]: {$in: categoryArr}}, {[category]: {$exists: false}}]}];
+                    }
                 }
             } else {
-                filter[category] = { $gte: categoryArr[0], $lte: categoryArr[1] };
+                if(filter['$and']) {
+                    filter['$and'].push({'$or': [{[category]: {$gte: categoryArr[0], $lte: categoryArr[1]}}, {[category]: {$exists: false}}]})
+                } else {
+                    filter['$and'] = [{'$or': [{[category]: {$gte: categoryArr[0], $lte: categoryArr[1]}}, {[category]: {$exists: false}}]}];
+                }
             }
         });
         const sortCategory = req.query.sortCategory;
@@ -36,7 +44,7 @@ router.post('/song', (req, res) => {
     Song.countDocuments({id: req.body.id}, (err, count) => {
         if(err) {
             console.log(err)
-        } else if(count == 0) {
+        } else if(count === 0) {
             const song = new Song({
                 album: req.body.album.name,
                 artists: req.body.artists.map(artist => artist.name),
@@ -71,27 +79,53 @@ router.post('/song', (req, res) => {
 
 router.post('/songs', (req, res) => {
     const songs = req.body.map(song => {
-        return {
-            album: song.album.name,
-            artists: song.artists.map(artist => artist.name),
-            danceability: song.danceability,
-            duration: song.duration_ms,
-            energy: song.energy,
-            id: song.id,
-            instrumentalness: song.instrumentalness,
-            key: song.key,
-            liveness: song.liveness,
-            loudness: parseInt(song.loudness),
-            name: song.name,
-            popularity: song.popularity,
-            preview: song.preview_url,
-            speechiness: song.speechiness,
-            tempo: parseInt(song.tempo),
-            time_signature: song.time_signature,
-            uri: song.uri,
-            valence: song.valence,
-            year: parseInt(song.album.release_date.substring(0, 5))
-        }
+        const parsedSong = {};
+        ['album', 'artists', 'danceability', 'duration', 'energy', 'id', 'instrumentalness', 'key', 'liveness', 'loudness', 'name', 'popularity', 'preview', 'speechiness', 'tempo', 'time_signature', 'uri', 'valence', 'year'].forEach(field => {
+            switch(field) {
+                case 'album':
+                    const album = song[field].name;
+                    if(album) {
+                        parsedSong[field] = album;
+                    }
+                    break;
+                case 'artists':
+                    const artists = song[field];
+                    if(artists.length) {
+                        parsedSong[field] = artists.map(artist => artist.name);
+                    }
+                    break;
+                case 'duration':
+                    const duration = song.duration_ms;
+                    if(duration) {
+                        parsedSong[field] = duration;
+                    }
+                    break;
+                case 'loudness' || 'tempo':
+                    const loudnessOrTempo = song[field];
+                    if(loudnessOrTempo) {
+                        parsedSong[field] = parseInt(loudnessOrTempo);
+                    }
+                    break;
+                case 'preview':
+                    const preview = song.preview_url;
+                    if(preview) {
+                        parsedSong[field] = preview;
+                    }
+                    break;
+                case 'year':
+                    const year = song.album.release_date;
+                    if(year) {
+                        parsedSong[field] = parseInt(year.substring(0, 5));
+                    }
+                    break;
+                default:
+                    const category = song[field];
+                    if(category) {
+                        parsedSong[field] = category;
+                    }
+            }
+        });
+        return parsedSong;
     });
     const filteredSongs = [];
     const pastIDs = [];
@@ -103,7 +137,7 @@ router.post('/songs', (req, res) => {
     }
     Song.insertMany(filteredSongs, err => {
         if(err) {
-            console.log(err)
+            console.log(err);
         } else {
             res.sendStatus(200);
         }

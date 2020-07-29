@@ -2,27 +2,27 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const SongSchema = new Schema({
-    album: String,
+    album: String | null,
     artists: [
-        String
+        String | null
     ],
-    danceability: Number,
-    duration: Number,
-    energy: Number,
-    id: String,
-    instrumentalness: Number,
-    key: Number,
-    liveness: Number,
-    loudness: Number,
-    name: String,
-    popularity: Number,
-    preview: String,
-    speechiness: Number,
-    tempo: Number,
-    time_signature: Number,
-    uri: String,
-    valence: Number,
-    year: Number
+    danceability: Number | null,
+    duration: Number | null,
+    energy: Number | null,
+    id: String | null,
+    instrumentalness: Number | null,
+    key: Number | null,
+    liveness: Number | null,
+    loudness: Number | null,
+    name: String | null,
+    popularity: Number | null,
+    preview: String | null,
+    speechiness: Number | null,
+    tempo: Number | null,
+    time_signature: Number | null,
+    uri: String | null,
+    valence: Number | null,
+    year: Number | null
 });
 
 const Song = mongoose.model('song', SongSchema);
