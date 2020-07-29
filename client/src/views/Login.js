@@ -26,72 +26,79 @@ const Login = () => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
         if(accessToken) {
-            const fetchedPlaylists = [];
             Promise.all([
                 fetch('https://api.spotify.com/v1/me/tracks', {
-                    headers: {'Authorization': `Bearer ${accessToken}` }
+                    headers: { Authorization: `Bearer ${accessToken}` }
                 })
                 .then(response => response.json())
                 .catch(err => console.log(err)),
                 fetch('https://api.spotify.com/v1/me/playlists', {
-                    headers: {'Authorization': `Bearer ${accessToken}`}
+                    headers: { Authorization: `Bearer ${accessToken}`}
                 })
                 .then(response => response.json())
                 .catch(err => console.log(err))
             ])
-            .then(([savedSongsData, playlistData]) => {
-                const promiseArr = [];
-                let savedSongTracks = savedSongsData.items.map(item => item.track);
-                if(savedSongsData.items.length) {
-                    savedSongTracks.map(track => {
-                        promiseArr.push(
-                            fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
-                                headers: {'Authorization': `Bearer ${accessToken}`}
-                            })
-                            .then(response => response.json())
-                            .then(trackData => {
-                                savedSongTracks = savedSongTracks.map(item => item.id === track.id ? {...item, ...trackData} : item)
-                            })
-                            .catch(err => console.log(err))
-                        );
-                    })
-                }
-                if(playlistData.items.length) {
-                    playlistData.items.map(playlist => {
-                        promiseArr.push(
-                            fetch(playlist.tracks.href, {
-                                headers: {'Authorization': `Bearer ${accessToken}`}
-                            })
-                            .then(response => response.json())
-                            .then(async(playlistData) => {
-                                const trackPromiseArr = [];
-                                let playlistTracks =  playlistData.items.map(item => item.track);
-                                playlistTracks.map(track => {
-                                    trackPromiseArr.push(
-                                        fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
-                                            headers: {'Authorization': `Bearer ${accessToken}`}
-                                        })
-                                        .then(response => response.json())
-                                        .then(trackData => playlistTracks = playlistTracks.map(item => item.id === track.id ? {...item, ...trackData} : item))
-                                        .catch(err => console.log(err))
-                                    )
-                                });
-                                await Promise.all(trackPromiseArr).then(() => fetchedPlaylists.push({ id: playlist.id, name: playlist.name, tracks: playlistTracks }));
-                            })
-                            .catch(err => console.log(err))
-                        );
-                    })
-                }
-
-                Promise.all(promiseArr).then(() => {
-                    if(savedSongTracks.length) {
-                        fetchedPlaylists.push({ id: savedSongsData.href, name: 'Saved Songs', tracks: savedSongTracks });
-                    }
-                    setPlaylists(fetchedPlaylists);
-                });
+            .then(([savedSongsData, playlistData]) => fetchTracks(savedSongsData, playlistData))
+            .catch(e => {
+                console.log('retrieving new access token...');
+                window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
             });
         }
     }, []);
+
+    const fetchTracks = (savedSongsData, playlistData) => {
+        const accessToken = query.get('access_token');
+        const fetchedPlaylists = [];
+        const promiseArr = [];
+        let savedSongTracks = savedSongsData.items.map(item => item.track);
+        if(savedSongsData.items.length) {
+            savedSongTracks.map(track => {
+                promiseArr.push(
+                    fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
+                        headers: {'Authorization': `Bearer ${accessToken}`}
+                    })
+                    .then(response => response.json())
+                    .then(trackData => {
+                        savedSongTracks = savedSongTracks.map(item => item.id === track.id ? {...item, ...trackData} : item)
+                    })
+                    .catch(err => console.log(err))
+                );
+            })
+        }
+        if(playlistData.items.length) {
+            playlistData.items.map(playlist => {
+                promiseArr.push(
+                    fetch(playlist.tracks.href, {
+                        headers: {'Authorization': `Bearer ${accessToken}`}
+                    })
+                    .then(response => response.json())
+                    .then(async(playlistData) => {
+                        const trackPromiseArr = [];
+                        let playlistTracks =  playlistData.items.map(item => item.track);
+                        playlistTracks.map(track => {
+                            trackPromiseArr.push(
+                                fetch(`https://api.spotify.com/v1/audio-features/${track.id}`, {
+                                    headers: {'Authorization': `Bearer ${accessToken}`}
+                                })
+                                .then(response => response.json())
+                                .then(trackData => playlistTracks = playlistTracks.map(item => item.id === track.id ? {...item, ...trackData} : item))
+                                .catch(err => console.log(err))
+                            )
+                        });
+                        await Promise.all(trackPromiseArr).then(() => fetchedPlaylists.push({ id: playlist.id, name: playlist.name, tracks: playlistTracks }));
+                    })
+                    .catch(err => console.log(err))
+                );
+            })
+        }
+
+        Promise.all(promiseArr).then(() => {
+            if(savedSongTracks.length) {
+                fetchedPlaylists.push({ id: savedSongsData.href, name: 'Saved Songs', tracks: savedSongTracks });
+            }
+            setPlaylists(fetchedPlaylists);
+        });
+    }
 
     const handleSubmit = () => {
         const songs = selectedPlaylists.map(playlist => playlist.tracks).flat();
