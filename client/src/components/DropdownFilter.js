@@ -29,9 +29,9 @@ const DropdownFilter = (props) => {
     useEffect(() => {
         if(!initialFilters.length && songs.length) {
             if(props.category === 'artists') {
-                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists).filter(song => song)))].sort());
+                setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists).filter(song => song)))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())));
             } else {
-                setInitialFilters([...new Set(songs.map(song => song[props.category]).filter(song => song))].sort());
+                setInitialFilters([...new Set(songs.map(song => song[props.category]).filter(song => song))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())));
             }
         }
     }, [songs]);
