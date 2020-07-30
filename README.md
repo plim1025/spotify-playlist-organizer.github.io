@@ -2,7 +2,7 @@
 Filter your music based on attributes such as beats per minute, mood, popularity, and more  
 Built with MERN stack
 
-![Preview image](./Capture.PNG)
+![Preview image](./client/src/assets/img/Capture.PNG)
 
 ## Installation
 ```
