@@ -22,7 +22,6 @@
     "aphrodite": "^2.4.0",
     "core-js": "^3.6.5",
     "react": "^16.13.1",
-    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -30,6 +29,7 @@
     "regenerator-runtime": "^0.13.5"
   },
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack-dev-server --mode production"
   }
 }

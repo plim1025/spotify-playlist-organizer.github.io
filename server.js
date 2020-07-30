@@ -1,4 +1,5 @@
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const express = require('express');
@@ -18,10 +19,18 @@ app.use(callbackRouter);
 app.use(refreshRouter);
 app.use(songRouter);
 
-mongoose.connect(`mongodb+srv://plim1025:${process.env.SONGS_DB_PASSWORD}@songs-pvhve.mongodb.net/songs?retryWrites=true&w=majority`, { useNewUrlParser: true , useUnifiedTopology: true});
+mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://plim1025:${process.env.SONGS_DB_PASSWORD}@songs-pvhve.mongodb.net/songs?retryWrites=true&w=majority`, { useNewUrlParser: true , useUnifiedTopology: true});
 mongoose.connection
   .once('open', () => console.log('Connection has been made with mongoDB'))
   .on('error', e => console.log('Connection error with mongoDB: ' + e));
+
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
