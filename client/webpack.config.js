@@ -3,6 +3,8 @@ const path = require("path");
 module.exports = {
     entry: path.resolve(__dirname, "./src/index.js"),
     output: {
+        path: __dirname,
+        publicPath: '/',
         filename: 'bundle.js'
     },
     module: {
@@ -19,5 +21,5 @@ module.exports = {
     devServer: {
         contentBase: path.resolve(__dirname, "./src"),
         historyApiFallback: true,
-    },
+    }
 };
