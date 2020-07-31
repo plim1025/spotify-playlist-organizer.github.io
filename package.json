@@ -9,7 +9,7 @@
     "client-install": "cd client && yarn install",
     "server": "nodemon server.js",
     "client-dev": "cd client && yarn start",
-    "heroku-postbuild": "yarn client-install && yarn build",
+    "heroku-postbuild": "yarn client-install",
     "dev": "concurrently \"yarn run server\" \"yarn run client-dev\""
   },
   "repository": {
