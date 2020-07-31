@@ -5,12 +5,12 @@
   "main": "server.js",
   "homepage": "https://plim1025.github.io/spotify-playlist-organizer.github.io/",
   "scripts": {
-    "build": "cd client && yarn build",
-    "client-install": "cd client && yarn install",
     "server": "nodemon server.js",
     "client-dev": "cd client && yarn start",
-    "heroku-postbuild": "yarn client-install && yarn build",
-    "dev": "concurrently \"yarn run server\" \"yarn run client-dev\""
+    "dev": "concurrently \"yarn run server\" \"yarn run client-dev\"",
+    "client-install": "cd client && yarn install",
+    "build": "cd client && yarn build",
+    "heroku-postbuild": "yarn client-install && yarn build"
   },
   "repository": {
     "type": "git",
