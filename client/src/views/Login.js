@@ -42,15 +42,14 @@ const Login = () => {
             .then(([savedSongsData, playlistData]) => {
                 const cachedPlaylistSongs = JSON.parse(localStorage.getItem(userID));
                 if(cachedPlaylistSongs) {
-                    console.log('retrieved from cache')
                     setPlaylists(cachedPlaylistSongs);
                 } else {
                     fetchTracks(savedSongsData, playlistData);
                 }
             })
             .catch(e => {
-                // console.log('retrieving new access token...');
-                // window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
+                console.log('retrieving new access token...');
+                window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
             });
         }
     }, []);

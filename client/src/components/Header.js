@@ -10,7 +10,7 @@ const Header = () => {
         const accessToken = query.get('access_token');
         const userID = query.get('user_id');
         if(accessToken && userID) {
-            window.location = `/?access_token=${accessToken}&user_id=${userID}}`;
+            window.location = `/?access_token=${accessToken}&user_id=${userID}`;
         } else {
             window.location = '/';
         }
