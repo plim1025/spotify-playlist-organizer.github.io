@@ -25,6 +25,7 @@ const Login = () => {
     useEffect(() => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
+        const userID = query.get('user_id');
         if(accessToken) {
             Promise.all([
                 fetch('https://api.spotify.com/v1/me/tracks', {
@@ -36,18 +37,27 @@ const Login = () => {
                     headers: { Authorization: `Bearer ${accessToken}`}
                 })
                 .then(response => response.json())
-                .catch(err => console.log('yeet1'))
+                .catch(err => console.log(err))
             ])
-            .then(([savedSongsData, playlistData]) => fetchTracks(savedSongsData, playlistData))
+            .then(([savedSongsData, playlistData]) => {
+                const cachedPlaylistSongs = JSON.parse(localStorage.getItem(userID));
+                if(cachedPlaylistSongs) {
+                    console.log('retrieved from cache')
+                    setPlaylists(cachedPlaylistSongs);
+                } else {
+                    fetchTracks(savedSongsData, playlistData);
+                }
+            })
             .catch(e => {
-                console.log('retrieving new access token...');
-                window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
+                // console.log('retrieving new access token...');
+                // window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
             });
         }
     }, []);
 
     const fetchTracks = (savedSongsData, playlistData) => {
         const accessToken = query.get('access_token');
+        const userID = query.get('user_id');
         const fetchedPlaylists = [];
         const promiseArr = [];
         let savedSongTracks = savedSongsData.items.map(item => item.track);
@@ -96,6 +106,7 @@ const Login = () => {
             if(savedSongTracks.length) {
                 fetchedPlaylists.push({ id: savedSongsData.href, name: 'Saved Songs', tracks: savedSongTracks });
             }
+            localStorage.setItem(userID, JSON.stringify(fetchedPlaylists));
             setPlaylists(fetchedPlaylists);
         });
     }

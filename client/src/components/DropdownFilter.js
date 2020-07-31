@@ -30,8 +30,10 @@ const DropdownFilter = (props) => {
         if(!initialFilters.length && songs.length) {
             if(props.category === 'artists') {
                 setInitialFilters([...new Set([].concat.apply([], songs.map(song => song.artists).filter(song => song)))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())));
-            } else {
+            } else if(props.category === 'album') {
                 setInitialFilters([...new Set(songs.map(song => song[props.category]).filter(song => song))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())));
+            } else if(props.category === 'year') {
+                setInitialFilters([...new Set(songs.map(song => song[props.category]).filter(song => song))].sort());
             }
         }
     }, [songs]);
