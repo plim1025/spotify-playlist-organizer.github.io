@@ -26,7 +26,8 @@
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "regenerator-runtime": "^0.13.5",
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.1",
+    "webpack-merge": "^5.0.9"
   },
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
