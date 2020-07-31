@@ -30,6 +30,6 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open",
-    "build": "webpack-dev-server --mode production"
+    "build": "webpack -p"
   }
 }
