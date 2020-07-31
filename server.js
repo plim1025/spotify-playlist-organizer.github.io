@@ -24,7 +24,7 @@ mongoose.connection
   .on('error', e => console.log('Connection error with mongoDB: ' + e));
 
 if(process.env.NODE_ENV === 'production') {
-  app.use(express.static(__dirname, 'dist'));
+  app.use(express.static(__dirname, '/dist'));
 }
 
 const PORT = process.env.PORT || 3000;
