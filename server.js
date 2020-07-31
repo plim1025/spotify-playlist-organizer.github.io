@@ -26,7 +26,7 @@ mongoose.connection
 
   console.log(path.resolve())
 if(process.env.NODE_ENV === 'production') {
-  app.use(express.static(__dirname, 'client/dist'));
+  app.use(express.static(__dirname + 'client/dist'));
 }
 
 const PORT = process.env.PORT || 3000;
