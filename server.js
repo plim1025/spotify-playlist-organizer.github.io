@@ -1,5 +1,4 @@
 const cookieParser = require('cookie-parser');
-const path = require('path');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const express = require('express');
@@ -23,6 +22,10 @@ mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://plim1025:${process.en
 mongoose.connection
   .once('open', () => console.log('Connection has been made with mongoDB'))
   .on('error', e => console.log('Connection error with mongoDB: ' + e));
+
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/dist'));
+}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
