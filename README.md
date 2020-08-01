@@ -12,7 +12,7 @@ yarn install-all
 ```
 yarn dev
 ```
-### Deploy
+## Deploy
 ```
 git push heroku master
 ```
