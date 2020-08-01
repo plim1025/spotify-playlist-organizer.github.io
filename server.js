@@ -9,8 +9,6 @@ const callbackRouter = require('./routes/callback');
 const refreshRouter = require('./routes/refresh');
 const songRouter = require('./routes/song');
 
-const fs = require('fs');
-
 const app = express();
 dotenv.config();
 app.use(express.json({limit: '50mb'}));
@@ -29,11 +27,7 @@ mongoose.connection
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/dist'));
   app.get('*', (req, res) => {
-    fs.readdir(__dirname, (err, files) => {
-      files.forEach(file => console.log(file))
-    });
-    console.log(path.resolve(__dirname, 'dist'))
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
   });
 }
 
