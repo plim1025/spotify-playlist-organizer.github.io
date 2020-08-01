@@ -9,7 +9,8 @@
     "client-dev": "cd client && yarn start",
     "dev": "concurrently \"yarn run server\" \"yarn run client-dev\"",
     "client-install": "cd client && yarn install",
-    "heroku-postbuild": "cd client && yarn install && yarn build"
+    "build": "cd client && yarn build",
+    "heroku-postbuild": "cd client && yarn install"
   },
   "repository": {
     "type": "git",

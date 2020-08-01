@@ -168,7 +168,7 @@ const Login = () => {
                 :
                     <Button 
                         text={'LOGIN'}
-                        onClickHandler={() => window.location=`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:1000'}/login`}
+                        onClickHandler={() => window.location=`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:3000'}/login`}
                         className={css(ss.button)}
                     />
             }
