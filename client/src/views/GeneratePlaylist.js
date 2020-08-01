@@ -204,7 +204,10 @@ const ss = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         margin: '0 10px',
-        padding: 20
+        padding: 20,
+        '@media(max-width:800px)': {
+            display: 'none'
+        }
     },
     generateWrapper: {
         display: 'flex',
