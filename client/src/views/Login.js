@@ -49,7 +49,7 @@ const Login = () => {
             })
             .catch(e => {
                 console.log('retrieving new access token...');
-                window.location='/refresh?refresh_token=${refreshToken}';
+                window.location = process.env.NODE_ENV === 'production' ? `refresh?refresh_token=${refreshToken}` : `http://localhost:3000/refresh?refresh_token=${refreshToken}`;
             });
         }
     }, []);
@@ -115,11 +115,11 @@ const Login = () => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
         const userID = query.get('user_id');
-        fetch('/song', {
+        fetch(process.env.NODE_ENV === 'production' ? '/song' : 'http://localhost:3000/song', {
             method: 'DELETE'
         })
         .then(() => 
-            fetch('/songs', {
+            fetch(process.env.NODE_ENV === 'production' ? '/songs' : 'http://localhost:3000/songs', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -168,7 +168,7 @@ const Login = () => {
                 :
                     <Button 
                         text={'LOGIN'}
-                        onClickHandler={() => window.location = '/login'}
+                        onClickHandler={() => window.location = process.env.NODE_ENV === 'production' ? '/login' : 'http://localhost:3000/login'}
                         className={css(ss.button)}
                     />
             }

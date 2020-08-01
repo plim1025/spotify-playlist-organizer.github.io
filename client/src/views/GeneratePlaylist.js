@@ -40,7 +40,7 @@ const GeneratePlaylist = () => {
     const [sidebar, setSidebar] = useState(false);
 
     useEffect(() => {
-        getSongsFromURL('/song');
+        getSongsFromURL(process.env.NODE_ENV === 'production' ? '/song' : 'http://localhost:3000/song');
         window.onresize = () => {
             if(window.outerWidth > 800) {
                 setSidebar(false);
@@ -52,7 +52,7 @@ const GeneratePlaylist = () => {
     }, []);
 
     useEffect(() => {
-        let fetchString = '/song?';
+        let fetchString = process.env.NODE_ENV === 'production' ? '/song?' : 'http://localhost:3000/song?';
         Object.keys(songFilters).forEach(category => {
             if(category === 'sort') {
                 fetchString += `sortCategory=${songFilters.sort.category}&sortDirection=${songFilters.sort.direction}`;
