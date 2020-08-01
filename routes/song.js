@@ -37,6 +37,7 @@ router.get('/song', async(req, res) => {
     } catch(err) {
         console.log(err);
     }
+    console.log(songs);
     res.send(songs);
 });
 
