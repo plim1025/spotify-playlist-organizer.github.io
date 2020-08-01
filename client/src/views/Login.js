@@ -49,7 +49,7 @@ const Login = () => {
             })
             .catch(e => {
                 console.log('retrieving new access token...');
-                window.location=`http://localhost:3000/refresh?refresh_token=${refreshToken}`;
+                window.location=`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:3000'}/refresh?refresh_token=${refreshToken}`;
             });
         }
     }, []);
@@ -115,11 +115,11 @@ const Login = () => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
         const userID = query.get('user_id');
-        fetch('http://localhost:3000/song', {
+        fetch(`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:3000'}/song`, {
             method: 'DELETE'
         })
         .then(() => 
-            fetch('http://localhost:3000/songs', {
+            fetch(`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:3000'}/songs`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -168,7 +168,7 @@ const Login = () => {
                 :
                     <Button 
                         text={'LOGIN'}
-                        onClickHandler={() => window.location='http://localhost:3000/login'}
+                        onClickHandler={() => window.location=`${process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URI : 'http://localhost:3000'}/login`}
                         className={css(ss.button)}
                     />
             }

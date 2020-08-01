@@ -27,7 +27,7 @@ if(process.env.NODE_ENV === 'production') {
   console.log('in production')
   app.use(express.static('client/dist'));
   app.get('*', (req, res) => {
-    res.sendFile();
+    res.sendFile(path.join(__dirame, 'client', 'dist', 'index.html'));
   });
 }
 
