@@ -1,4 +1,4 @@
-# [Spotify Playlist Organizer](https://plim1025.github.io/spotify-playlist-organizer.github.io/)
+# [Spotify Playlist Organizer](https://spotifyplaylistorganizer.herokuapp.com/)
 Filter your music based on attributes such as beats per minute, mood, popularity, and more  
 Built with MERN stack
 
@@ -12,7 +12,7 @@ yarn install-all
 ```
 yarn dev
 ```
-## Deploy
+## Deploy to heroku
 ```
 git push heroku master
 ```
