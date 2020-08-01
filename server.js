@@ -27,8 +27,7 @@ mongoose.connection
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/dist'));
   app.get('*', (req, res) => {
-    console.log(__dirname, 'HELLOOOOOOOOOOO');
-    res.sendFile('index.html');
+    res.sendFile('/dist/index.html');
   });
 }
 
