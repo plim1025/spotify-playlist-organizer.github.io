@@ -6,10 +6,13 @@ Built with MERN stack
 
 ## Installation
 ```
-yarn client-install
+yarn install-all
 ```
-
-## Run app
+## Run locally
 ```
 yarn dev
+```
+### Deploy
+```
+git push heroku master
 ```
