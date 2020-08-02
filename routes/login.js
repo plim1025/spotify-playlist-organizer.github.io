@@ -21,7 +21,8 @@ router.get('/login', (req, res) => {
             client_id: process.env.SPOTIFY_CLIENT_ID,
             scope: 'user-library-read playlist-read-private playlist-modify-public playlist-modify-private',
             state: state,
-            redirect_uri: redirect_uri
+            redirect_uri: redirect_uri,
+            show_dialog: true
         })
     );
 });

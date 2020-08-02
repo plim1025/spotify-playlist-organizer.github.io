@@ -13,7 +13,8 @@ module.exports = {
     module: {
         rules: [
             { test: /\.(t|j)sx?$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-            { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]}
+            { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
+            { test: /\.(png|svg|jpg|gif)$/, use: [ 'file-loader' ]},
         ]
     },
     resolve: {
