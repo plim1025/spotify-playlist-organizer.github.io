@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 
 const SongSchema = new Schema({
     album: String | null,
-    artists: [
-        String | null
-    ],
+    artists: [String | null],
     danceability: Number | null,
     duration: Number | null,
     energy: Number | null,
@@ -22,7 +20,7 @@ const SongSchema = new Schema({
     time_signature: Number | null,
     uri: String | null,
     valence: Number | null,
-    year: Number | null
+    year: Number | null,
 });
 
 const Song = mongoose.model('song', SongSchema);

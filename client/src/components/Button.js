@@ -1,13 +1,13 @@
 import React from 'react';
 import { css, StyleSheet } from 'aphrodite/no-important';
 
-const Button = (props) => {
+const Button = props => {
     return (
         <div onClick={props.onClickHandler} className={css(ss.button)}>
             {props.text}
         </div>
-    )
-}
+    );
+};
 
 const ss = StyleSheet.create({
     button: {
@@ -24,9 +24,9 @@ const ss = StyleSheet.create({
         transition: '0.2s ease-in-out',
         margin: '30px 0',
         ':hover': {
-            background: '#1ed760'
-        }
-    }
+            background: '#1ed760',
+        },
+    },
 });
 
 export default Button;

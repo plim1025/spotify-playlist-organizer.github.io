@@ -3,39 +3,83 @@ import SliderFilter from '../components/SliderFilter';
 import { SongsContext, SongFiltersContext } from './GeneratePlaylist';
 import { css, StyleSheet } from 'aphrodite/no-important';
 
-const SliderFilters = (props) => {
-
+const SliderFilters = props => {
     const songs = useContext(SongsContext);
-    const {songFilters, setSongFilters} = useContext(SongFiltersContext);
+    const { songFilters, setSongFilters } = useContext(SongFiltersContext);
 
     useEffect(() => {
-        if(songs.length && !songFilters.duration.length && !songFilters.energy.length && !songFilters.instrumentalness.length && !songFilters.loudness.length && !songFilters.popularity.length && !songFilters.speechiness.length && !songFilters.tempo.length && !songFilters.valence.length) {
-            let filter = {...songFilters};
-            if(!songFilters.danceability.length) {
+        if (
+            songs.length &&
+            !songFilters.duration.length &&
+            !songFilters.energy.length &&
+            !songFilters.instrumentalness.length &&
+            !songFilters.loudness.length &&
+            !songFilters.popularity.length &&
+            !songFilters.speechiness.length &&
+            !songFilters.tempo.length &&
+            !songFilters.valence.length
+        ) {
+            let filter = { ...songFilters };
+            if (!songFilters.danceability.length) {
                 filter['danceability'] = [0, 1];
             }
-            if(!songFilters.duration.length) {
-                filter['duration'] = [0, Math.max(...[...songs.map(song => song.duration).filter(song => song)])];
+            if (!songFilters.duration.length) {
+                filter['duration'] = [
+                    0,
+                    Math.max(
+                        ...[
+                            ...songs
+                                .map(song => song.duration)
+                                .filter(song => song),
+                        ]
+                    ),
+                ];
             }
-            if(!songFilters.energy.length) {
+            if (!songFilters.energy.length) {
                 filter['energy'] = [0, 1];
             }
-            if(!songFilters.instrumentalness.length) {
+            if (!songFilters.instrumentalness.length) {
                 filter['instrumentalness'] = [0, 1];
             }
-            if(!songFilters.loudness.length) {
-                filter['loudness'] = [Math.min(...[...songs.map(song => song.loudness).filter(song => song)]), Math.max(...[...songs.map(song => song.loudness).filter(song => song)])];
+            if (!songFilters.loudness.length) {
+                filter['loudness'] = [
+                    Math.min(
+                        ...[
+                            ...songs
+                                .map(song => song.loudness)
+                                .filter(song => song),
+                        ]
+                    ),
+                    Math.max(
+                        ...[
+                            ...songs
+                                .map(song => song.loudness)
+                                .filter(song => song),
+                        ]
+                    ),
+                ];
             }
-            if(!songFilters.speechiness.length) {
+            if (!songFilters.speechiness.length) {
                 filter['speechiness'] = [0, 1];
             }
-            if(!songFilters.popularity.length) {
+            if (!songFilters.popularity.length) {
                 filter['popularity'] = [0, 100];
             }
-            if(!songFilters.tempo.length) {
-                filter['tempo'] = [0, Math.ceil(Math.max(...[...songs.map(song => song.tempo).filter(song => song)]))];
+            if (!songFilters.tempo.length) {
+                filter['tempo'] = [
+                    0,
+                    Math.ceil(
+                        Math.max(
+                            ...[
+                                ...songs
+                                    .map(song => song.tempo)
+                                    .filter(song => song),
+                            ]
+                        )
+                    ),
+                ];
             }
-            if(!songFilters.valence.length) {
+            if (!songFilters.valence.length) {
                 filter['valence'] = [0, 1];
             }
             setSongFilters(filter);
@@ -46,7 +90,10 @@ const SliderFilters = (props) => {
         <div className={css(ss.wrapper)}>
             <SliderFilter category={'danceability'} title={'Danceability'} />
             <SliderFilter category={'energy'} title={'Energy'} />
-            <SliderFilter category={'instrumentalness'} title={'Instrumental'} />
+            <SliderFilter
+                category={'instrumentalness'}
+                title={'Instrumental'}
+            />
             <SliderFilter category={'duration'} title={'Length'} />
             <SliderFilter category={'loudness'} title={'Loudness (dB)'} />
             <SliderFilter category={'popularity'} title={'Popularity'} />
@@ -54,13 +101,13 @@ const SliderFilters = (props) => {
             <SliderFilter category={'tempo'} title={'Tempo (bpm)'} />
             <SliderFilter category={'valence'} title={'Positivity'} />
         </div>
-    )
-}
+    );
+};
 
 const ss = StyleSheet.create({
     wrapper: {
-        marginTop: 20
-    }
+        marginTop: 20,
+    },
 });
 
 export default SliderFilters;
