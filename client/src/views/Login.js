@@ -165,7 +165,7 @@ const Login = () => {
         const userID = query.get('user_id');
         fetch(
             process.env.NODE_ENV === 'production'
-                ? '/song'
+                ? '/songs'
                 : 'http://localhost:3000/song',
             {
                 method: 'DELETE',

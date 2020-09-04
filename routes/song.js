@@ -209,13 +209,7 @@ router.post('/songs', (req, res) => {
     });
 });
 
-// router.put('/song', (req, res) => {
-//     res.setHeader('Content-Type', 'application/json');
-
-//     console.log(req.body)
-// });
-
-router.delete('/song', (req, res) => {
+router.delete('/songs', (req, res) => {
     Song.deleteMany({}, err => {
         if (err) {
             console.log(err);
