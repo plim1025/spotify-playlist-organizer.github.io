@@ -20,8 +20,7 @@ app.use(refreshRouter);
 app.use(songRouter);
 
 mongoose.connect(
-    process.env.MONGODB_URI ||
-        `mongodb+srv://plim1025:${process.env.SONGS_DB_PASSWORD}@songs-pvhve.mongodb.net/songs?retryWrites=true&w=majority`,
+    `mongodb+srv://plim1025:${process.env.SONGS_DB_PASSWORD}@songs-pvhve.mongodb.net/songs?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
 mongoose.connection
@@ -31,6 +30,7 @@ mongoose.connection
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/dist'));
     app.get('*', (req, res) => {
+        console.log('GOT FILE');
         res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
     });
 }
